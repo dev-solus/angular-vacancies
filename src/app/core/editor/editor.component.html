@@ -1,0 +1,9 @@
+<!-- <ckeditor *ngIf="Editor" [editor]="Editor" [config]="config" (ready)="onReady($event)" [formControl]="obj">
+</ckeditor> -->
+<ckeditor #editor [editor]="Editor" [config]="ckeConfig" (ready)="onReady($event)" class="ckeditor" [formControl]="obj">
+</ckeditor>
+
+<!-- <ckeditor [editor]="Editor" [config]="{plugins: [ MathType ]}"></ckeditor> -->
+<!-- <ckeditor *ngIf="Editor" [editor]="Editor" [config]="config" (ready)="onReady($event)" [formControl]="shared.value">
+</ckeditor> -->
+<!-- <ckeditor [editor]="Editor"></ckeditor> -->

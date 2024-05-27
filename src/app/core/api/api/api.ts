@@ -1,0 +1,11 @@
+export * from './accountsController.service';
+import { AccountsControllerService } from './accountsController.service';
+export * from './authController.service';
+import { AuthControllerService } from './authController.service';
+export * from './operationsController.service';
+import { OperationsControllerService } from './operationsController.service';
+export * from './rolesController.service';
+import { RolesControllerService } from './rolesController.service';
+export * from './usersController.service';
+import { UsersControllerService } from './usersController.service';
+export const APIS = [AccountsControllerService, AuthControllerService, OperationsControllerService, RolesControllerService, UsersControllerService];

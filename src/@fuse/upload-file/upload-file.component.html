@@ -1,0 +1,45 @@
+<div class="example-container" *ngIf="false">
+  <div class="example-loading-shade" *ngIf="isLoadingResults"> </div>
+  <!-- <label for="formFile" class="form-label">{{fileName}}</label> -->
+  <!-- accept="application/pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" -->
+  <input #file class="form-control form-control" (change)="upload$.next(file.files)" type="file">
+  <label for="formFile" class="form-label text-primary mt-1" *ngIf="fileName() !== ''">
+    <span style="cursor: pointer; font-size: .8em;">{{fileName()}}</span> &nbsp;
+    <i class="bx bxs-trash-alt text-danger" style="cursor: pointer;" (click)="this.remove$.next()"></i></label>
+</div>
+
+
+<ng-container [ngTemplateOutlet]="template || defaultTemplate"
+  [ngTemplateOutletContext]="{inputClick$, remove$, fileName}"></ng-container>
+
+<input hidden multiple  #fileInput type="file" (click)="$event.stopPropagation()"
+  (change)="upload$.next(fileInput.files)">
+
+<ng-template #defaultTemplate>
+  <div class="flex justify-center items-center flex-col w-full gap-5 ">
+    <img *ngIf="isImage"  alt="" onerror="src='/assets/images/logo/logo.png'" [src]="fileName()">
+    <div class=" flex items-center justify-center gap-3 w-full ">
+      <div class="w-full">
+        <mat-form-field *ngIf="!isImage" class="cursor-pointer w-full">
+          <mat-label >{{labelName}}</mat-label>
+          <input type="text" matInput (click)="fileInput.click()" [formControl]="obj" class="caret-transparent">
+          <mat-icon svgIcon="heroicons_outline:arrow-up-tray" (click)="fileInput.click()"></mat-icon>
+          <mat-error
+          *ngIf="obj.invalid && (obj.dirty || obj.touched)">
+          Champ est requis
+      </mat-error>
+        </mat-form-field>
+        <div *ngIf="isImage">
+        <button  mat-raised-button type="button" (click)="fileInput.click()">
+            <mat-icon svgIcon="heroicons_outline:cloud-arrow-up"></mat-icon>
+        </button>
+
+        <button mat-raised-button color="warn" (click)="this.remove$.next()">
+          <mat-icon matPrefix class="hidden sm:flex icon-size-5" [svgIcon]="'heroicons_solid:trash'">
+          </mat-icon>
+        </button>
+    </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

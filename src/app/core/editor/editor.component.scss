@@ -1,0 +1,13 @@
+:host ::ng-deep .ck.ck-editor__editable {
+	min-height: 200px;
+    background: white;
+    border-width: 1px;
+    border-radius: 4px 4px 0 0;
+    --tw-border-opacity: 1 !important;
+    border-color: rgba(203, 213, 225, var(--tw-border-opacity)) !important;
+    margin-bottom: 15px;
+    width: 100% !important;
+}
+.cke_editable p {
+  text-align: justify;
+}

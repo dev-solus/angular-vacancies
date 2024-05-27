@@ -1,0 +1,117 @@
+<div class="flex flex-col md:min-w-160 -m-6">
+
+    <!-- Header -->
+    <div class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary">
+        <div class="text-lg font-medium">Operation</div>
+        <button mat-icon-button (click)="back()" [tabIndex]="-1">
+            <mat-icon class="text-current" [svgIcon]="'heroicons_outline:x'"></mat-icon>
+        </button>
+    </div>
+
+    <div class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto">
+
+        <div class="grid w-full">
+            <ng-container [ngTemplateOutlet]="formTemplate"
+                [ngTemplateOutletContext]="{$implicit:myForm}"></ng-container>
+
+            <ng-container *ngIf="showMessage$ | async as e">
+                <fuse-alert class="w-full my-5" [@shake]="true" [type]="e.code < 0 ? 'warn' : 'success'"
+                    [appearance]="'border'">
+                    <span fuseAlertTitle>Message</span>
+                    {{e.message}}
+                </fuse-alert>
+            </ng-container>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-4 sm:mt-6">
+            <div class="-ml-2">
+            </div>
+
+            <div class="flex items-center gap-2 mt-4 sm:mt-0">
+                <button class="ml-auto sm:ml-0" mat-button (click)="back()">
+                    Retour
+                </button>
+
+                <button class="order-first sm:order-last" mat-flat-button [color]="'primary'"
+                    (click)="submit(myForm.getRawValue())">
+                    Enregistrer
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #formTemplate let-myForm>
+    <!-- <pre>
+        {{myForm.value | json}}
+    </pre> -->
+    <form [formGroup]="myForm">
+        <div class="grid md:grid-cols-2 gap-5">
+
+            <mat-form-field class="col-span-2">
+                <mat-label>Compte Débité</mat-label>
+                <mat-select formControlName="accountDebit_id">
+                    <mat-option [value]="null">-- None --</mat-option>
+                    @for (e of usersDebite$ | async; track $index) {
+                    <mat-optgroup [label]="$any(e).name">
+                        @for (c of e.accounts; track $index) {
+                        <mat-option [value]="c.id" [disabled]="!c.balance || c.status !== 'Ouvert'" (click)="selectedAccount.set($any(c))">
+                            {{c.accountNumber}} - Solde: {{c.balance}} <span class="bg-green-800 text-white px-1 rounded-lg"
+                            [ngClass]="{'bg-red-700': c.status !== 'Ouvert'}">{{c.status}}</span>
+                        </mat-option>
+                        }
+                    </mat-optgroup>
+                    }
+                </mat-select>
+                <mat-error
+                    *ngIf="myForm.controls.accountDebit_id.invalid && (myForm.controls.accountDebit_id.dirty || myForm.controls.accountDebit_id.touched)">
+                    Champ est requis
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="col-span-2">
+                <mat-label>Compte Crédité</mat-label>
+                <mat-select formControlName="accountCredit_id">
+                    <mat-option [value]="null">-- None --</mat-option>
+                    @for (e of usersCredit$ | async; track $index) {
+                    <mat-optgroup [label]="$any(e).name" >
+                        @for (c of e.accounts; track $index) {
+                        <mat-option [value]="c.id" [disabled]="c.status !== 'Ouvert'">
+                            {{c.accountNumber}} - Solde: {{c.balance}} <span class="bg-green-800 text-white px-1 rounded-lg"
+                                [ngClass]="{'bg-red-700': c.status !== 'Ouvert'}">{{c.status}}</span>
+                        </mat-option>
+                        }
+                    </mat-optgroup>
+                    }
+                </mat-select>
+                <mat-error
+                    *ngIf="myForm.controls.accountCredit_id.invalid && (myForm.controls.accountCredit_id.dirty || myForm.controls.accountCredit_id.touched)">
+                    Champ est requis
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" class="col-span-2">
+                <mat-label>Montant</mat-label>
+                <input matInput formControlName="amount" type="undefined" required>
+                <mat-error
+                    *ngIf="myForm.controls.amount.hasError('required') && (myForm.controls.amount.dirty || myForm.controls.amount.touched)">
+                    Champ est requis
+                </mat-error>
+
+                <!-- <mat-error
+                    *ngIf="!selectedAccount().balance">
+                    Votre solde est nul, veuillez vérifier.
+                </mat-error> -->
+
+                <mat-error *ngIf="myForm.controls.amount.hasError('amountBiggerThanBalance')">
+                    Le montant à transférer est supérieur à votre solde disponible.
+                </mat-error>
+
+                <!-- <mat-error *ngIf="amountBiggerThanBalance">
+                    Le montant à transférer est supérieur à votre solde disponible.
+                </mat-error> -->
+            </mat-form-field>
+        </div>
+    </form>
+</ng-template>

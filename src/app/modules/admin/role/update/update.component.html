@@ -1,0 +1,57 @@
+
+<div class="flex flex-col md:min-w-160 -m-6">
+
+    <!-- Header -->
+    <div class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary">
+        <div class="text-lg font-medium">Role</div>
+        <button mat-icon-button (click)="back()" [tabIndex]="-1">
+            <mat-icon class="text-current" [svgIcon]="'heroicons_outline:x'"></mat-icon>
+        </button>
+    </div>
+
+    <div class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto">
+
+        <div class="grid w-full">
+            <ng-container [ngTemplateOutlet]="formTemplate" [ngTemplateOutletContext]="{$implicit:myForm}"></ng-container>
+
+            <ng-container *ngIf="showMessage$ | async as e">
+                <fuse-alert class="w-full my-5" [@shake]="true" [type]="e.code < 0 ? 'warn' : 'success'"
+                    [appearance]="'border'">
+                    <span fuseAlertTitle>Message</span>
+                    {{e.message}}
+                </fuse-alert>
+            </ng-container>
+        </div>
+
+            <!-- Actions -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-4 sm:mt-6">
+            <div class="-ml-2">
+            </div>
+
+            <div class="flex items-center gap-2 mt-4 sm:mt-0">
+                <button class="ml-auto sm:ml-0" mat-button (click)="back()">
+                    Retour
+                </button>
+
+                <button class="order-first sm:order-last" mat-flat-button [disabled]="!myForm.dirty" [color]="'primary'" (click)="submit(myForm.getRawValue())">
+                    Enregistrer
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #formTemplate let-myForm>
+    <form [formGroup]="myForm" >
+    <div class="grid md:grid-cols-2 gap-5">
+    <mat-form-field appearance="fill">
+                <mat-label>Nom</mat-label>
+                <input matInput formControlName="name" type="text" required>
+                <mat-error *ngIf="myForm.controls.name.invalid && (myForm.controls.name.dirty || myForm.controls.name.touched)">
+                    Champ est requis
+                </mat-error>
+            </mat-form-field>
+    </div>
+</form>
+</ng-template>
+        

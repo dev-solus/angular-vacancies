@@ -1,0 +1,146 @@
+<div class="flex flex-col flex-auto min-w-0">
+    <!-- Header -->
+    <div
+        class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 sm:py-8 sm:px-10 border-b bg-card dark:bg-transparent">
+        <div class="flex-1 min-w-0">
+            <!-- Title -->
+            <div class="flex gap-3 mt-2">
+                <button mat-icon-button routerLink="../"><mat-icon svgIcon="heroicons_outline:arrow-small-left"></mat-icon></button>
+                <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
+                    Utilisateur
+                </h2>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main -->
+    <div class="w-full p-6 sm:p-10">
+        <ng-container [ngTemplateOutlet]="formTemplate" [ngTemplateOutletContext]="{$implicit:myForm}"></ng-container>
+
+        <ng-container *ngIf="showMessage$ | async as e">
+            <fuse-alert class="w-full my-5" [@shake]="true" [type]="e.code < 0 ? 'warn' : 'success'"
+                [appearance]="'border'">
+                <span fuseAlertTitle>Message</span>
+                {{e.message}}
+            </fuse-alert>
+        </ng-container>
+
+        <div class="w-full flex justify-between mt-10">
+            <button mat-raised-button (click)="back()">Retour</button>
+            <button mat-raised-button [disabled]="!myForm.dirty" color="primary" (click)="submit(myForm.getRawValue())">
+                <span *ngIf="!myForm.disabled">
+                    Enregistrer
+                </span>
+                <mat-progress-spinner *ngIf="myForm.disabled" [diameter]="24" [mode]="'indeterminate'">
+                </mat-progress-spinner>
+            </button>
+        </div>
+    </div>
+</div>
+
+<ng-template #formTemplate let-myForm>
+    <form [formGroup]="myForm">
+        <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-5">
+
+            <mat-form-field appearance="fill">
+                <mat-label>Nom</mat-label>
+                <input matInput formControlName="lastname" type="text" required>
+                <mat-error
+                    *ngIf="myForm.controls.lastname.invalid && (myForm.controls.lastname.dirty || myForm.controls.lastname.touched)">
+                    Champ est requis
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+                <mat-label>Prénom</mat-label>
+                <input matInput formControlName="firstname" type="text" required>
+                <mat-error
+                    *ngIf="myForm.controls.firstname.invalid && (myForm.controls.firstname.dirty || myForm.controls.firstname.touched)">
+                    Champ est requis
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+                <mat-label>CIN</mat-label>
+                <input matInput formControlName="cin" type="text" required>
+                <mat-error
+                    *ngIf="myForm.controls.cin.invalid && (myForm.controls.cin.dirty || myForm.controls.cin.touched)">
+                    Champ est requis
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+                <mat-label>Téléphone</mat-label>
+                <input matInput formControlName="phone" type="text" required>
+                <mat-error
+                    *ngIf="myForm.controls.phone.invalid && (myForm.controls.phone.dirty || myForm.controls.phone.touched)">
+                    Champ est requis
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+                <mat-label>email</mat-label>
+                <input matInput formControlName="email" type="text" required>
+                <mat-error
+                    *ngIf="myForm.controls.email.invalid && (myForm.controls.email.dirty || myForm.controls.email.touched)">
+                    Champ est requis
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>Mot de passe</mat-label>
+                <input matInput formControlName="password" type="text" >
+                <mat-error
+                    *ngIf="myForm.controls.password.invalid && (myForm.controls.password.dirty || myForm.controls.password.touched)">
+                    Champ est requis
+                </mat-error>
+            </mat-form-field>
+
+
+            <mat-form-field appearance="fill">
+                <mat-label>Date de naissance</mat-label>
+                <input matInput formControlName="birthdate" [matDatepicker]="picker6">
+                <mat-datepicker-toggle matSuffix [for]="picker6"></mat-datepicker-toggle>
+                <mat-datepicker #picker6></mat-datepicker>
+                <mat-error
+                    *ngIf="myForm.controls.birthdate.invalid && (myForm.controls.birthdate.dirty || myForm.controls.birthdate.touched)">
+                    Champ est requis
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+                <mat-label>Genre</mat-label>
+                <input matInput formControlName="gender" type="text" required>
+                <mat-error
+                    *ngIf="myForm.controls.gender.invalid && (myForm.controls.gender.dirty || myForm.controls.gender.touched)">
+                    Champ est requis
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" class="sm:col-span-2 md:col-span-4">
+                <mat-label>Adresse</mat-label>
+                <input matInput formControlName="address" type="text" required>
+                <mat-error
+                    *ngIf="myForm.controls.address.invalid && (myForm.controls.address.dirty || myForm.controls.address.touched)">
+                    Champ est requis
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+                <mat-label>Role</mat-label>
+                <mat-select formControlName="role_id">
+                    <mat-option *ngFor="let e of roles$ | async" [value]="e.id">{{e.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                    *ngIf="myForm.controls.role_id.invalid && (myForm.controls.role_id.dirty || myForm.controls.role_id.touched)">
+                    Champ est requis
+                </mat-error>
+            </mat-form-field>
+
+            <div></div>
+            <mat-checkbox class="flex items" formControlName="active" labelPosition="before">
+                Actif
+            </mat-checkbox>
+
+        </div>
+    </form>
+</ng-template>

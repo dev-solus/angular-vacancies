@@ -1,0 +1,16 @@
+FROM node:16-alpine3.15 as build-env
+WORKDIR /app
+
+# copy and cahe
+COPY package*.json .
+
+# RUN npm i --force
+
+COPY src src
+COPY .editorconfig .
+COPY .eslintrc.json .
+COPY angular.json .
+COPY server.ts .
+COPY transloco.config.js .
+COPY tailwind.config.js .
+COPY tsconfig.* .
