@@ -1,7 +1,7 @@
 import { environment } from 'environments/environment.development';
 import { Injectable, inject } from '@angular/core';
 import { UtilsService } from './utils.service';
-import { User, AuthControllerService, UsersControllerService, Role, RolesControllerService, Account, AccountsControllerService, Operation, OperationsControllerService } from '../api';
+import { AccountsService, Config, ConfigsService, Role, RolesService, User, UsersService } from '../api';
 
 
 
@@ -11,11 +11,10 @@ import { User, AuthControllerService, UsersControllerService, Role, RolesControl
 export class CoreService {
     readonly utils = inject(UtilsService);
 
-    readonly auth = this.utils.extendClass<User, AuthControllerService>(AuthControllerService, environment.apiUrl, 'auth');
+    readonly auth = this.utils.extendClass<User, AccountsService>(AccountsService, environment.apiUrl, 'Accounts');
 
-    readonly users = this.utils.extendClass<User, UsersControllerService>(UsersControllerService, environment.apiUrl, 'users');
-    readonly roles = this.utils.extendClass<Role, RolesControllerService>(RolesControllerService, environment.apiUrl, 'roles');
-    readonly accounts = this.utils.extendClass<Account, AccountsControllerService>(AccountsControllerService, environment.apiUrl, 'accounts');
-    readonly operations = this.utils.extendClass<Operation, OperationsControllerService>(OperationsControllerService, environment.apiUrl, 'operations');
+    readonly users = this.utils.extendClass<User, UsersService>(UsersService, environment.apiUrl, 'users');
+    readonly roles = this.utils.extendClass<Role, RolesService>(RolesService, environment.apiUrl, 'roles');
+    readonly configs = this.utils.extendClass<Config, ConfigsService>(ConfigsService, environment.apiUrl, 'operations');
 
 }

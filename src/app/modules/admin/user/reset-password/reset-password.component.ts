@@ -56,22 +56,22 @@ export class ResetPasswordComponent {
     readonly showMessage$ = new Subject<any>();
 
     readonly patch$ = new Subject<void>();
-    readonly #patch$ = toSignal(this.patch$.pipe(
-        tap(_ => this.uow.logInvalidFields(this.myForm)),
-        tap(_ => this.myForm.markAllAsTouched()),
-        filter(_ => this.myForm.valid && this.myForm.dirty),
-        tap(_ => this.myForm.disable()),
-        map(_ => ({ password: this.myForm.controls.password.value })),
-        // switchMap(o => this.uow.core.users.patchObject(this.data.model.id, o).pipe(
-        switchMap(o => this.uow.core.auth.changePassword({ id: this.data.model.id, password: o.password }).pipe(
-            catchError(this.uow.handleError),
-            map((e: any) => ({ code: e.code < 0 ? -1 : 1, message: e.code < 0 ? e.message : 'Enregistrement réussi' })),
-        )),
-        tap(r => this.showMessage$.next({ message: r.message, code: r.code })),
-        tap((r) => this.myForm.enable()),
-        filter(r => r.code === 1),
-        delay(500),
-        tap(e => this.dialogRef.close(e)),
-    ));
+    // readonly #patch$ = toSignal(this.patch$.pipe(
+    //     tap(_ => this.uow.logInvalidFields(this.myForm)),
+    //     tap(_ => this.myForm.markAllAsTouched()),
+    //     filter(_ => this.myForm.valid && this.myForm.dirty),
+    //     tap(_ => this.myForm.disable()),
+    //     map(_ => ({ password: this.myForm.controls.password.value })),
+    //     // switchMap(o => this.uow.core.users.patchObject(this.data.model.id, o).pipe(
+    //     switchMap(o => this.uow.core.auth.apiAccountsResetPasswordTokenPost({ id: this.data.model.id, password: o.password }).pipe(
+    //         catchError(this.uow.handleError),
+    //         map((e: any) => ({ code: e.code < 0 ? -1 : 1, message: e.code < 0 ? e.message : 'Enregistrement réussi' })),
+    //     )),
+    //     tap(r => this.showMessage$.next({ message: r.message, code: r.code })),
+    //     tap((r) => this.myForm.enable()),
+    //     filter(r => r.code === 1),
+    //     delay(500),
+    //     tap(e => this.dialogRef.close(e)),
+    // ));
 
 }

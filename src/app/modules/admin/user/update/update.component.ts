@@ -18,7 +18,6 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { UploadFileComponent } from '@fuse/upload-file/upload-file.component';
 import { User } from 'app/core/api';
-import { AccountComponent } from "../../account/account.component";
 
 @Component({
     standalone: true,
@@ -70,7 +69,7 @@ export class UpdateComponent {
     }) as any;
 
     // select
-    readonly roles$ = this.uow.core.roles.get$;
+    readonly roles$ = this.uow.core.roles.getForSelect$;
 
     readonly showMessage$ = new Subject<any>();
 

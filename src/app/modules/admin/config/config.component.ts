@@ -1,6 +1,6 @@
-import { Component, ViewChild, Signal, AfterViewInit, ChangeDetectionStrategy, inject, signal } from '@angular/core';
+import { Component, ViewChild,Signal, AfterViewInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { merge, Subject, switchMap, filter, map, startWith, tap, delay, catchError } from 'rxjs';
-import { Account, User } from 'app/core/api';
+import { Config } from 'app/core/api';
 import { UowService, TypeForm } from 'app/core/http-services/uow.service';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
@@ -15,14 +15,16 @@ import { FuseAlertComponent } from '@fuse/components/alert';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSelectModule } from '@angular/material/select';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { UpdateComponent } from './update/update.component';
-import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
+
+
+import { Router, ActivatedRoute, RouterLink } from '@angular/router';
+
+
 
 @Component({
     standalone: true,
-    selector: 'app-account',
-    templateUrl: './account.component.html',
+    selector: 'app-config',
+    templateUrl: './config.component.html',
     styles: [``],
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [
@@ -39,14 +41,17 @@ import { ActivatedRoute } from '@angular/router';
         MatSelectModule,
         MatIconModule,
         MatProgressSpinnerModule,
+
+
+        RouterLink,
     ],
 })
-export class AccountComponent implements AfterViewInit {
+export class ConfigComponent implements AfterViewInit {
     //DI
     readonly uow = inject(UowService);
+    readonly router = inject(Router);
     readonly route = inject(ActivatedRoute);
 
-    readonly dialog = inject(MatDialog);
 
     @ViewChild(MatPaginator, { static: true })
     readonly paginator: MatPaginator;
@@ -60,36 +65,21 @@ export class AccountComponent implements AfterViewInit {
 
     readonly showMessage$ = new Subject<any>();
 
-    readonly delete$ = new Subject<Account>();
+    readonly delete$ = new Subject<Config>();
     readonly #delete$ = this.delete$.pipe(
-        switchMap(item => this.uow.fuseConfirmation.open().afterClosed().pipe(
+        switchMap(item => this.uow.fuseConfirmation.open({ message: 'Config' }).afterClosed().pipe(
             filter((e: 'confirmed' | 'cancelled') => e === 'confirmed'),
             tap(e => console.warn(e)),
-            switchMap(_ => this.uow.core.accounts.delete(item.id).pipe(
+            switchMap(_ => this.uow.core.configs.delete(item.id).pipe(
                 catchError(this.uow.handleError),
-                map((e: any) => ({ code: e.code < 0 ? -1 : 1, message: e.code < 0 ? "Vous ne pouvez pas supprimer car il est lié à d'autres enregistrements" : 'Enregistrement réussi' })),
+                map((e: any) => ({ code: e.code < 0 ? -1 : 1, message: e.code < 0 ? e.message : 'Enregistrement réussi' })),
                 tap(r => this.showMessage$.next({ message: r.message, code: r.code })),
             )),
         )),
     );
 
-    readonly userIdParams = +this.route.snapshot.queryParamMap.get('userId');
-
-    // select
-    readonly users = toSignal(this.uow.core.users.getForSelect$.pipe(
-        // tap(users => this.user.set(!!this.userIdParams ? users.find(e => e.id === this.userIdParams)?.name : ''))
-    ));
-
-
-    readonly cin = new FormControl('');
-    readonly balanceMin = new FormControl(0);
-    readonly balanceMax = new FormControl(0);
-    readonly userId = new FormControl(this.userIdParams);
-
-    readonly user = signal<User>(null)
-
     readonly viewInitDone = new Subject<void>();
-    readonly dataSource: Signal<(Account)[]> = toSignal(this.viewInitDone.pipe(
+    readonly dataSource: Signal<(Config)[]> = toSignal(this.viewInitDone.pipe(
         delay(50),
         switchMap(_ => merge(
             this.sort.sortChange,
@@ -99,21 +89,17 @@ export class AccountComponent implements AfterViewInit {
         )),
         startWith(null as any),
         map(_ => [
-            (this.paginator?.pageIndex || 0),// * (this.paginator?.pageSize ?? 10),// startIndex
+            (this.paginator?.pageIndex || 0) * (this.paginator?.pageSize ?? 10),// startIndex
             this.paginator?.pageSize ?? 10,
             this.sort?.active ? this.sort?.active : 'id',
             this.sort?.direction ? this.sort?.direction : 'desc',
-            this.cin.value === '' ? '*' : this.cin.value,
-            this.balanceMin.value,
-            this.balanceMax.value,
-            this.userId.value,
+
         ]),
         tap(e => this.isLoadingResults = true),
-        switchMap(e => this.uow.core.accounts.getList(e).pipe(
+        switchMap(e => this.uow.core.configs.getList(e).pipe(
             tap(e => this.totalRecords = e.count),
-            map(e => e.list),
-            tap(list =>!this.userIdParams ? null : this.user.set((list.find(e => e.user_id === this.userIdParams) as any)?.user))
-        )),
+            map(e => e.list))
+        ),
         tap(e => this.isLoadingResults = false),
     ), { initialValue: [] }) as any;
 
@@ -126,10 +112,7 @@ export class AccountComponent implements AfterViewInit {
     }
 
     reset() {
-        this.cin.setValue('');
-        this.balanceMin.setValue(0);
-        this.balanceMax.setValue(0);
-        this.userId.setValue(0);
+
 
         this.update.next(0);
     }
@@ -138,35 +121,16 @@ export class AccountComponent implements AfterViewInit {
         this.update.next(0);
     }
 
-    openDialog(o: Account, text) {
-        const dialogRef = this.dialog.open(UpdateComponent, {
-            // width: '1100px',
-            disableClose: true,
-            data: { model: o, title: text }
-        });
-
-        return dialogRef.afterClosed();
-    };
 
     add() {
-
-        this.openDialog({} as Account, 'Ajouter Account').subscribe(result => {
-            if (result) {
-                this.update.next(0);
-            }
-        });
+        this.router.navigate(['/admin/config', 0]);
     }
 
-    edit(o: Account) {
-
-        this.openDialog(o, 'Modifier Account').subscribe((result: Account) => {
-            if (result) {
-                this.update.next(0);
-            }
-        });
+    edit(o: Config) {
+        this.router.navigate(['/admin/config', o.id]);
     }
 
-    remove(o: Account) {
+    remove(o: Config) {
         this.delete$.next(o);
     }
 

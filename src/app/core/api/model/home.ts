@@ -9,17 +9,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { OperationType } from './operationType';
+import { MyElement } from './myElement';
 
 
-export interface Operation { 
-    operationType?: OperationType;
-    path?: string | null;
-    op?: string | null;
-    from?: string | null;
-    value?: any | null;
+export interface Home { 
+    card?: MyElement;
+    url?: MyElement;
+    title?: MyElement;
 }
-export namespace Operation {
-}
-
 

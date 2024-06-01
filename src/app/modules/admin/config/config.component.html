@@ -7,11 +7,11 @@
             <!-- Title -->
             <div class="mt-2 flex justify-between items-center">
                 <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
-                    Compte Bancaire <span *ngIf="!!user()">({{user().firstname}} {{user().lastname}} : {{user().cin}})</span>
+                    Configs
                 </h2>
 
                 <div class="flex gap-1">
-                    <button #testVariable mat-flat-button [ngClass]="{'hidden': false}"
+                    <button #testVariable mat-flat-button [ngClass]="{'hidden': true}"
                         (click)="$any(testVariable).value = !!!$any(testVariable).value">
                         <mat-icon [svgIcon]="'heroicons_outline:chevron-double-down'"></mat-icon>
                         <span class="ml-2 mr-1">search</span>
@@ -31,32 +31,11 @@
     <div *ngIf="!!$any(testVariable).value" class=" py-6 px-4 border-b">
         <!-- Title -->
         <div class="grid md:grid-cols-4 gap-2">
-            <mat-form-field appearance="fill">
-                <input matInput (keyup.enter)="search()" placeholder="CIN" [formControl]="cin"
-                    required>
-            </mat-form-field>
 
-
-            <!-- <mat-form-field appearance="fill">
-                <input matInput (keyup.enter)="search()" placeholder="Solde Min" [formControl]="balanceMin"
-                    type="number" required>
-            </mat-form-field>
-
-            <mat-form-field appearance="fill">
-                <input matInput (keyup.enter)="search()" placeholder="Solde Max" [formControl]="balanceMax"
-                    type="number" required>
-            </mat-form-field> -->
-
-            <mat-form-field appearance="fill">
-                <mat-select [formControl]="userId" [placeholder]="'Sélectionnez une option'">
-                    <mat-option [value]="0">Propriétaire</mat-option>
-                    <mat-option *ngFor="let e of users()" [value]="e.id">{{e.name}}</mat-option>
-                </mat-select>
-            </mat-form-field>
 
             <ng-container class="flex gap-1 w-80">
                 <button mat-raised-button (click)="reset()">
-                    <mat-icon svgIcon="heroicons_outline:arrow-uturn-left"></mat-icon>
+                    <mat-icon>refresh</mat-icon>
                 </button>
                 <button mat-raised-button color="primary" (click)="search()">
                     <mat-icon>search</mat-icon>
@@ -88,11 +67,12 @@
 
 
 
-                            <div mat-sort-header="id">id</div>
-                            <div class="col-span-2">Propriétaire</div>
-                            <div mat-sort-header="accountNumber">Numéro de compte</div>
-                            <div mat-sort-header="balance">Solde</div>
-                            <div mat-sort-header="status">Statut</div>
+                            <div>name</div>
+                            <div>url</div>
+                            <div>pageSize</div>
+                            <div>pageSelector</div>
+                            <div>home</div>
+                            <div>detail</div>
 
                             <div>Action</div>
                         </div>
@@ -101,20 +81,18 @@
                         <ng-container *ngFor="let e of dataSource(); let i=index; trackBy: trackById">
                             <div class="grid grid-cols-1 md:grid-cols-7 items-center gap-4 py-3 px-6 md:px-8 border-b">
 
-                                <div class="truncate">{{e.id}}</div>
-                                <div class="col-span-2">{{$any(e).user?.firstname ?? '-'}} {{$any(e).user?.lastname ?? '-'}} ({{$any(e).user.cin}})</div>
-                                <div class="truncate">{{e.accountNumber}}</div>
-                                <div class="truncate">{{e.balance}}</div>
+                                <div class="truncate">{{e.name}}</div>
+                                <div class="truncate">{{e.url}}</div>
+                                <div class="truncate">{{e.pageSize}}</div>
                                 <div class="truncate">
-                                    <div class="py-0.5 px-3 rounded-full text-sm font-semibold w-fit"
-                                        style="width: fit-content;"
-                                        [ngClass]="{ 'text-green-800 bg-green-100 dark:text-green-50 dark:bg-green-700 w-fit' : e?.status === 'Ouvert',
-                                                        'text-red-800 bg-red-100 dark:text-red-50 dark:bg-red-700 w-fit' : e?.status !== 'Ouvert', }">
-                                        {{e?.status}}
-                                    </div>
+                                    <!-- {{e.pageSelector}} -->
                                 </div>
-
-
+                                <div class="truncate">
+                                    <!-- {{e.home?.card ?? '-'}} -->
+                                </div>
+                                <div class="truncate">
+                                    <!-- {{e.detail?.title ?? '-'}} -->
+                                </div>
                                 <div>
                                     <button class="min-w-10 min-h-7 h-7 px-2 leading-6" mat-stroked-button
                                         matTooltip="Go to Edit form" (click)="edit(e)">

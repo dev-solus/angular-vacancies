@@ -9,17 +9,11 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { OperationType } from './operationType';
+import { UserDto } from './userDto';
 
 
-export interface Operation { 
-    operationType?: OperationType;
-    path?: string | null;
-    op?: string | null;
-    from?: string | null;
-    value?: any | null;
+export interface UserDtoGetAllDto { 
+    list?: Array<UserDto> | null;
+    count?: number;
 }
-export namespace Operation {
-}
-
 

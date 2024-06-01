@@ -61,7 +61,7 @@ export class AuthSignInComponent {
         tap(e => this.myForm.disable()),
         tap(e => this.uow.session.token = ''),
         map(_ => this.myForm.getRawValue()),
-        switchMap(o => this.uow.core.auth.login(o).pipe(
+        switchMap(o => this.uow.core.auth.apiAccountsLoginPost(o).pipe(
             catchError(this.uow.handleError),
         )),
         tap(e => console.warn(e)),

@@ -13,7 +13,7 @@
     "f": "ng serve --hmr --port 4201",
     "s": "ng serve --port 4201",
     "prod": "ng build --progress --configuration=production --output-path dist",
-    "g": "openapi-generator-cli generate -i http://127.0.0.1:8080/v3/api-docs -g typescript-angular -o src/app/core/api",
+    "g": "openapi-generator-cli generate -i http://127.0.0.1:5000/swagger/v1/swagger.json -g typescript-angular -o src/app/core/api",
     "u": "ng update @angular/core@17 @angular/cli@17 --force --allow-dirty && ng update @angular/material@17  --force --allow-dirty",
     "test": "ng test"
   },

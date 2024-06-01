@@ -47,8 +47,7 @@ export const appRoutes: Route[] = [
         children: [
             { path: '', pathMatch: 'full', redirectTo: 'operation' },
             { path: 'user', loadChildren: () => import('app/modules/admin/user/user.routes') },
-            { path: 'account', loadChildren: () => import('app/modules/admin/account/account.routes') },
-            { path: 'operation', loadChildren: () => import('app/modules/admin/operation/operation.routes') },
+            { path: 'config', loadChildren: () => import('app/modules/admin/config/config.routes') },
             { path: 'role', loadChildren: () => import('app/modules/admin/role/role.routes') },
         ]
     }

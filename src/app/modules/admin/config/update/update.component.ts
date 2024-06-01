@@ -14,15 +14,14 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
 import { fuseAnimations } from '@fuse/animations';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
-import { Account } from 'app/core/api';
-import { ActivatedRoute } from '@angular/router';
 
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Config } from 'app/core/api';
 
 
 @Component({
     standalone: true,
-    selector: 'app-account-update',
+    selector: 'app-config-update',
     templateUrl: './update.component.html',
     styles: [``],
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -39,7 +38,7 @@ import { ActivatedRoute } from '@angular/router';
         MatDatepickerModule,
         MatIconModule,
         MatProgressSpinnerModule,
-        MatDialogModule,
+        RouterLink,
         FuseAlertComponent,
 
     ],
@@ -48,27 +47,28 @@ export class UpdateComponent {
     //di
     readonly fb = inject(FormBuilder);
     readonly uow = inject(UowService);
-    readonly dialogRef = inject(MatDialogRef);
-    readonly data = inject(MAT_DIALOG_DATA);
-    readonly route = inject(ActivatedRoute);
-    readonly userIdParams = +this.route.snapshot.queryParamMap.get('userId');
 
-    readonly patchForm = toSignal(of(this.data).pipe(
-        delay(10),
-        tap(e => this.myForm.patchValue(e.model)),
-        tap(e => !!this.userIdParams ? this.myForm.controls.user_id.disable() : null),
+
+    readonly route = inject(ActivatedRoute);
+    readonly router = inject(Router);
+
+    readonly model = toSignal(this.route.paramMap.pipe(
+        take(1),
+        map(e => +(e.get('id') ?? 0)),
+        filter(id => id !== 0),
+        switchMap(id => this.uow.core.configs.getById(id)),
+        tap(r => this.myForm.patchValue(r)),
     ));
 
-    readonly myForm: FormGroup<TypeForm<Account>> = this.fb.group({
-        id: [0],
-        accountNumber: [null, []],
-        balance: [0, [Validators.min(1),]],
-        user_id: [this.userIdParams, [Validators.min(1)]],
-        status: [null, []],
-    }) as any;
 
-    // select
-    readonly users$ = this.uow.core.users.getForSelect$;
+    readonly myForm: FormGroup<TypeForm<Config>> = this.fb.group({
+        name: [null, []],
+        url: [null, []],
+        pageSize: [0, [Validators.min(1),]],
+        pageSelector: [null, []],
+        homeId: [0, [Validators.min(1),]],
+        detailId: [0, [Validators.min(1),]],
+    }) as any;
 
     readonly showMessage$ = new Subject<any>();
 
@@ -79,7 +79,7 @@ export class UpdateComponent {
         filter(_ => this.myForm.valid && this.myForm.dirty),
         tap(_ => this.myForm.disable()),
         map(_ => this.myForm.getRawValue()),
-        switchMap(o => this.uow.core.accounts.post(o).pipe(
+        switchMap(o => this.uow.core.configs.post(o).pipe(
             catchError(this.uow.handleError),
             map((e: any) => ({ code: e.code < 0 ? -1 : 1, message: e.code < 0 ? e.message : 'Enregistrement réussi' })),
         )),
@@ -97,7 +97,7 @@ export class UpdateComponent {
         filter(_ => this.myForm.valid && this.myForm.dirty),
         tap(_ => this.myForm.disable()),
         map(_ => this.myForm.getRawValue()),
-        switchMap(o => this.uow.core.accounts.put(o.id, o).pipe(
+        switchMap(o => this.uow.core.configs.put(o.id, o).pipe(
             catchError(this.uow.handleError),
             map((e: any) => ({ code: e.code < 0 ? -1 : 1, message: e.code < 0 ? e.message : 'Enregistrement réussi' })),
         )),
@@ -108,8 +108,6 @@ export class UpdateComponent {
         tap(r => this.back(r)),
     ));
 
-
-
-    submit = (e: Account) => e.id === 0 ? this.post$.next() : this.put$.next();
-    back = (e?: Account) => this.dialogRef.close(e);
+    submit = (e: Config) => e.id === 0 ? this.post$.next() : this.put$.next();
+    back = (e?: Config) => this.router.navigate(['../'], { relativeTo: this.route });
 }

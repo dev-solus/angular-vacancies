@@ -77,10 +77,8 @@
                             matSort matSortDisableClear>
                             <div>id</div>
                             <div class="col-span-2">Nom complet</div>
-                            <div>CIN</div>
                             <div>email</div>
                             <div>Téléphone</div>
-                            <div>Genre</div>
                             <div>role</div>
                             <div>Actif</div>
                             <div>Action</div>
@@ -92,11 +90,9 @@
 
                                 <div class="truncate">{{e.id}}</div>
                                 <div class=" col-span-2">{{e.firstname}} {{e.lastname}}</div>
-                                <div class="truncate">{{e.cin}}</div>
                                 <div class="truncate">{{e.email}}</div>
                                 <div class="truncate">{{e.phone}}</div>
-                                <div class="truncate">{{e.gender}}</div>
-                                <div class="truncate">{{e.role?.name ?? '-'}}</div>
+                                <div class="truncate">{{e.role?.label ?? '-'}}</div>
                                 <div class="truncate">
                                     <div class="py-0.5 px-3 rounded-full text-sm font-semibold w-fit"
                                         style="width: fit-content;"

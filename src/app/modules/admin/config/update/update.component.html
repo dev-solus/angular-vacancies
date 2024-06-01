@@ -1,0 +1,78 @@
+
+<div class="flex flex-col flex-auto min-w-0">
+    <!-- Header -->
+    <div
+        class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 sm:py-8 sm:px-10 border-b bg-card dark:bg-transparent">
+        <div class="flex-1 min-w-0">
+            <!-- Title -->
+            <div class="flex gap-3 mt-2">
+                <button mat-icon-button routerLink="../"><mat-icon>arrow_back</mat-icon></button>
+                <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
+                    Config
+                </h2>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main -->
+    <div class="w-full p-6 sm:p-10">
+        <ng-container [ngTemplateOutlet]="formTemplate" [ngTemplateOutletContext]="{$implicit:myForm}"></ng-container>
+
+        <ng-container *ngIf="showMessage$ | async as e">
+            <fuse-alert class="w-full my-5" [@shake]="true" [type]="e.code < 0 ? 'warn' : 'success'"
+                [appearance]="'border'">
+                <span fuseAlertTitle>Message</span>
+                {{e.message}}
+            </fuse-alert>
+        </ng-container>
+
+        <div class="w-full flex justify-between mt-10">
+            <button mat-raised-button (click)="back()">Retour</button>
+            <button mat-raised-button [disabled]="!myForm.dirty" color="primary" (click)="submit(myForm.getRawValue())" >
+                <span *ngIf="!myForm.disabled">
+                    Enregistrer
+                </span>
+                <mat-progress-spinner *ngIf="myForm.disabled" [diameter]="24" [mode]="'indeterminate'">
+                </mat-progress-spinner>
+            </button>
+        </div>
+    </div>
+</div>
+
+<ng-template #formTemplate let-myForm>
+    <form [formGroup]="myForm" >
+    <div class="grid md:grid-cols-2 gap-5">
+    <mat-form-field appearance="fill">
+                <mat-label>name</mat-label>
+                <input matInput formControlName="name" type="text" required>
+                <mat-error *ngIf="myForm.controls.name.invalid && (myForm.controls.name.dirty || myForm.controls.name.touched)">
+                    Champ est requis
+                </mat-error>
+            </mat-form-field>
+<mat-form-field appearance="fill">
+                <mat-label>url</mat-label>
+                <input matInput formControlName="url" type="text" required>
+                <mat-error *ngIf="myForm.controls.url.invalid && (myForm.controls.url.dirty || myForm.controls.url.touched)">
+                    Champ est requis
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+                <mat-label>pageSize</mat-label>
+                <input matInput formControlName="pageSize" type="undefined" required>
+                <mat-error *ngIf="myForm.controls.pageSize.invalid && (myForm.controls.pageSize.dirty || myForm.controls.pageSize.touched)">
+                    Champ est requis
+                </mat-error>
+            </mat-form-field>
+<mat-form-field appearance="fill">
+                <mat-label>pageSelector</mat-label>
+                <input matInput formControlName="pageSelector" type="text" required>
+                <mat-error *ngIf="myForm.controls.pageSelector.invalid && (myForm.controls.pageSelector.dirty || myForm.controls.pageSelector.touched)">
+                    Champ est requis
+                </mat-error>
+            </mat-form-field>
+
+
+    </div>
+</form>
+</ng-template>

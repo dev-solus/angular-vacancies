@@ -14,7 +14,7 @@ export class LocalService {
     readonly user = signal<UserClient>(null);
     readonly isSignin = signal(false);
     public token = '';
-    readonly isAdmin = computed(() => this.user()?.role.name === 'AGENT_GUICHET');
+    readonly isAdmin = computed(() => this.user()?.role.label === 'Admin');
 
     constructor() {
         this.getLocal();
