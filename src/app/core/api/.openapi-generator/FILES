@@ -4,6 +4,7 @@ api.module.ts
 api/accounts.service.ts
 api/api.ts
 api/configs.service.ts
+api/jobs.service.ts
 api/roles.service.ts
 api/scraping.service.ts
 api/users.service.ts
@@ -17,6 +18,8 @@ model/configGetAllDto.ts
 model/detail.ts
 model/getForSelectDto.ts
 model/home.ts
+model/job.ts
+model/jobGetAllDto.ts
 model/loginResponseDto.ts
 model/models.ts
 model/myElement.ts

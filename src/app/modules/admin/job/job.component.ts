@@ -1,4 +1,4 @@
-import { Component, ViewChild,Signal, AfterViewInit, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, ViewChild, Signal, AfterViewInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { merge, Subject, switchMap, filter, map, startWith, tap, delay, catchError } from 'rxjs';
 import { Job } from 'app/core/api';
 import { UowService, TypeForm } from 'app/core/http-services/uow.service';
@@ -19,6 +19,7 @@ import { UpdateComponent } from './update/update.component';
 import { MatDialog } from '@angular/material/dialog';
 
 import { MyImageComponent } from '@fuse/upload-file/display-image/my-image.component';
+import { AddComponent } from './add/add.component';
 
 
 @Component({
@@ -41,16 +42,16 @@ import { MyImageComponent } from '@fuse/upload-file/display-image/my-image.compo
         MatSelectModule,
         MatIconModule,
         MatProgressSpinnerModule,
-        
+
         MyImageComponent,
-        
+
     ],
 })
 export class JobComponent implements AfterViewInit {
     //DI
     readonly uow = inject(UowService);
-    
-    
+
+
     readonly dialog = inject(MatDialog);
 
     @ViewChild(MatPaginator, { static: true })
@@ -79,9 +80,6 @@ export class JobComponent implements AfterViewInit {
     );
 
     // select
-    readonly metadatas$ = this.uow.core.metadata[]s.getForSelect$;
-
-    
 
     readonly viewInitDone = new Subject<void>();
     readonly dataSource: Signal<(Job)[]> = toSignal(this.viewInitDone.pipe(
@@ -92,13 +90,13 @@ export class JobComponent implements AfterViewInit {
             this.update,
             this.#delete$,
         )),
-        startWith(null as any),
+        // startWith(null as any),
         map(_ => [
             (this.paginator?.pageIndex || 0) * (this.paginator?.pageSize ?? 10),// startIndex
             this.paginator?.pageSize ?? 10,
             this.sort?.active ? this.sort?.active : 'id',
             this.sort?.direction ? this.sort?.direction : 'desc',
-            
+
         ]),
         tap(e => this.isLoadingResults = true),
         switchMap(e => this.uow.core.jobs.getList(e).pipe(
@@ -109,7 +107,12 @@ export class JobComponent implements AfterViewInit {
     ), { initialValue: [] }) as any;
 
     ngAfterViewInit(): void {
-        this.viewInitDone.next();
+        // this.viewInitDone.next();
+        this.uow.core.myScrapings.getProgress().subscribe(
+            r => {
+                console.log(`Progress: ${r}%`);
+            }
+        );
     }
 
     trackById(index: number, item: any): number {
@@ -117,7 +120,7 @@ export class JobComponent implements AfterViewInit {
     }
 
     reset() {
-        
+
 
         this.update.next(0);
     }
@@ -125,7 +128,7 @@ export class JobComponent implements AfterViewInit {
     search() {
         this.update.next(0);
     }
-    
+
     openDialog(o: Job, text) {
         const dialogRef = this.dialog.open(UpdateComponent, {
             // width: '1100px',
@@ -137,8 +140,11 @@ export class JobComponent implements AfterViewInit {
     };
 
     add() {
-        
-        this.openDialog({} as Job, 'Ajouter Job').subscribe(result => {
+        this.dialog.open(AddComponent, {
+            // width: '1100px',
+            disableClose: true,
+            data: { model: {}, title: 'Add' }
+        }).afterClosed().subscribe(result => {
             if (result) {
                 this.update.next(0);
             }
@@ -146,7 +152,6 @@ export class JobComponent implements AfterViewInit {
     }
 
     edit(o: Job) {
-        
         this.openDialog(o, 'Modifier Job').subscribe((result: Job) => {
             if (result) {
                 this.update.next(0);
@@ -158,5 +163,5 @@ export class JobComponent implements AfterViewInit {
         this.delete$.next(o);
     }
 
-    
+
 }

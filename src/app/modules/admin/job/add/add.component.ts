@@ -21,8 +21,8 @@ import { UploadFileComponent } from '@fuse/upload-file/upload-file.component';
 
 @Component({
     standalone: true,
-    selector: 'app-job-update',
-    templateUrl: './update.component.html',
+    selector: 'app-job-add',
+    templateUrl: './add.component.html',
     styles: [``],
     changeDetection: ChangeDetectionStrategy.OnPush,
     animations   : fuseAnimations,
@@ -43,7 +43,7 @@ import { UploadFileComponent } from '@fuse/upload-file/upload-file.component';
         UploadFileComponent,
     ],
 })
-export class UpdateComponent {
+export class AddComponent {
     //di
     readonly fb = inject(FormBuilder);
     readonly uow = inject(UowService);
@@ -67,6 +67,7 @@ export class UpdateComponent {
     }) as any;
 
     // select
+    readonly configs = this.uow.core.configs.getForSelect$;
 
     readonly showMessage$ = new Subject<any>();
 
@@ -81,33 +82,14 @@ export class UpdateComponent {
             catchError(this.uow.handleError),
             map((e: any) => ({ code: e.code < 0 ? -1 : 1, message: e.code < 0 ? e.message : 'Enregistrement réussi' })),
         )),
+        tap((r) => this.myForm.enable()),
         tap(r => this.showMessage$.next({ message: r.message, code: r.code })),
         filter(r => r.code === 1),
         delay(500),
-        tap((r) => this.myForm.enable()),
-        tap(r => this.back(r)),
-    ));
-
-    readonly put$ = new Subject<void>();
-    readonly #put$ = toSignal( this.put$.pipe(
-        tap(_ => this.uow.logInvalidFields(this.myForm)),
-        tap(_ => this.myForm.markAllAsTouched()),
-        filter(_ => this.myForm.valid && this.myForm.dirty),
-        tap(_ => this.myForm.disable()),
-        map(_ => this.myForm.getRawValue()),
-        switchMap(o => this.uow.core.jobs.put(o.id, o).pipe(
-            catchError(this.uow.handleError),
-            map((e: any) => ({ code: e.code < 0 ? -1 : 1, message: e.code < 0 ? e.message : 'Enregistrement réussi' })),
-        )),
-        tap(r => this.showMessage$.next({ message: r.message, code: r.code })),
-        filter(r => r.code === 1),
-        delay(500),
-        tap((r) => this.myForm.enable()),
         tap(r => this.back(r)),
     ));
 
 
-
-    submit = (e: Job) =>  e.id === 0 ? this.post$.next() : this.put$.next();
+    submit = (e: Job) =>  this.post$.next();
     back = (e?: Job) =>  this.dialogRef.close(e);
 }

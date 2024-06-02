@@ -4,6 +4,8 @@ export * from './configGetAllDto';
 export * from './detail';
 export * from './getForSelectDto';
 export * from './home';
+export * from './job';
+export * from './jobGetAllDto';
 export * from './loginResponseDto';
 export * from './myElement';
 export * from './operation';
