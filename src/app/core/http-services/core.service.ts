@@ -15,6 +15,6 @@ export class CoreService {
 
     readonly users = this.utils.extendClass<User, UsersService>(UsersService, environment.apiUrl, 'users');
     readonly roles = this.utils.extendClass<Role, RolesService>(RolesService, environment.apiUrl, 'roles');
-    readonly configs = this.utils.extendClass<Config, ConfigsService>(ConfigsService, environment.apiUrl, 'operations');
+    readonly configs = this.utils.extendClass<Config, ConfigsService>(ConfigsService, environment.apiUrl, 'configs');
 
 }

@@ -1,0 +1,132 @@
+
+<div class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent">
+
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 sm:py-8 sm:px-10 border-b bg-card dark:bg-transparent">
+        <div class="flex-1 min-w-0">
+            <!-- Title -->
+            <div class="mt-2 flex justify-between items-center">
+                <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
+                    Jobs
+                </h2>
+
+                <div class="flex gap-1">
+                    <button #testVariable mat-flat-button [ngClass]="{'hidden': true}"
+                        (click)="$any(testVariable).value = !!!$any(testVariable).value">
+                        <mat-icon [svgIcon]="'heroicons_outline:chevron-double-down'"></mat-icon>
+                        <span class="ml-2 mr-1">search</span>
+                    </button>
+
+                    <button mat-flat-button [color]="'primary'" (click)="add()">
+                        <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+                        <span class="ml-2 mr-1">Add</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Header -->
+    <div *ngIf="!!$any(testVariable).value" class=" py-6 px-4 border-b">
+    <!-- Title -->
+    <div class="grid md:grid-cols-4 gap-2">
+        
+
+        <ng-container class="flex gap-1 w-80">
+            <button mat-raised-button (click)="reset()">
+                <mat-icon>refresh</mat-icon>
+            </button>
+            <button mat-raised-button color="primary" (click)="search()">
+                <mat-icon>search</mat-icon>
+            </button>
+        </ng-container>
+    </div>
+
+</div>
+
+
+<ng-container *ngIf="showMessage$ | async as e">
+                <fuse-alert class="w-full my-5" [@shake]="true" [type]="e.code < 0 ? 'warn' : 'success'"
+                    [appearance]="'border'">
+                    <span fuseAlertTitle>Message</span>
+                    {{e.message}}
+                </fuse-alert>
+            </ng-container>
+
+    <!-- Main -->
+    <div class="flex flex-auto overflow-hidden">
+        <!-- Balances list -->
+        <div class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto ">
+            <ng-container>
+                <ng-container>
+                    <div class="">
+                        <!-- Header -->
+                        <div class="grid grid-cols-1 md:grid-cols-14 z-10 sticky top-0 gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5 "
+                            matSort matSortDisableClear>
+                            
+                            
+
+                            <div>id</div>
+<div>title</div>
+<div>url</div>
+<div>image</div>
+<div>date</div>
+<div>location</div>
+<div>description</div>
+<div>domain</div>
+<div>company</div>
+<div>fonction</div>
+<div>educationLevel</div>
+<div>salary</div>
+<div>metadata</div>
+
+                            <div>Action</div>
+                        </div>
+                        <!-- Rows -->
+
+                            <ng-container *ngFor="let e of dataSource(); let i=index; trackBy: trackById">
+                                <div
+                                    class="grid grid-cols-1 md:grid-cols-14 items-center gap-4 py-3 px-6 md:px-8 border-b">
+                                    
+                                    <div class="truncate">{{e.id}}</div>
+<div class="truncate">{{e.title}}</div>
+<div class="truncate">{{e.url}}</div>
+<div class="truncate"><my-image class="rounded-circle avatar-sm w-10" [src]="e.image"/></div>
+<div class="truncate">{{e.date}}</div>
+<div class="truncate">{{e.location}}</div>
+<div class="truncate">{{e.description}}</div>
+<div class="truncate">{{e.domain}}</div>
+<div class="truncate">{{e.company}}</div>
+<div class="truncate">{{e.fonction}}</div>
+<div class="truncate">{{e.educationLevel}}</div>
+<div class="truncate">{{e.salary}}</div>
+<div class="truncate">{{e.metadata?.undefined ?? '-'}}</div>
+                                    <div>
+                                        <button class="min-w-10 min-h-7 h-7 px-2 leading-6" mat-stroked-button
+                                            matTooltip="Go to Edit form" (click)="edit(e)">
+                                            <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:pencil' ">
+                                            </mat-icon>
+                                        </button>
+                                        <button class="min-w-10 min-h-7 h-7 px-2 leading-6 ml-2" mat-stroked-button
+                                            matTooltip="Delete this item" (click)="remove(e)">
+                                            <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:trash' ">
+                                            </mat-icon>
+                                        </button>
+                                    </div>
+                                </div>
+                            </ng-container>
+                    </div>
+
+                    <mat-paginator #paginator
+                        class="sm:absolute sm:inset-x-0 sm:bottom-0 border-b sm:border-t sm:border-b-0 z-10 bg-gray-50 dark:bg-transparent"
+                        [length]="totalRecords" [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]"
+                        [showFirstLastButtons]="true">
+                    </mat-paginator>
+
+                </ng-container>
+            </ng-container>
+        </div>
+    </div>
+</div>
+            

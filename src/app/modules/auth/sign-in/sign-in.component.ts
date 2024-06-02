@@ -49,7 +49,7 @@ export class AuthSignInComponent {
     ]
 
     readonly myForm: FormGroup<TypeForm<{ email: string, password: string }>> = this.fb.group({
-        email: [this.uow.isDev ? 'agent@bank.com' : '', [Validators.required]],
+        email: [this.uow.isDev ? 'app@admin.com' : '', [Validators.required]],
         password: [this.uow.isDev ? '123' : '', Validators.required],
     }) as any;
 

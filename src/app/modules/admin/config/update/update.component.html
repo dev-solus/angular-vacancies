@@ -28,7 +28,7 @@
 
         <div class="w-full flex justify-between mt-10">
             <button mat-raised-button (click)="back()">Retour</button>
-            <button mat-raised-button [disabled]="!myForm.dirty" color="primary" (click)="submit(myForm.getRawValue())" >
+            <button mat-raised-button  color="primary" (click)="submit(myForm.getRawValue())" >
                 <span *ngIf="!myForm.disabled">
                     Enregistrer
                 </span>

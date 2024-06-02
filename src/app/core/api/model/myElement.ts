@@ -14,5 +14,6 @@
 export interface MyElement { 
     name?: string | null;
     selector?: string | null;
+    type?: string | null;
 }
 

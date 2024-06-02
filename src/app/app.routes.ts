@@ -49,6 +49,7 @@ export const appRoutes: Route[] = [
             { path: 'user', loadChildren: () => import('app/modules/admin/user/user.routes') },
             { path: 'config', loadChildren: () => import('app/modules/admin/config/config.routes') },
             { path: 'role', loadChildren: () => import('app/modules/admin/role/role.routes') },
+            { path: 'job', loadChildren: () => import('app/modules/admin/job/job.routes') },
         ]
     }
 ];

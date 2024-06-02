@@ -18,7 +18,7 @@ export interface Config {
     name?: string | null;
     url?: string | null;
     pageSize?: number;
-    pageMyElement?: string | null;
+    pageSelector?: string | null;
     home?: Home;
     detail?: Detail;
 }

@@ -4,12 +4,20 @@ import { FuseNavigationItem } from '@fuse/components/navigation';
 export const defaultNavigation: FuseNavigationItem[] = [
 
     {
-        id: 'operation',
-        title: 'Operation',
-        subtitle: 'Gestion des operation',
+        id: 'config',
+        title: 'Config',
+        subtitle: 'Gestion des config',
         icon: 'heroicons_outline:cog',
         type: 'basic',
-        link: '/admin/operation',
+        link: '/admin/config',
+    },
+    {
+        id: 'job',
+        title: 'job',
+        subtitle: 'Gestion des profils',
+        icon: 'heroicons_outline:cog',
+        type: 'basic',
+        link: '/admin/job',
     },
     {
         id: 'User',
@@ -20,12 +28,12 @@ export const defaultNavigation: FuseNavigationItem[] = [
         link: '/admin/user',
     },
     {
-        id: 'account',
-        title: 'Compte bancaire',
-        subtitle: 'Gestion des comptes bancaires',
+        id: 'role',
+        title: 'Role',
+        subtitle: 'Gestion des profils',
         icon: 'heroicons_outline:cog',
         type: 'basic',
-        link: '/admin/account',
+        link: '/admin/role',
     },
     // {
     //     id: 'settings',

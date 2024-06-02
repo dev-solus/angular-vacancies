@@ -62,36 +62,27 @@
                 <ng-container>
                     <div class="">
                         <!-- Header -->
-                        <div class="grid grid-cols-1 md:grid-cols-7 z-10 sticky top-0 gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5 "
+                        <div class="grid grid-cols-1 md:grid-cols-5 z-10 sticky top-0 gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5 "
                             matSort matSortDisableClear>
-
-
-
                             <div>name</div>
                             <div>url</div>
                             <div>pageSize</div>
                             <div>pageSelector</div>
-                            <div>home</div>
-                            <div>detail</div>
 
                             <div>Action</div>
                         </div>
                         <!-- Rows -->
 
                         <ng-container *ngFor="let e of dataSource(); let i=index; trackBy: trackById">
-                            <div class="grid grid-cols-1 md:grid-cols-7 items-center gap-4 py-3 px-6 md:px-8 border-b">
+                            <div class="grid grid-cols-1 md:grid-cols-5 items-center gap-4 py-3 px-6 md:px-8 border-b">
 
-                                <div class="truncate">{{e.name}}</div>
-                                <div class="truncate">{{e.url}}</div>
-                                <div class="truncate">{{e.pageSize}}</div>
-                                <div class="truncate">
-                                    <!-- {{e.pageSelector}} -->
+                                <div class="">{{e.name}}</div>
+                                <div class="">
+                                    <a [href]="e.url" target="_blank" >URL</a>
                                 </div>
-                                <div class="truncate">
-                                    <!-- {{e.home?.card ?? '-'}} -->
-                                </div>
-                                <div class="truncate">
-                                    <!-- {{e.detail?.title ?? '-'}} -->
+                                <div class="">{{e.pageSize}}</div>
+                                <div class="">
+                                    {{e.pageSelector}}
                                 </div>
                                 <div>
                                     <button class="min-w-10 min-h-7 h-7 px-2 leading-6" mat-stroked-button
