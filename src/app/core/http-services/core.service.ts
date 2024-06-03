@@ -19,6 +19,6 @@ export class CoreService {
     readonly configs = this.utils.extendClass<Config, ConfigsService>(ConfigsService, environment.apiUrl, 'configs');
     readonly jobs = this.utils.extendClass<Job, JobsService>(JobsService, environment.apiUrl, 'jobs');
     readonly scrapings = this.utils.extendClass<Job, ScrapingService>(ScrapingService, environment.apiUrl, 'scrapings');
-    readonly myScrapings = this.utils.extendClass<Job, MyScrapingService>(MyScrapingService, environment.apiUrl, 'scrapings');
+    readonly myScrapings = this.utils.extendClass<Job, MyScrapingService>(MyScrapingService, environment.apiUrl, 'scraping');
 
 }
