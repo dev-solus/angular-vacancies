@@ -29,13 +29,13 @@ export class MyScrapingService extends SuperService<Job> {
         });
     }
 
-    scrapeOffers(numbers: number[]): Observable<number> {
+    scrapeOffers(numbers: number[]) {
         const numbersString = numbers.join(',');
 
         return new Observable(observer => {
             const eventSource = new EventSource(`${environment.apiUrl}/api/${this.controller}/ScrapeOffers?numbers=${numbersString}`);
             eventSource.onmessage = event => {
-                observer.next(parseInt(event.data));
+                observer.next(event.data);
             };
             eventSource.onerror = error => {
                 observer.error(error);

@@ -15,11 +15,11 @@ import { FuseAlertComponent } from '@fuse/components/alert';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSelectModule } from '@angular/material/select';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { UpdateComponent } from './update/update.component';
 import { MatDialog } from '@angular/material/dialog';
 
 import { MyImageComponent } from '@fuse/upload-file/display-image/my-image.component';
 import { AddComponent } from './add/add.component';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -50,7 +50,7 @@ import { AddComponent } from './add/add.component';
 export class JobComponent implements AfterViewInit {
     //DI
     readonly uow = inject(UowService);
-
+    readonly router = inject(Router);
 
     readonly dialog = inject(MatDialog);
 
@@ -84,13 +84,14 @@ export class JobComponent implements AfterViewInit {
     readonly viewInitDone = new Subject<void>();
     readonly dataSource: Signal<(Job)[]> = toSignal(this.viewInitDone.pipe(
         delay(50),
+
         switchMap(_ => merge(
             this.sort.sortChange,
             this.paginator.page,
             this.update,
             this.#delete$,
         )),
-        // startWith(null as any),
+        startWith(null as any),
         map(_ => [
             (this.paginator?.pageIndex || 0) * (this.paginator?.pageSize ?? 10),// startIndex
             this.paginator?.pageSize ?? 10,
@@ -107,12 +108,12 @@ export class JobComponent implements AfterViewInit {
     ), { initialValue: [] }) as any;
 
     ngAfterViewInit(): void {
-        // this.viewInitDone.next();
-        this.uow.core.myScrapings.scrapeOffers([1,2]).subscribe(
-            r => {
-                console.log(`Progress: ${r}%`);
-            }
-        );
+        this.viewInitDone.next();
+        // this.uow.core.myScrapings.scrapeOffers([1,2]).subscribe(
+        //     r => {
+        //         console.log(`Progress: ${r}%`);
+        //     }
+        // );
     }
 
     trackById(index: number, item: any): number {
@@ -120,24 +121,12 @@ export class JobComponent implements AfterViewInit {
     }
 
     reset() {
-
-
         this.update.next(0);
     }
 
     search() {
         this.update.next(0);
     }
-
-    openDialog(o: Job, text) {
-        const dialogRef = this.dialog.open(UpdateComponent, {
-            // width: '1100px',
-            disableClose: true,
-            data: { model: o, title: text }
-        });
-
-        return dialogRef.afterClosed();
-    };
 
     add() {
         this.dialog.open(AddComponent, {
@@ -152,11 +141,7 @@ export class JobComponent implements AfterViewInit {
     }
 
     edit(o: Job) {
-        this.openDialog(o, 'Modifier Job').subscribe((result: Job) => {
-            if (result) {
-                this.update.next(0);
-            }
-        });
+        this.router.navigate(['/admin/job', o.id]);
     }
 
     remove(o: Job) {

@@ -1,5 +1,5 @@
-import { Component,  ChangeDetectionStrategy, inject, ViewEncapsulation } from '@angular/core';
-import { Subject, delay, filter, map,  switchMap, take, takeUntil, tap, catchError, of } from 'rxjs';
+import { Component, ChangeDetectionStrategy, inject, ViewEncapsulation } from '@angular/core';
+import { Subject, delay, filter, map, switchMap, take, takeUntil, tap, catchError, of } from 'rxjs';
 import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { Job } from 'app/core/api';
 import { CommonModule } from '@angular/common';
@@ -15,8 +15,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
 import { fuseAnimations } from '@fuse/animations';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule} from '@angular/material/dialog';
 
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { UploadFileComponent } from '@fuse/upload-file/upload-file.component';
 
 @Component({
@@ -25,7 +25,7 @@ import { UploadFileComponent } from '@fuse/upload-file/upload-file.component';
     templateUrl: './update.component.html',
     styles: [``],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    animations   : fuseAnimations,
+    animations: fuseAnimations,
     imports: [
         CommonModule,
         FormsModule,
@@ -38,7 +38,7 @@ import { UploadFileComponent } from '@fuse/upload-file/upload-file.component';
         MatDatepickerModule,
         MatIconModule,
         MatProgressSpinnerModule,
-        MatDialogModule,
+        RouterLink,
         FuseAlertComponent,
         UploadFileComponent,
     ],
@@ -47,8 +47,10 @@ export class UpdateComponent {
     //di
     readonly fb = inject(FormBuilder);
     readonly uow = inject(UowService);
-    readonly dialogRef = inject(MatDialogRef);
-    readonly data = inject(MAT_DIALOG_DATA);
+
+
+    readonly route = inject(ActivatedRoute);
+    readonly router = inject(Router);
 
     readonly myForm: FormGroup<TypeForm<Job>> = this.fb.group({
         id: [0],
@@ -63,39 +65,19 @@ export class UpdateComponent {
         fonction: [null, []],
         educationLevel: [null, []],
         salary: [null, []],
-        metadata: [[], [Validators.min(1), ]],
+        metadataId: [0, [Validators.min(1),]],
     }) as any;
-
-    // select
 
     readonly showMessage$ = new Subject<any>();
 
-    readonly post$ = new Subject<void>();
-    readonly #post$ = toSignal(this.post$.pipe(
-        tap(_ => this.uow.logInvalidFields(this.myForm)),
-        tap(_ => this.myForm.markAllAsTouched()),
-        filter(_ => this.myForm.valid && this.myForm.dirty),
-        tap(_ => this.myForm.disable()),
-        map(_ => this.myForm.getRawValue()),
-        switchMap(o => this.uow.core.jobs.post(o).pipe(
-            catchError(this.uow.handleError),
-            map((e: any) => ({ code: e.code < 0 ? -1 : 1, message: e.code < 0 ? e.message : 'Enregistrement réussi' })),
-        )),
-        tap(r => this.showMessage$.next({ message: r.message, code: r.code })),
-        filter(r => r.code === 1),
-        delay(500),
-        tap((r) => this.myForm.enable()),
-        tap(r => this.back(r)),
-    ));
-
     readonly put$ = new Subject<void>();
-    readonly #put$ = toSignal( this.put$.pipe(
+    readonly #put$ = toSignal(this.put$.pipe(
         tap(_ => this.uow.logInvalidFields(this.myForm)),
         tap(_ => this.myForm.markAllAsTouched()),
         filter(_ => this.myForm.valid && this.myForm.dirty),
         tap(_ => this.myForm.disable()),
         map(_ => this.myForm.getRawValue()),
-        switchMap(o => this.uow.core.jobs.put(o.id, o).pipe(
+        switchMap(o => this.uow.core.jobs.patchObject(o.id, o).pipe(
             catchError(this.uow.handleError),
             map((e: any) => ({ code: e.code < 0 ? -1 : 1, message: e.code < 0 ? e.message : 'Enregistrement réussi' })),
         )),
@@ -106,8 +88,14 @@ export class UpdateComponent {
         tap(r => this.back(r)),
     ));
 
+    readonly model = toSignal(this.route.paramMap.pipe(
+        take(1),
+        map(e => +(e.get('id') ?? 0)),
+        filter(id => id !== 0),
+        switchMap(id => this.uow.core.jobs.getById(id)),
+        tap(r => this.myForm.patchValue(r)),
+    ));
 
-
-    submit = (e: Job) =>  e.id === 0 ? this.post$.next() : this.put$.next();
-    back = (e?: Job) =>  this.dialogRef.close(e);
+    submit = (e: Job) => this.put$.next();
+    back = (e?: Job) => this.router.navigate(['../'], { relativeTo: this.route });
 }

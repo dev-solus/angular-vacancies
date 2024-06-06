@@ -99,13 +99,13 @@
                                 <div class="truncate">{{e.fonction}}</div>
                                 <div class="truncate">{{e.educationLevel}}</div>
                                 <div class="truncate">{{e.salary}}</div>
-                                <div>
+                                <div class="flex gap-2">
                                     <button class="min-w-10 min-h-7 h-7 px-2 leading-6" mat-stroked-button
                                         matTooltip="Go to Edit form" (click)="edit(e)">
                                         <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:pencil' ">
                                         </mat-icon>
                                     </button>
-                                    <button class="min-w-10 min-h-7 h-7 px-2 leading-6 ml-2" mat-stroked-button
+                                    <button class="min-w-10 min-h-7 h-7 px-2 leading-6" mat-stroked-button
                                         matTooltip="Delete this item" (click)="remove(e)">
                                         <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:trash' ">
                                         </mat-icon>

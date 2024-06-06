@@ -1,43 +1,39 @@
-<div class="flex flex-col md:min-w-160 -m-6">
-
+<div class="flex flex-col flex-auto min-w-0">
     <!-- Header -->
-    <div class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary">
-        <div class="text-lg font-medium">Job</div>
-        <button mat-icon-button (click)="back()" [tabIndex]="-1">
-            <mat-icon class="text-current" [svgIcon]="'heroicons_outline:x'"></mat-icon>
-        </button>
+    <div
+        class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 sm:py-8 sm:px-10 border-b bg-card dark:bg-transparent">
+        <div class="flex-1 min-w-0">
+            <!-- Title -->
+            <div class="flex gap-3 mt-2">
+                <button mat-icon-button routerLink="../"><mat-icon>arrow_back</mat-icon></button>
+                <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
+                    Job
+                </h2>
+            </div>
+        </div>
     </div>
 
-    <div class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto">
+    <!-- Main -->
+    <div class="w-full p-6 sm:p-10">
+        <ng-container [ngTemplateOutlet]="formTemplate" [ngTemplateOutletContext]="{$implicit:myForm}"></ng-container>
 
-        <div class="grid w-full">
-            <ng-container [ngTemplateOutlet]="formTemplate"
-                [ngTemplateOutletContext]="{$implicit:myForm}"></ng-container>
+        <ng-container *ngIf="showMessage$ | async as e">
+            <fuse-alert class="w-full my-5" [@shake]="true" [type]="e.code < 0 ? 'warn' : 'success'"
+                [appearance]="'border'">
+                <span fuseAlertTitle>Message</span>
+                {{e.message}}
+            </fuse-alert>
+        </ng-container>
 
-            <ng-container *ngIf="showMessage$ | async as e">
-                <fuse-alert class="w-full my-5" [@shake]="true" [type]="e.code < 0 ? 'warn' : 'success'"
-                    [appearance]="'border'">
-                    <span fuseAlertTitle>Message</span>
-                    {{e.message}}
-                </fuse-alert>
-            </ng-container>
-        </div>
-
-        <!-- Actions -->
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-4 sm:mt-6">
-            <div class="-ml-2">
-            </div>
-
-            <div class="flex items-center gap-2 mt-4 sm:mt-0">
-                <button class="ml-auto sm:ml-0" mat-button (click)="back()">
-                    Retour
-                </button>
-
-                <button class="order-first sm:order-last" mat-flat-button [disabled]="!myForm.dirty" [color]="'primary'"
-                    (click)="submit(myForm.getRawValue())">
+        <div class="w-full flex justify-between mt-10">
+            <button mat-raised-button (click)="back()">Retour</button>
+            <button mat-raised-button [disabled]="!myForm.dirty" color="primary" (click)="submit(myForm.getRawValue())">
+                <span *ngIf="!myForm.disabled">
                     Enregistrer
-                </button>
-            </div>
+                </span>
+                <mat-progress-spinner *ngIf="myForm.disabled" [diameter]="24" [mode]="'indeterminate'">
+                </mat-progress-spinner>
+            </button>
         </div>
     </div>
 </div>
@@ -131,9 +127,16 @@
                 </mat-error>
             </mat-form-field>
 
-            <pre>
-                {{myForm.value.metadata | json}}
-            </pre>
+            <!-- <mat-form-field appearance="fill">
+                <mat-label>metadata</mat-label>
+                <mat-select formControlName="metadataId">
+                    <mat-option *ngFor="let e of metadata[]s$ | async" [value]="e.id">{{e.name}}</mat-option>
+                </mat-select>
+                <mat-error
+                    *ngIf="myForm.controls.metadataId.invalid && (myForm.controls.metadataId.dirty || myForm.controls.metadataId.touched)">
+                    Champ est requis
+                </mat-error>
+            </mat-form-field> -->
         </div>
     </form>
 </ng-template>
