@@ -85,15 +85,15 @@ export class RoleComponent implements AfterViewInit {
             this.#delete$,
         )),
         startWith(null as any),
-        map(_ => [
-            (this.paginator?.pageIndex || 0) ,// * (this.paginator?.pageSize ?? 10),// startIndex
-            this.paginator?.pageSize ?? 10,
-            this.sort?.active ? this.sort?.active : 'id',
-            this.sort?.direction ? this.sort?.direction : 'desc',
-            this.name.value === '' ? '*' : this.name.value,
-        ]),
+        map(_ => ({
+            pageIndex: (this.paginator?.pageIndex || 0),// * (this.paginator?.pageSize ?? 10),// startIndex
+            pageSize: this.paginator?.pageSize ?? 10,
+            sortBy: this.sort?.active ? this.sort?.active : 'id',
+            sortDir: this.sort?.direction ? this.sort?.direction : 'desc',
+            name: this.name.value,
+        })),
         tap(e => this.isLoadingResults = true),
-        switchMap(e => this.uow.core.roles.getList(e).pipe(
+        switchMap(e => this.uow.core.roles.getListQ(e).pipe(
             tap(e => this.totalRecords = e.count),
             map(e => e.list))
         ),

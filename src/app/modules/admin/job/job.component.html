@@ -32,6 +32,9 @@
         <!-- Title -->
         <div class="grid md:grid-cols-4 gap-2">
 
+            <mat-form-field appearance="fill">
+                <input matInput (keyup.enter)="search()" placeholder="titre, domain ..." [formControl]="name" required>
+            </mat-form-field>
 
             <ng-container class="flex gap-1 w-80">
                 <button mat-raised-button (click)="reset()">
@@ -62,43 +65,49 @@
                 <ng-container>
                     <div class="">
                         <!-- Header -->
-                        <div class="grid grid-cols-1 md:grid-cols-12 z-10 sticky top-0 gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5 "
+                        <div class="grid grid-cols-1 md:grid-cols-11 z-10 sticky top-0 gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5 "
                             matSort matSortDisableClear>
 
 
 
-                            <div>id</div>
-                            <div>image</div>
-                            <div class="col-span-2">title</div>
-                            <div>date</div>
-                            <div>location</div>
+                            <div mat-sort-header="id">id</div>
+                            <div mat-sort-header="company">image</div>
+                            <div mat-sort-header="title" class="col-span-2">title</div>
+                            <div mat-sort-header="domain">domain</div>
+                            <div mat-sort-header="salary">salary</div>
+                            <div class="col-span-2">date</div>
+                            <div class="col-span-2">url</div>
+                            <!-- <div>location</div>
                             <div>domain</div>
                             <div>company</div>
                             <div>fonction</div>
                             <div>educationLevel</div>
-                            <div>salary</div>
+                            <div>salary</div> -->
 
                             <div>Action</div>
                         </div>
                         <!-- Rows -->
 
                         <ng-container *ngFor="let e of dataSource(); let i=index; trackBy: trackById">
-                            <div class="grid grid-cols-1 md:grid-cols-12 items-center gap-4 py-3 px-6 md:px-8 border-b">
+                            <div class="grid grid-cols-1 md:grid-cols-11 items-center gap-4 py-3 px-6 md:px-8 border-b">
 
                                 <div class="truncate">{{e.id}}</div>
                                 <div class="truncate">
                                     <my-image class="rounded-circle avatar-sm w-10" [src]="e.image" />
+                                    <span>{{e.company || '--'}}</span>
                                 </div>
-                                <div class="truncate col-span-2">
-                                    <a [href]="e.url" target="_blank" rel="noopener noreferrer">{{e.title}}</a>
+                                <div class=" col-span-2">
+                                    <a [href]="e.url" class="underline" target="_blank" rel="noopener noreferrer">{{e.title || '--'}}</a>
                                 </div>
-                                <div class="truncate">{{e.date}}</div>
-                                <div class="truncate">{{e.location}}</div>
-                                <div class="truncate">{{e.domain}}</div>
+                                <div class="">{{e.domain || '--'}}</div>
+                                <div class="truncate">{{e.salary || '--'}}</div>
+                                <div class="col-span-2">{{e.date || '--'}}</div>
+                                <div class="col-span-2 truncate">{{e.url || '--'}}</div>
+                                <!-- <div class="truncate">{{e.location}}</div>
                                 <div class="truncate">{{e.company}}</div>
                                 <div class="truncate">{{e.fonction}}</div>
                                 <div class="truncate">{{e.educationLevel}}</div>
-                                <div class="truncate">{{e.salary}}</div>
+                                -->
                                 <div class="flex gap-2">
                                     <button class="min-w-10 min-h-7 h-7 px-2 leading-6" mat-stroked-button
                                         matTooltip="Go to Edit form" (click)="edit(e)">
@@ -117,7 +126,7 @@
 
                     <mat-paginator #paginator
                         class="sm:absolute sm:inset-x-0 sm:bottom-0 border-b sm:border-t sm:border-b-0 z-10 bg-gray-50 dark:bg-transparent"
-                        [length]="totalRecords" [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]"
+                        [length]="totalRecords" [pageIndex]="0" [pageSize]="50" [pageSizeOptions]="[5, 10, 25, 50, 100]"
                         [showFirstLastButtons]="true">
                     </mat-paginator>
 

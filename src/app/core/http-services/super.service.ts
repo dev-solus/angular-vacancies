@@ -10,6 +10,11 @@ export class SuperService<T> {
 
     getList = (args: any[]) => this.http.get<{ list: T[], count: number }>(`${this.apiUrl}/${this.controller}/getAll/${args.join('/')}`);
 
+    getListQ = (args: any) => {
+        const queryParams = new URLSearchParams(args).toString();
+        return this.http.get<{ list: T[], count: number }>(`${this.apiUrl}/${this.controller}/getList?${queryParams}`);
+    };
+
     private getListCache$: Observable<{ list: T[]; count: number; }>;
 
     getList$ = (args: any[]) => {

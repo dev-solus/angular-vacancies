@@ -14,11 +14,14 @@ export class MyScrapingService extends SuperService<Job> {
         super('Scraping');
     }
 
-    getProgress(): Observable<number> {
+    getProgress(numbers?: number[]): Observable<any> {
+        const numbersString = numbers?.join(',') ?? '';
         return new Observable(observer => {
-            const eventSource = new EventSource(environment.apiUrl + '/api/Scraping/GetProgress');
+            const eventSource = new EventSource(environment.apiUrl + `/api/Scraping/GetProgress?numbers=${numbersString}`);
+            // const eventSource = new EventSource(`${environment.apiUrl}/api/${this.controller}/ScrapeOffers=${numbersString}`);
             eventSource.onmessage = event => {
-                observer.next(parseInt(event.data));
+                console.log('event.data', event.data);
+                observer.next(event.data);
             };
             eventSource.onerror = error => {
                 observer.error(error);
@@ -29,37 +32,37 @@ export class MyScrapingService extends SuperService<Job> {
         });
     }
 
-    scrapeOffers(numbers: number[]): Observable<SubjectDto | any> {
-        const numbersString = numbers.join(',');
+    // scrapeOffers(numbers?: number[]): Observable<SubjectDto | any> {
+    //     const numbersString = numbers?.join(',') ?? '';
 
-        const eventSource = new EventSource(`${environment.apiUrl}/api/${this.controller}/ScrapeOffers?numbers=${numbersString}`);
-        return new Observable(observer => {
-            eventSource.onmessage = event => {
-                this.zone.run(() => {
-                    console.log('666666666666666666666666666');
-                    observer.next(1);
-                    // observer.next(event.data);
-                });
-            };
+    //     return new Observable(observer => {
+    //         const eventSource = new EventSource(`${environment.apiUrl}/api/${this.controller}/ScrapeOffers?numbers=${numbersString}`);
+    //         eventSource.onmessage = event => {
+    //             this.zone.run(() => {
+    //                 console.log('666666666666666666666666666');
+    //                 observer.next(1);
+    //                 // observer.next(event.data);
+    //             });
+    //         };
 
-            eventSource.onerror = error => {
-                this.zone.run(() => {
-                    observer.error(error);
-                  });
-                // if (eventSource.readyState === 0) {
-                //     console.log('The stream has been closed by the server.');
-                //     eventSource.close();
-                //     observer.complete();
-                // } else {
-                //     observer.error('EventSource error: ' + error);
-                // }
-                // console.warn(error);
-            };
-            return () => {
-                eventSource.close();
-            };
-        });
-    }
+    //         eventSource.onerror = error => {
+    //             this.zone.run(() => {
+    //                 observer.error(error);
+    //               });
+    //             // if (eventSource.readyState === 0) {
+    //             //     console.log('The stream has been closed by the server.');
+    //             //     eventSource.close();
+    //             //     observer.complete();
+    //             // } else {
+    //             //     observer.error('EventSource error: ' + error);
+    //             // }
+    //             // console.warn(error);
+    //         };
+    //         return () => {
+    //             eventSource.close();
+    //         };
+    //     });
+    // }
 }
 
 export class SubjectDto {

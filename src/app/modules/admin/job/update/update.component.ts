@@ -18,6 +18,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { UploadFileComponent } from '@fuse/upload-file/upload-file.component';
+import { EditorComponent } from 'app/core/editor/editor.component';
 
 @Component({
     standalone: true,
@@ -41,6 +42,7 @@ import { UploadFileComponent } from '@fuse/upload-file/upload-file.component';
         RouterLink,
         FuseAlertComponent,
         UploadFileComponent,
+        EditorComponent,
     ],
 })
 export class UpdateComponent {

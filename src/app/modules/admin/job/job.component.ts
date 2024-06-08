@@ -80,6 +80,7 @@ export class JobComponent implements AfterViewInit {
     );
 
     // select
+    readonly name = new FormControl('');
 
     readonly viewInitDone = new Subject<void>();
     readonly dataSource: Signal<(Job)[]> = toSignal(this.viewInitDone.pipe(
@@ -92,15 +93,15 @@ export class JobComponent implements AfterViewInit {
             this.#delete$,
         )),
         startWith(null as any),
-        map(_ => [
-            (this.paginator?.pageIndex || 0) * (this.paginator?.pageSize ?? 10),// startIndex
-            this.paginator?.pageSize ?? 10,
-            this.sort?.active ? this.sort?.active : 'id',
-            this.sort?.direction ? this.sort?.direction : 'desc',
-
-        ]),
+        map(_ => ({
+            pageIndex: (this.paginator?.pageIndex || 0),// * (this.paginator?.pageSize ?? 10),// startIndex
+            pageSize: this.paginator?.pageSize ?? 10,
+            sortBy: this.sort?.active ? this.sort?.active : 'id',
+            sortDir: this.sort?.direction ? this.sort?.direction : 'desc',
+            name: this.name.value,
+        })),
         tap(e => this.isLoadingResults = true),
-        switchMap(e => this.uow.core.jobs.getList(e).pipe(
+        switchMap(e => this.uow.core.jobs.getListQ(e).pipe(
             tap(e => this.totalRecords = e.count),
             map(e => e.list))
         ),
@@ -110,17 +111,17 @@ export class JobComponent implements AfterViewInit {
     ngAfterViewInit(): void {
         this.viewInitDone.next();
 
-        this.uow.core.myScrapings.getProgress().subscribe(
-            r => {
-                console.log(`Progress: ${r}%`);
-            },
-            error => console.error(error)
-        );
-
-
-        // this.uow.core.myScrapings.scrapeOffers([1,2]).subscribe(
+        // this.uow.core.myScrapings.getProgress([1, 2]).subscribe(
         //     r => {
-        //         console.log(`Progress: ${r}%`);
+        //         // console.log(`Progress: ${r}%`);
+        //     },
+        //     error => console.error(error)
+        // );
+
+
+        // this.uow.core.myScrapings.scrapeOffers().subscribe(
+        //     r => {
+        //         console.log(`data: ${r}`);
         //     },
         //     error => console.error(error)
         // );

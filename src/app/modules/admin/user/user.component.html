@@ -32,15 +32,7 @@
         <!-- Title -->
         <div class="grid md:grid-cols-4 gap-2">
             <mat-form-field appearance="fill">
-                <input matInput (keyup.enter)="search()" placeholder="Prénom" [formControl]="firstname" required>
-            </mat-form-field>
-
-            <mat-form-field appearance="fill">
-                <input matInput (keyup.enter)="search()" placeholder="CIN" [formControl]="cin" required>
-            </mat-form-field>
-
-            <mat-form-field appearance="fill">
-                <input matInput (keyup.enter)="search()" placeholder="email" [formControl]="email" required>
+                <input matInput (keyup.enter)="search()" placeholder="Prénom, email ..." [formControl]="firstname" required>
             </mat-form-field>
 
 
@@ -73,26 +65,26 @@
                 <ng-container>
                     <div class="">
                         <!-- Header -->
-                        <div class="grid grid-cols-1 md:grid-cols-11 z-10 sticky top-0 gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5 "
+                        <div class="grid grid-cols-1 md:grid-cols-9 z-10 sticky top-0 gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5 "
                             matSort matSortDisableClear>
-                            <div>id</div>
-                            <div class="col-span-2">Nom complet</div>
-                            <div>email</div>
-                            <div>Téléphone</div>
-                            <div>role</div>
-                            <div>Actif</div>
+                            <div mat-sort-header="id">id</div>
+                            <div mat-sort-header="firstname" class="col-span-2">Nom complet</div>
+                            <div mat-sort-header="email">email</div>
+                            <div mat-sort-header="phone">Téléphone</div>
+                            <div mat-sort-header="role">role</div>
+                            <div mat-sort-header="active">Actif</div>
                             <div>Action</div>
                         </div>
                         <!-- Rows -->
 
                         <ng-container *ngFor="let e of dataSource(); let i=index; trackBy: trackById">
-                            <div class="grid grid-cols-1 md:grid-cols-11 items-center gap-4 py-3 px-6 md:px-8 border-b">
+                            <div class="grid grid-cols-1 md:grid-cols-9 items-center gap-4 py-3 px-6 md:px-8 border-b">
 
                                 <div class="truncate">{{e.id}}</div>
                                 <div class=" col-span-2">{{e.firstname}} {{e.lastname}}</div>
                                 <div class="truncate">{{e.email}}</div>
                                 <div class="truncate">{{e.phone}}</div>
-                                <div class="truncate">{{e.role?.label ?? '-'}}</div>
+                                <div class="truncate">{{e.role ?? '-'}}</div>
                                 <div class="truncate">
                                     <div class="py-0.5 px-3 rounded-full text-sm font-semibold w-fit"
                                         style="width: fit-content;"
@@ -107,12 +99,8 @@
                                         <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:pencil' ">
                                         </mat-icon>
                                     </button>
-                                    <button class="min-w-10 min-h-7 h-7 leading-6" mat-stroked-button
-                                        matTooltip="Go to " (click)="account(e)">
-                                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:banknotes'">
-                                        </mat-icon>
-                                    </button>
-                                    <button class="min-w-10 min-h-7 h-7 leading-6" mat-stroked-button
+
+                                    <button class="min-w-10 min-h-7 h-7 leading-6" *ngIf="e.id === 1" mat-stroked-button
                                         matTooltip="Delete this item" (click)="remove(e)">
                                         <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:trash' ">
                                         </mat-icon>
@@ -123,11 +111,7 @@
                                         <mat-icon svgIcon="heroicons_outline:key"></mat-icon>
                                     </button>
 
-                                    <button class="min-w-10 min-h-7 h-7 leading-6" mat-stroked-button
-                                        matTooltip="Go to " (click)="account(e)">
-                                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:banknotes'">
-                                        </mat-icon>
-                                    </button>
+
 
                                 </div>
                             </div>

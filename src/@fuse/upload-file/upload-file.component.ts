@@ -44,7 +44,8 @@ export class UploadFileComponent implements OnInit, OnDestroy, ControlValueAcces
     @Input() folder: string;
     @Input() isLoadingResults = false;
     @Input() placeholder = '';
-    @Input() labelName='';
+    @Input() labelName = '';
+    @Input() showActionsButton = false;
 
     @Output() uploaded = new EventEmitter<string>();
     readonly fileName = signal('');

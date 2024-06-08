@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, inject, ViewEncapsulation } from '@angular/core';
 import { Subject, delay, filter, map, switchMap, take, takeUntil, tap, catchError, of } from 'rxjs';
-import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule, FormControl, FormArray } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -58,21 +58,117 @@ export class UpdateComponent {
         delay(50),
         tap(id => this.myForm.patchValue(id === 0 ? init : {})),
         filter(id => id !== 0),
-        switchMap(id => this.uow.core.configs.getById(id)),
-        tap(r => this.myForm.patchValue(r)),
+        switchMap(id => this.uow.core.configs.getById(id).pipe(
+            tap(r => this.myForm.patchValue(r)),
+            tap(e => {
+                (this.myForm.controls.detail.get('metadata') as FormArray).clear();
+                e.detail.metadata.forEach((m: any) => {
+                    const metadataGroup = this.fb.group({
+                        name: [m.name, Validators.required],
+                        selector: [m.selector, Validators.required],
+                        type: [m.type, Validators.required]
+                    });
+                    (this.myForm.controls.detail.get('metadata') as FormArray).push(metadataGroup);
+                });
+            }),
+        )),
     ));
+
+
+    // readonly myForm: FormGroup<TypeForm<Config>> = this.fb.group({
+    //     id: [null, []],
+    //     name: [null, []],
+    //     url: [null, []],
+    //     count: [null, []],
+    //     pageSize: [0, [Validators.min(1),]],
+    //     pageSelector: [null, []],
+    //     home: [0, [Validators.min(1),]],
+    //     detail: [0, [Validators.min(1),]],
+    // }) as any;
+    readonly homeFields = ['card', 'title', 'url'];
+    readonly detailFields = ['title', 'image', 'date', 'location', 'domain', 'company', 'fonction', 'educationLevel', 'salary', 'description'];
 
 
     readonly myForm: FormGroup<TypeForm<Config>> = this.fb.group({
         id: [null, []],
-        name: [null, []],
-        url: [null, []],
-        count: [null, []],
-        pageSize: [0, [Validators.min(1),]],
-        pageSelector: [null, []],
-        home: [0, [Validators.min(1),]],
-        detail: [0, [Validators.min(1),]],
+        name: ['', Validators.required],
+        pageSize: ['', Validators.required],
+        count: ['', Validators.required],
+        pageSelector: ['', Validators.required],
+        url: ['', Validators.required],
+        home: this.fb.group({
+            card: this.fb.group({
+                selector: ['', Validators.required],
+                type: ['', Validators.required],
+            }),
+            title: this.fb.group({
+                selector: ['', Validators.required],
+                type: ['', Validators.required],
+            }),
+            url: this.fb.group({
+                selector: ['', Validators.required],
+                type: ['', Validators.required],
+            }),
+        }),
+        detail: this.fb.group({
+            title: this.fb.group({
+                selector: ['', Validators.required],
+                type: ['', Validators.required],
+            }),
+            image: this.fb.group({
+                selector: ['', Validators.required],
+                type: ['', Validators.required],
+            }),
+            date: this.fb.group({
+                selector: ['', Validators.required],
+                type: ['', Validators.required],
+            }),
+            location: this.fb.group({
+                selector: ['', Validators.required],
+                type: ['', Validators.required],
+            }),
+            description: this.fb.group({
+                selector: ['', Validators.required],
+                type: ['', Validators.required],
+            }),
+            domain: this.fb.group({
+                selector: ['', Validators.required],
+                type: ['', Validators.required],
+            }),
+            company: this.fb.group({
+                selector: ['', Validators.required],
+                type: ['', Validators.required],
+            }),
+            fonction: this.fb.group({
+                selector: ['', Validators.required],
+                type: ['', Validators.required],
+            }),
+            educationLevel: this.fb.group({
+                selector: ['', Validators.required],
+                type: ['', Validators.required],
+            }),
+            salary: this.fb.group({
+                selector: ['', Validators.required],
+                type: ['', Validators.required],
+            }),
+            metadata: this.fb.array([]) // You can push form groups to this form array later
+
+        })
     }) as any;
+
+    getMetadataControls() {
+        return (this.myForm.get('detail.metadata') as FormArray).controls;
+    }
+
+    addMetadata() {
+        const metadataArray = this.myForm.get('detail.metadata') as FormArray;
+        const metadataGroup = this.fb.group({
+            name: ['', Validators.required],
+            selector: ['', Validators.required],
+            type: ['', Validators.required]
+        });
+        metadataArray.push(metadataGroup);
+    }
 
     readonly showMessage$ = new Subject<any>();
 

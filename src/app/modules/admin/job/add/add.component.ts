@@ -60,11 +60,11 @@ export class AddComponent {
     readonly resultStream$ = this.post$.pipe(
         tap(_ => this.uow.logInvalidFields(this.myForm)),
         tap(_ => this.myForm.markAllAsTouched()),
-        // filter(_ => this.myForm.valid && this.myForm.dirty),
         map(_ => this.myForm.getRawValue()),
         tap(_ => console.log('myForm', this.myForm.getRawValue())),
+        filter(e => e.configIds?.length > 0),
         // filter(_ => false),
-        switchMap(o => this.uow.core.myScrapings.scrapeOffers(o.configIds).pipe(
+        switchMap(o => this.uow.core.myScrapings.getProgress(o.configIds).pipe(
             catchError(this.uow.handleError),
             tap(r => console.warn(r)),
             tap(r => this.showMessage$.next(r)),
@@ -77,7 +77,7 @@ export class AddComponent {
 
     ngAfterViewInit(): void {
         // this.viewInitDone.next();
-        this.uow.core.myScrapings.scrapeOffers([1, 2]).subscribe(r => {
+        this.uow.core.myScrapings.getProgress([1, 2]).subscribe(r => {
             console.log(r);
         });
     }

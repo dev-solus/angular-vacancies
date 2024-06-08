@@ -5,7 +5,8 @@
         <div class="flex-1 min-w-0">
             <!-- Title -->
             <div class="flex gap-3 mt-2">
-                <button mat-icon-button routerLink="../"><mat-icon>arrow_back</mat-icon></button>
+                <button mat-icon-button routerLink="../"><mat-icon
+                        svgIcon="heroicons_outline:arrow-small-left"></mat-icon></button>
                 <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
                     Config
                 </h2>
@@ -38,55 +39,169 @@
     </div>
 </div>
 
-<ng-template #formTemplate let-myForm>
-    <form [formGroup]="myForm">
-        <div class="grid md:grid-cols-2 gap-5">
-            <mat-form-field appearance="fill">
-                <mat-label>name</mat-label>
-                <input matInput formControlName="name" type="text" required>
-                <mat-error
-                    *ngIf="myForm.controls.name.invalid && (myForm.controls.name.dirty || myForm.controls.name.touched)">
-                    Champ est requis
-                </mat-error>
-            </mat-form-field>
-            <mat-form-field appearance="fill">
-                <mat-label>url</mat-label>
-                <input matInput formControlName="url" type="text" required>
-                <mat-error
-                    *ngIf="myForm.controls.url.invalid && (myForm.controls.url.dirty || myForm.controls.url.touched)">
-                    Champ est requis
-                </mat-error>
-            </mat-form-field>
+<ng-template #formTemplate let-form>
 
-            <mat-form-field appearance="fill">
-                <mat-label>pageSize</mat-label>
-                <input matInput formControlName="pageSize" type="number" required>
-                <mat-error
-                    *ngIf="myForm.controls.pageSize.invalid && (myForm.controls.pageSize.dirty || myForm.controls.pageSize.touched)">
-                    Champ est requis
-                </mat-error>
-            </mat-form-field>
+    <form [formGroup]="form" class="grid grid-cols-2 gap-2">
+        <!-- Name -->
+        <mat-form-field appearance="fill" class="col-span-2">
+            <mat-label>Name</mat-label>
+            <input matInput formControlName="name" required>
+            <mat-error *ngIf="form.controls.name.invalid && (form.controls.name.dirty || form.controls.name.touched)">
+                Champ est requis
+            </mat-error>
+        </mat-form-field>
 
-            <mat-form-field appearance="fill">
-                <mat-label>Count</mat-label>
-                <input matInput formControlName="count" type="number" required>
-                <mat-error
-                    *ngIf="myForm.controls.count.invalid && (myForm.controls.count.dirty || myForm.controls.count.touched)">
-                    Champ est requis
-                </mat-error>
-            </mat-form-field>
+        <!-- URL -->
+        <mat-form-field appearance="fill" class="col-span-2">
+            <mat-label>URL</mat-label>
+            <input matInput formControlName="url" required>
+            <mat-error *ngIf="form.controls.url.invalid && (form.controls.url.dirty || form.controls.url.touched)">
+                Champ est requis
+            </mat-error>
+        </mat-form-field>
+
+        <!-- Page Size -->
+        <mat-form-field appearance="fill">
+            <mat-label>Page Size</mat-label>
+            <input matInput formControlName="pageSize" type="number" required>
+            <mat-error
+                *ngIf="form.controls.pageSize.invalid && (form.controls.pageSize.dirty || form.controls.pageSize.touched)">
+                Champ est requis
+            </mat-error>
+        </mat-form-field>
+
+        <!-- Count -->
+        <mat-form-field appearance="fill">
+            <mat-label>Count</mat-label>
+            <input matInput formControlName="count" type="number" required>
+            <mat-error
+                *ngIf="form.controls.count.invalid && (form.controls.count.dirty || form.controls.count.touched)">
+                Champ est requis
+            </mat-error>
+        </mat-form-field>
+
+        <!-- Page Selector -->
+        <mat-form-field appearance="fill">
+            <mat-label>Page Selector</mat-label>
+            <input matInput formControlName="pageSelector" required>
+            <mat-error
+                *ngIf="form.controls.pageSelector.invalid && (form.controls.pageSelector.dirty || form.controls.pageSelector.touched)">
+                Champ est requis
+            </mat-error>
+        </mat-form-field>
+
+        <div></div>
 
 
-            <mat-form-field appearance="fill">
-                <mat-label>pageSelector</mat-label>
-                <input matInput formControlName="pageSelector" type="text" required>
-                <mat-error
-                    *ngIf="myForm.controls.pageSelector.invalid && (myForm.controls.pageSelector.dirty || myForm.controls.pageSelector.touched)">
-                    Champ est requis
-                </mat-error>
-            </mat-form-field>
+        <!-- Home Group -->
+         <h1 class="text-3xl font-bold col-span-2">Home</h1>
+        <div formGroupName="home" class="grid md:grid-cols-3 items-start gap-2 col-span-2">
+            <ng-container *ngFor="let field of homeFields">
+                <div [formGroupName]="field" class="grid items-start gap-2 bg-slate-50 p-2 border">
+                    <mat-form-field appearance="fill">
+                        <mat-label>{{field | titlecase}} Selector</mat-label>
+                        <input matInput formControlName="selector" required>
+                        <mat-error
+                            *ngIf="form.get('home.' + field).controls.selector.invalid && (form.get('home.' + field).controls.selector.dirty || form.get('home.' + field).controls.selector.touched)">
+                            Champ est requis
+                        </mat-error>
+                    </mat-form-field>
 
+                    <!-- <mat-form-field appearance="fill">
+                        <mat-label>{{field | titlecase}} Type</mat-label>
+                        <input matInput formControlName="type" required>
+                        <mat-error
+                            *ngIf="form.get('home.' + field).controls.type.invalid && (form.get('home.' + field).controls.type.dirty || form.get('home.' + field).controls.type.touched)">
+                            Champ est requis
+                        </mat-error>
+                    </mat-form-field> -->
 
+                    <mat-form-field appearance="fill" >
+                        <mat-label>{{field | titlecase}} Type</mat-label>
+                        <mat-select formControlName="type">
+                            <mat-option *ngFor="let e of ['text', 'link']" [value]="e">{{e}}</mat-option>
+                        </mat-select>
+                        <mat-error
+                            *ngIf="form.get('home.' + field).controls.type.invalid && (form.get('home.' + field).controls.type.dirty || form.get('home.' + field).controls.type.touched)">
+                            Champ est requis
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </ng-container>
         </div>
+
+        <h1 class="text-3xl font-bold col-span-2 mt-3">Detail</h1>
+        <!-- Detail Group -->
+        <div formGroupName="detail" class="grid md:grid-cols-3 col-span-2 items-start gap-2">
+            <!-- Detail Fields -->
+            <ng-container *ngFor="let field of detailFields">
+                <div [formGroupName]="field" class="grid items-start bg-slate-50 p-2 border">
+                    <mat-form-field appearance="fill">
+                        <mat-label>{{field | titlecase}} Selector</mat-label>
+                        <input matInput formControlName="selector" required>
+                        <mat-error
+                            *ngIf="form.get('detail.' + field).controls.selector.invalid && (form.get('detail.' + field).controls.selector.dirty || form.get('detail.' + field).controls.selector.touched)">
+                            Champ est requis
+                        </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="fill" >
+                        <mat-label>{{field | titlecase}} Type</mat-label>
+                        <mat-select formControlName="type">
+                            <mat-option *ngFor="let e of ['text', 'link']" [value]="e">{{e}}</mat-option>
+                        </mat-select>
+                        <mat-error
+                            *ngIf="form.get('detail.' + field).controls.type.invalid && (form.get('detail.' + field).controls.type.dirty || form.get('detail.' + field).controls.type.touched)">
+                            Champ est requis
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </ng-container>
+
+            <h1 class="text-xl font-bold col-span-3 mt-2">Metadata</h1>
+            <!-- Metadata -->
+            <div formArrayName="metadata" class="grid grid-cols-3 gap-2 col-span-3">
+                <div *ngFor="let item of getMetadataControls(); let i = index;">
+                    <div [formGroupName]="i" class="grid items-start bg-slate-50 p-2 border">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Metadata {{ i + 1 }} Name</mat-label>
+                            <input matInput formControlName="name" required>
+                            <mat-error
+                                *ngIf="item.get('name').invalid && (item.get('name').dirty || item.get('name').touched)">
+                                Champ est requis
+                            </mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="fill">
+                            <mat-label>Metadata {{ i + 1 }} Selector</mat-label>
+                            <input matInput formControlName="selector" required>
+                            <mat-error
+                                *ngIf="item.get('selector').invalid && (item.get('selector').dirty || item.get('selector').touched)">
+                                Champ est requis
+                            </mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="fill">
+                            <mat-label>Metadata {{ i + 1 }} Type</mat-label>
+                            <mat-select formControlName="type">
+                                <mat-option *ngFor="let e of ['text', 'link']" [value]="e">{{e}}</mat-option>
+                            </mat-select>
+                            <mat-error
+                                *ngIf="item.get('type').invalid && (item.get('type').dirty || item.get('type').touched)">
+                                Champ est requis
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <button mat-flat-button [color]="'primary'" class="w-50" (click)="addMetadata()">
+                    <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+                    <span class="ml-2 mr-1">Add Metadata</span>
+                </button>
+            </div>
+        </div>
+
     </form>
+
+
 </ng-template>

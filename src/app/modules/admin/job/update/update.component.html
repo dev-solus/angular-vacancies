@@ -5,7 +5,7 @@
         <div class="flex-1 min-w-0">
             <!-- Title -->
             <div class="flex gap-3 mt-2">
-                <button mat-icon-button routerLink="../"><mat-icon>arrow_back</mat-icon></button>
+                <button mat-icon-button routerLink="../"><mat-icon svgIcon="heroicons_outline:arrow-small-left"></mat-icon></button>
                 <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
                     Job
                 </h2>
@@ -27,13 +27,13 @@
 
         <div class="w-full flex justify-between mt-10">
             <button mat-raised-button (click)="back()">Retour</button>
-            <button mat-raised-button [disabled]="!myForm.dirty" color="primary" (click)="submit(myForm.getRawValue())">
+            <!-- <button mat-raised-button [disabled]="!myForm.dirty" color="primary" (click)="submit(myForm.getRawValue())">
                 <span *ngIf="!myForm.disabled">
                     Enregistrer
                 </span>
                 <mat-progress-spinner *ngIf="myForm.disabled" [diameter]="24" [mode]="'indeterminate'">
                 </mat-progress-spinner>
-            </button>
+            </button> -->
         </div>
     </div>
 </div>
@@ -41,6 +41,11 @@
 <ng-template #formTemplate let-myForm>
     <form [formGroup]="myForm">
         <div class="grid md:grid-cols-2 gap-5">
+            <div class="col-span-1" >
+                <!-- <mat-label class="text-black mr-2">Image</mat-label> -->
+                <app-upload-file [formControl]="myForm.controls.image" folder="jobs"></app-upload-file>
+            </div>
+            <div></div>
             <mat-form-field appearance="fill">
                 <mat-label>title</mat-label>
                 <input matInput formControlName="title" type="text" required>
@@ -58,10 +63,7 @@
                 </mat-error>
             </mat-form-field>
 
-            <div class=" flex flex-row flex-wrap" style="place-content: center;">
-                <!-- <mat-label class="text-black mr-2">Image</mat-label> -->
-                <app-upload-file formControlName="image" folder="jobs"></app-upload-file>
-            </div>
+
             <mat-form-field appearance="fill">
                 <mat-label>date</mat-label>
                 <input matInput formControlName="date" type="text" required>
@@ -78,14 +80,7 @@
                     Champ est requis
                 </mat-error>
             </mat-form-field>
-            <mat-form-field appearance="fill">
-                <mat-label>description</mat-label>
-                <input matInput formControlName="description" type="text" required>
-                <mat-error
-                    *ngIf="myForm.controls.description.invalid && (myForm.controls.description.dirty || myForm.controls.description.touched)">
-                    Champ est requis
-                </mat-error>
-            </mat-form-field>
+
             <mat-form-field appearance="fill">
                 <mat-label>domain</mat-label>
                 <input matInput formControlName="domain" type="text" required>
@@ -126,6 +121,23 @@
                     Champ est requis
                 </mat-error>
             </mat-form-field>
+
+            <!-- <mat-form-field appearance="fill" class="col-span-2">
+                <mat-label>description</mat-label>
+                <input matInput formControlName="description" type="text" required>
+                <mat-error
+                    *ngIf="myForm.controls.description.invalid && (myForm.controls.description.dirty || myForm.controls.description.touched)">
+                    Champ est requis
+                </mat-error>
+            </mat-form-field> -->
+
+            <div class="col-span-2">
+                <app-editor formControlName="description"></app-editor>
+            </div>
+
+            <pre>
+                {{myForm.value.metadata | json}}
+            </pre>
 
             <!-- <mat-form-field appearance="fill">
                 <mat-label>metadata</mat-label>

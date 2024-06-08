@@ -99,17 +99,15 @@ export class UserComponent implements AfterViewInit {
             this.#delete$,
         )),
         startWith(null as any),
-        map(_ => [
-            (this.paginator?.pageIndex || 0) ,// * (this.paginator?.pageSize ?? 10),// startIndex
-            this.paginator?.pageSize ?? 10,
-            this.sort?.active ? this.sort?.active : 'id',
-            this.sort?.direction ? this.sort?.direction : 'desc',
-            this.firstname.value === '' ? '*' : this.firstname.value,
-            this.cin.value === '' ? '*' : this.cin.value,
-            this.email.value === '' ? '*' : this.email.value,
-        ]),
+        map(_ => ({
+            pageIndex: (this.paginator?.pageIndex || 0),// * (this.paginator?.pageSize ?? 10),// startIndex
+            pageSize: this.paginator?.pageSize ?? 10,
+            sortBy: this.sort?.active ? this.sort?.active : 'id',
+            sortDir: this.sort?.direction ? this.sort?.direction : 'desc',
+            firstname: this.firstname.value,
+        })),
         tap(e => this.isLoadingResults = true),
-        switchMap(e => this.uow.core.users.getList(e).pipe(
+        switchMap(e => this.uow.core.users.getListQ(e).pipe(
             tap(e => this.totalRecords = e.count),
             map(e => e.list))
         ),
@@ -156,7 +154,7 @@ export class UserComponent implements AfterViewInit {
 
 
     resetPassword(o: User) {
-        this.dialog.open(ResetPasswordComponent, { disableClose: true, data: { model: o} }).afterClosed().pipe(
+        this.dialog.open(ResetPasswordComponent, { disableClose: true, data: { model: o } }).afterClosed().pipe(
             tap(result => {
                 if (result) {
                     this.update.next(0);
