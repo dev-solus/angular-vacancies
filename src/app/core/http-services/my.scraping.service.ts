@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { inject, Injectable, NgZone } from "@angular/core";
 import { Job, ScrapingService } from "../api";
 import { Observable } from "rxjs";
 import { HttpClient } from "@angular/common/http";
@@ -9,7 +9,7 @@ import { SuperService } from "./super.service";
     providedIn: 'root'
 })
 export class MyScrapingService extends SuperService<Job> {
-
+    readonly zone = inject(NgZone);
     constructor() {
         super('Scraping');
     }
@@ -29,20 +29,41 @@ export class MyScrapingService extends SuperService<Job> {
         });
     }
 
-    scrapeOffers(numbers: number[]) {
+    scrapeOffers(numbers: number[]): Observable<SubjectDto | any> {
         const numbersString = numbers.join(',');
 
+        const eventSource = new EventSource(`${environment.apiUrl}/api/${this.controller}/ScrapeOffers?numbers=${numbersString}`);
         return new Observable(observer => {
-            const eventSource = new EventSource(`${environment.apiUrl}/api/${this.controller}/ScrapeOffers?numbers=${numbersString}`);
             eventSource.onmessage = event => {
-                observer.next(event.data);
+                this.zone.run(() => {
+                    console.log('666666666666666666666666666');
+                    observer.next(1);
+                    // observer.next(event.data);
+                });
             };
+
             eventSource.onerror = error => {
-                observer.error(error);
+                this.zone.run(() => {
+                    observer.error(error);
+                  });
+                // if (eventSource.readyState === 0) {
+                //     console.log('The stream has been closed by the server.');
+                //     eventSource.close();
+                //     observer.complete();
+                // } else {
+                //     observer.error('EventSource error: ' + error);
+                // }
+                // console.warn(error);
             };
             return () => {
                 eventSource.close();
             };
         });
     }
+}
+
+export class SubjectDto {
+    code = 0;
+    message = 0;
+    payload = 0;
 }

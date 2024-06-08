@@ -67,6 +67,7 @@ export class UpdateComponent {
         id: [null, []],
         name: [null, []],
         url: [null, []],
+        count: [null, []],
         pageSize: [0, [Validators.min(1),]],
         pageSelector: [null, []],
         home: [0, [Validators.min(1),]],

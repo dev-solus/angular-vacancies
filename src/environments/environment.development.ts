@@ -1,6 +1,5 @@
 const CORE_API = `http://localhost:5000`;
 
-const CORE_API_PROD = 'http://dev-local.cloud-digitransform.co:5033';
 
 export const environment = {
     production: false,

@@ -18,6 +18,7 @@ export interface Config {
     name?: string | null;
     url?: string | null;
     pageSize?: number;
+    count?: number;
     pageSelector?: string | null;
     home?: Home;
     detail?: Detail;

@@ -1,5 +1,5 @@
-import { Component,  ChangeDetectionStrategy, inject, ViewEncapsulation } from '@angular/core';
-import { Subject, delay, filter, map,  switchMap, take, takeUntil, tap, catchError, of } from 'rxjs';
+import { Component, ChangeDetectionStrategy, inject, ViewEncapsulation } from '@angular/core';
+import { Subject, delay, filter, map, switchMap, take, takeUntil, tap, catchError, of } from 'rxjs';
 import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { Job } from 'app/core/api';
 import { CommonModule } from '@angular/common';
@@ -15,7 +15,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
 import { fuseAnimations } from '@fuse/animations';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule} from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 
 import { UploadFileComponent } from '@fuse/upload-file/upload-file.component';
 
@@ -25,22 +25,18 @@ import { UploadFileComponent } from '@fuse/upload-file/upload-file.component';
     templateUrl: './add.component.html',
     styles: [``],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    animations   : fuseAnimations,
+    animations: fuseAnimations,
     imports: [
         CommonModule,
-        FormsModule,
         ReactiveFormsModule,
         MatFormFieldModule,
-        MatCheckboxModule,
         MatInputModule,
         MatButtonModule,
         MatSelectModule,
-        MatDatepickerModule,
         MatIconModule,
         MatProgressSpinnerModule,
         MatDialogModule,
         FuseAlertComponent,
-        UploadFileComponent,
     ],
 })
 export class AddComponent {
@@ -50,46 +46,39 @@ export class AddComponent {
     readonly dialogRef = inject(MatDialogRef);
     readonly data = inject(MAT_DIALOG_DATA);
 
-    readonly myForm: FormGroup<TypeForm<Job>> = this.fb.group({
+    readonly myForm: FormGroup<TypeForm<any>> = this.fb.group({
         id: [0],
-        title: [null, []],
-        url: [null, []],
-        image: [null, []],
-        date: [null, []],
-        location: [null, []],
-        description: [null, []],
-        domain: [null, []],
-        company: [null, []],
-        fonction: [null, []],
-        educationLevel: [null, []],
-        salary: [null, []],
-        metadata: [[], [Validators.min(1), ]],
+        configIds: [null, []],
     }) as any;
 
     // select
-    readonly configs = this.uow.core.configs.getForSelect$;
+    readonly configs$ = this.uow.core.configs.getForSelect$;
 
     readonly showMessage$ = new Subject<any>();
 
     readonly post$ = new Subject<void>();
-    readonly #post$ = toSignal(this.post$.pipe(
+    readonly resultStream$ = this.post$.pipe(
         tap(_ => this.uow.logInvalidFields(this.myForm)),
         tap(_ => this.myForm.markAllAsTouched()),
-        filter(_ => this.myForm.valid && this.myForm.dirty),
-        tap(_ => this.myForm.disable()),
+        // filter(_ => this.myForm.valid && this.myForm.dirty),
         map(_ => this.myForm.getRawValue()),
-        switchMap(o => this.uow.core.jobs.post(o).pipe(
+        tap(_ => console.log('myForm', this.myForm.getRawValue())),
+        // filter(_ => false),
+        switchMap(o => this.uow.core.myScrapings.scrapeOffers(o.configIds).pipe(
             catchError(this.uow.handleError),
-            map((e: any) => ({ code: e.code < 0 ? -1 : 1, message: e.code < 0 ? e.message : 'Enregistrement réussi' })),
+            tap(r => console.warn(r)),
+            tap(r => this.showMessage$.next(r)),
+            map(r => r.message),
         )),
-        tap((r) => this.myForm.enable()),
-        tap(r => this.showMessage$.next({ message: r.message, code: r.code })),
-        filter(r => r.code === 1),
-        delay(500),
-        tap(r => this.back(r)),
-    ));
+    );
 
+    submit = (e: Job) => this.post$.next();
+    back = (e?: Job) => this.dialogRef.close(e);
 
-    submit = (e: Job) =>  this.post$.next();
-    back = (e?: Job) =>  this.dialogRef.close(e);
+    ngAfterViewInit(): void {
+        // this.viewInitDone.next();
+        this.uow.core.myScrapings.scrapeOffers([1, 2]).subscribe(r => {
+            console.log(r);
+        });
+    }
 }

@@ -14,6 +14,12 @@
             <ng-container [ngTemplateOutlet]="formTemplate"
                 [ngTemplateOutletContext]="{$implicit:myForm}"></ng-container>
 
+                @if(resultStream$ | async; as result){
+                    <pre>
+                        {{result | json}}
+                    </pre>
+                }
+
             <ng-container *ngIf="showMessage$ | async as e">
                 <fuse-alert class="w-full my-5" [@shake]="true" [type]="e.code < 0 ? 'warn' : 'success'"
                     [appearance]="'border'">
@@ -33,7 +39,7 @@
                     Retour
                 </button>
 
-                <button class="order-first sm:order-last" mat-flat-button [disabled]="!myForm.dirty" [color]="'primary'"
+                <button class="order-first sm:order-last" mat-flat-button [color]="'primary'"
                     (click)="submit(myForm.getRawValue())">
                     Enregistrer
                 </button>
@@ -45,91 +51,17 @@
 <ng-template #formTemplate let-myForm>
     <form [formGroup]="myForm">
         <div class="grid md:grid-cols-2 gap-5">
-            <mat-form-field appearance="fill">
-                <mat-label>title</mat-label>
-                <input matInput formControlName="title" type="text" required>
+             <mat-form-field appearance="fill" class="col-span-2">
+                <mat-label>Config</mat-label>
+                <mat-select formControlName="configIds" multiple>
+                    <mat-option *ngFor="let e of configs$ | async" [value]="e.id">{{e.name}}</mat-option>
+                </mat-select>
                 <mat-error
-                    *ngIf="myForm.controls.title.invalid && (myForm.controls.title.dirty || myForm.controls.title.touched)">
-                    Champ est requis
-                </mat-error>
-            </mat-form-field>
-            <mat-form-field appearance="fill">
-                <mat-label>url</mat-label>
-                <input matInput formControlName="url" type="text" required>
-                <mat-error
-                    *ngIf="myForm.controls.url.invalid && (myForm.controls.url.dirty || myForm.controls.url.touched)">
+                    *ngIf="myForm.controls.configIds.invalid && (myForm.controls.configIds.dirty || myForm.controls.configIds.touched)">
                     Champ est requis
                 </mat-error>
             </mat-form-field>
 
-            <div class=" flex flex-row flex-wrap" style="place-content: center;">
-                <!-- <mat-label class="text-black mr-2">Image</mat-label> -->
-                <app-upload-file formControlName="image" folder="jobs"></app-upload-file>
-            </div>
-            <mat-form-field appearance="fill">
-                <mat-label>date</mat-label>
-                <input matInput formControlName="date" type="text" required>
-                <mat-error
-                    *ngIf="myForm.controls.date.invalid && (myForm.controls.date.dirty || myForm.controls.date.touched)">
-                    Champ est requis
-                </mat-error>
-            </mat-form-field>
-            <mat-form-field appearance="fill">
-                <mat-label>location</mat-label>
-                <input matInput formControlName="location" type="text" required>
-                <mat-error
-                    *ngIf="myForm.controls.location.invalid && (myForm.controls.location.dirty || myForm.controls.location.touched)">
-                    Champ est requis
-                </mat-error>
-            </mat-form-field>
-            <mat-form-field appearance="fill">
-                <mat-label>description</mat-label>
-                <input matInput formControlName="description" type="text" required>
-                <mat-error
-                    *ngIf="myForm.controls.description.invalid && (myForm.controls.description.dirty || myForm.controls.description.touched)">
-                    Champ est requis
-                </mat-error>
-            </mat-form-field>
-            <mat-form-field appearance="fill">
-                <mat-label>domain</mat-label>
-                <input matInput formControlName="domain" type="text" required>
-                <mat-error
-                    *ngIf="myForm.controls.domain.invalid && (myForm.controls.domain.dirty || myForm.controls.domain.touched)">
-                    Champ est requis
-                </mat-error>
-            </mat-form-field>
-            <mat-form-field appearance="fill">
-                <mat-label>company</mat-label>
-                <input matInput formControlName="company" type="text" required>
-                <mat-error
-                    *ngIf="myForm.controls.company.invalid && (myForm.controls.company.dirty || myForm.controls.company.touched)">
-                    Champ est requis
-                </mat-error>
-            </mat-form-field>
-            <mat-form-field appearance="fill">
-                <mat-label>fonction</mat-label>
-                <input matInput formControlName="fonction" type="text" required>
-                <mat-error
-                    *ngIf="myForm.controls.fonction.invalid && (myForm.controls.fonction.dirty || myForm.controls.fonction.touched)">
-                    Champ est requis
-                </mat-error>
-            </mat-form-field>
-            <mat-form-field appearance="fill">
-                <mat-label>educationLevel</mat-label>
-                <input matInput formControlName="educationLevel" type="text" required>
-                <mat-error
-                    *ngIf="myForm.controls.educationLevel.invalid && (myForm.controls.educationLevel.dirty || myForm.controls.educationLevel.touched)">
-                    Champ est requis
-                </mat-error>
-            </mat-form-field>
-            <mat-form-field appearance="fill">
-                <mat-label>salary</mat-label>
-                <input matInput formControlName="salary" type="text" required>
-                <mat-error
-                    *ngIf="myForm.controls.salary.invalid && (myForm.controls.salary.dirty || myForm.controls.salary.touched)">
-                    Champ est requis
-                </mat-error>
-            </mat-form-field>
 
             <pre>
                 {{myForm.value.metadata | json}}

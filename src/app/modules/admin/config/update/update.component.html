@@ -1,4 +1,3 @@
-
 <div class="flex flex-col flex-auto min-w-0">
     <!-- Header -->
     <div
@@ -28,7 +27,7 @@
 
         <div class="w-full flex justify-between mt-10">
             <button mat-raised-button (click)="back()">Retour</button>
-            <button mat-raised-button  color="primary" (click)="submit(myForm.getRawValue())" >
+            <button mat-raised-button color="primary" (click)="submit(myForm.getRawValue())">
                 <span *ngIf="!myForm.disabled">
                     Enregistrer
                 </span>
@@ -40,39 +39,54 @@
 </div>
 
 <ng-template #formTemplate let-myForm>
-    <form [formGroup]="myForm" >
-    <div class="grid md:grid-cols-2 gap-5">
-    <mat-form-field appearance="fill">
+    <form [formGroup]="myForm">
+        <div class="grid md:grid-cols-2 gap-5">
+            <mat-form-field appearance="fill">
                 <mat-label>name</mat-label>
                 <input matInput formControlName="name" type="text" required>
-                <mat-error *ngIf="myForm.controls.name.invalid && (myForm.controls.name.dirty || myForm.controls.name.touched)">
+                <mat-error
+                    *ngIf="myForm.controls.name.invalid && (myForm.controls.name.dirty || myForm.controls.name.touched)">
                     Champ est requis
                 </mat-error>
             </mat-form-field>
-<mat-form-field appearance="fill">
+            <mat-form-field appearance="fill">
                 <mat-label>url</mat-label>
                 <input matInput formControlName="url" type="text" required>
-                <mat-error *ngIf="myForm.controls.url.invalid && (myForm.controls.url.dirty || myForm.controls.url.touched)">
+                <mat-error
+                    *ngIf="myForm.controls.url.invalid && (myForm.controls.url.dirty || myForm.controls.url.touched)">
                     Champ est requis
                 </mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="fill">
                 <mat-label>pageSize</mat-label>
-                <input matInput formControlName="pageSize" type="undefined" required>
-                <mat-error *ngIf="myForm.controls.pageSize.invalid && (myForm.controls.pageSize.dirty || myForm.controls.pageSize.touched)">
+                <input matInput formControlName="pageSize" type="number" required>
+                <mat-error
+                    *ngIf="myForm.controls.pageSize.invalid && (myForm.controls.pageSize.dirty || myForm.controls.pageSize.touched)">
                     Champ est requis
                 </mat-error>
             </mat-form-field>
-<mat-form-field appearance="fill">
+
+            <mat-form-field appearance="fill">
+                <mat-label>Count</mat-label>
+                <input matInput formControlName="count" type="number" required>
+                <mat-error
+                    *ngIf="myForm.controls.count.invalid && (myForm.controls.count.dirty || myForm.controls.count.touched)">
+                    Champ est requis
+                </mat-error>
+            </mat-form-field>
+
+
+            <mat-form-field appearance="fill">
                 <mat-label>pageSelector</mat-label>
                 <input matInput formControlName="pageSelector" type="text" required>
-                <mat-error *ngIf="myForm.controls.pageSelector.invalid && (myForm.controls.pageSelector.dirty || myForm.controls.pageSelector.touched)">
+                <mat-error
+                    *ngIf="myForm.controls.pageSelector.invalid && (myForm.controls.pageSelector.dirty || myForm.controls.pageSelector.touched)">
                     Champ est requis
                 </mat-error>
             </mat-form-field>
 
 
-    </div>
-</form>
+        </div>
+    </form>
 </ng-template>

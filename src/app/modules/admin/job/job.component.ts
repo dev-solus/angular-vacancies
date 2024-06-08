@@ -109,10 +109,20 @@ export class JobComponent implements AfterViewInit {
 
     ngAfterViewInit(): void {
         this.viewInitDone.next();
+
+        this.uow.core.myScrapings.getProgress().subscribe(
+            r => {
+                console.log(`Progress: ${r}%`);
+            },
+            error => console.error(error)
+        );
+
+
         // this.uow.core.myScrapings.scrapeOffers([1,2]).subscribe(
         //     r => {
         //         console.log(`Progress: ${r}%`);
-        //     }
+        //     },
+        //     error => console.error(error)
         // );
     }
 
