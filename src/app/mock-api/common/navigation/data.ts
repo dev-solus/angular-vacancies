@@ -6,7 +6,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
     {
         id: 'config',
         title: 'Config',
-        subtitle: 'Gestion des config',
+        // subtitle: 'Gestion des config',
         icon: 'heroicons_outline:cog',
         type: 'basic',
         link: '/admin/config',
@@ -14,15 +14,23 @@ export const defaultNavigation: FuseNavigationItem[] = [
     {
         id: 'job',
         title: 'job',
-        subtitle: 'Gestion des profils',
+        // subtitle: 'Gestion des profils',
         icon: 'heroicons_outline:cog',
         type: 'basic',
         link: '/admin/job',
     },
     {
+        id: 'filter',
+        title: 'filter',
+        // subtitle: 'Gestion des profils',
+        icon: 'heroicons_outline:cog',
+        type: 'basic',
+        link: '/admin/filter',
+    },
+    {
         id: 'User',
         title: 'Utilisateur',
-        subtitle: 'Gestion des utilisateurs',
+        // subtitle: 'Gestion des utilisateurs',
         icon: 'heroicons_outline:cog',
         type: 'basic',
         link: '/admin/user',
@@ -30,7 +38,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
     {
         id: 'role',
         title: 'Role',
-        subtitle: 'Gestion des profils',
+        // subtitle: 'Gestion des profils',
         icon: 'heroicons_outline:cog',
         type: 'basic',
         link: '/admin/role',
@@ -40,7 +48,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
     //     title: 'Settings',
     //     type: 'collapsable',
     //     icon: 'heroicons_outline:cog',
-    //     subtitle: 'Admin Paramètres',
+        // subtitle: 'Admin Paramètres',
     //     // link: '',
     //     children: [
     //         {

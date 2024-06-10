@@ -1,0 +1,106 @@
+<div class="flex flex-col md:min-w-160 -m-6">
+
+    <!-- Header -->
+    <div class="flex flex-0 items-center justify-between h-16 pr-3 sm:pr-5 pl-6 sm:pl-8 bg-primary text-on-primary">
+        <div class="text-lg font-medium">Filter</div>
+        <button mat-icon-button (click)="back()" [tabIndex]="-1">
+            <mat-icon class="text-current" [svgIcon]="'heroicons_outline:x'"></mat-icon>
+        </button>
+    </div>
+
+    <div class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto">
+
+        <div class="grid w-full">
+            <ng-container [ngTemplateOutlet]="formTemplate"
+                [ngTemplateOutletContext]="{$implicit:myForm}"></ng-container>
+
+            <ng-container *ngIf="showMessage$ | async as e">
+                <fuse-alert class="w-full my-5" [@shake]="true" [type]="e.code < 0 ? 'warn' : 'success'"
+                    [appearance]="'border'">
+                    <span fuseAlertTitle>Message</span>
+                    {{e.message}}
+                </fuse-alert>
+            </ng-container>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-4 sm:mt-6">
+            <div class="-ml-2">
+            </div>
+
+            <div class="flex items-center gap-2 mt-4 sm:mt-0">
+                <button class="ml-auto sm:ml-0" mat-button (click)="back()">
+                    Retour
+                </button>
+
+                <button class="order-first sm:order-last" mat-flat-button  [color]="'primary'"
+                    (click)="submit(myForm.getRawValue())">
+                    Enregistrer
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #formTemplate let-myForm>
+    <form [formGroup]="myForm">
+        <div class="grid md:grid-cols-2 gap-5">
+            <mat-form-field appearance="fill">
+                <mat-label>Nom</mat-label>
+                <input matInput formControlName="name" type="text" required>
+                <mat-error
+                    *ngIf="myForm.controls.name.invalid && (myForm.controls.name.dirty || myForm.controls.name.touched)">
+                    Champ est requis
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>label</mat-label>
+                <input matInput formControlName="label" type="text" required>
+                <mat-error
+                    *ngIf="myForm.controls.label.invalid && (myForm.controls.label.dirty || myForm.controls.label.touched)">
+                    Champ est requis
+                </mat-error>
+            </mat-form-field>
+            <!-- <mat-form-field appearance="fill">
+                <mat-label>list</mat-label>
+                <input matInput formControlName="list" type="text" required>
+                <mat-error
+                    *ngIf="myForm.controls.list.invalid && (myForm.controls.list.dirty || myForm.controls.list.touched)">
+                    Champ est requis
+                </mat-error>
+            </mat-form-field> -->
+
+            <mat-form-field appearance="fill">
+                <mat-label>count</mat-label>
+                <input matInput formControlName="count" type="number" [readonly]="true" required>
+                <mat-error
+                    *ngIf="myForm.controls.count.invalid && (myForm.controls.count.dirty || myForm.controls.count.touched)">
+                    Champ est requis
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="col-span-2">
+                <mat-label>List</mat-label>
+                <mat-chip-grid #chipGrid aria-label="Fruit selection">
+                    @for (e of chips$ | async; track e) {
+                    <mat-chip-row (removed)="removeChip$.next(e)">
+                        {{e}}
+                        <button matChipRemove [attr.aria-label]="'remove ' + e">
+                            <mat-icon>cancel</mat-icon>
+                        </button>
+                    </mat-chip-row>
+                    }
+                </mat-chip-grid>
+                <input placeholder="nouveau..." #myInput [matChipInputFor]="chipGrid" [matAutocomplete]="auto"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                    (matChipInputTokenEnd)="addChip$.next($event.value);myInput.value = ''" />
+                <mat-autocomplete #auto="matAutocomplete">
+                    @for (e of []; track e) {
+                    <mat-option [value]="e">{{e}}</mat-option>
+                    }
+                </mat-autocomplete>
+            </mat-form-field>
+
+        </div>
+    </form>
+</ng-template>

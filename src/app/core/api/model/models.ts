@@ -2,6 +2,8 @@ export * from './addDto';
 export * from './config';
 export * from './configGetAllDto';
 export * from './detail';
+export * from './filter';
+export * from './filterGetAllDto';
 export * from './getForSelectDto';
 export * from './home';
 export * from './job';

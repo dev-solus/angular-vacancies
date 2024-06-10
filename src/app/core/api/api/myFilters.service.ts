@@ -21,11 +21,11 @@ import { Observable }                                        from 'rxjs';
 // @ts-ignore
 import { AddDto } from '../model/addDto';
 // @ts-ignore
+import { Filter } from '../model/filter';
+// @ts-ignore
+import { FilterGetAllDto } from '../model/filterGetAllDto';
+// @ts-ignore
 import { GetForSelectDto } from '../model/getForSelectDto';
-// @ts-ignore
-import { Job } from '../model/job';
-// @ts-ignore
-import { JobGetAllDto } from '../model/jobGetAllDto';
 // @ts-ignore
 import { Operation } from '../model/operation';
 
@@ -38,7 +38,7 @@ import { Configuration }                                     from '../configurat
 @Injectable({
   providedIn: 'root'
 })
-export class JobsService {
+export class MyFiltersService {
 
     protected basePath = 'http://localhost';
     public defaultHeaders = new HttpHeaders();
@@ -100,14 +100,14 @@ export class JobsService {
     }
 
     /**
-     * @param job 
+     * @param filter 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public apiJobsAddPost(job?: Job, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<AddDto>;
-    public apiJobsAddPost(job?: Job, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<AddDto>>;
-    public apiJobsAddPost(job?: Job, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<AddDto>>;
-    public apiJobsAddPost(job?: Job, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
+    public apiMyFiltersAddPost(filter?: Filter, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<AddDto>;
+    public apiMyFiltersAddPost(filter?: Filter, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<AddDto>>;
+    public apiMyFiltersAddPost(filter?: Filter, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<AddDto>>;
+    public apiMyFiltersAddPost(filter?: Filter, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -161,11 +161,11 @@ export class JobsService {
             }
         }
 
-        let localVarPath = `/api/Jobs/Add`;
+        let localVarPath = `/api/MyFilters/Add`;
         return this.httpClient.request<AddDto>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: job,
+                body: filter,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
@@ -176,14 +176,14 @@ export class JobsService {
     }
 
     /**
-     * @param job 
+     * @param filter 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public apiJobsAddRangePost(job?: Array<Job>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
-    public apiJobsAddRangePost(job?: Array<Job>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
-    public apiJobsAddRangePost(job?: Array<Job>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
-    public apiJobsAddRangePost(job?: Array<Job>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+    public apiMyFiltersAddRangePost(filter?: Array<Filter>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
+    public apiMyFiltersAddRangePost(filter?: Array<Filter>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
+    public apiMyFiltersAddRangePost(filter?: Array<Filter>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
+    public apiMyFiltersAddRangePost(filter?: Array<Filter>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -234,11 +234,11 @@ export class JobsService {
             }
         }
 
-        let localVarPath = `/api/Jobs/AddRange`;
+        let localVarPath = `/api/MyFilters/AddRange`;
         return this.httpClient.request<any>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: job,
+                body: filter,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
@@ -253,12 +253,12 @@ export class JobsService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public apiJobsDeleteIdDelete(id: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<boolean>;
-    public apiJobsDeleteIdDelete(id: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<boolean>>;
-    public apiJobsDeleteIdDelete(id: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<boolean>>;
-    public apiJobsDeleteIdDelete(id: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
+    public apiMyFiltersDeleteIdDelete(id: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<boolean>;
+    public apiMyFiltersDeleteIdDelete(id: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<boolean>>;
+    public apiMyFiltersDeleteIdDelete(id: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<boolean>>;
+    public apiMyFiltersDeleteIdDelete(id: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling apiJobsDeleteIdDelete.');
+            throw new Error('Required parameter id was null or undefined when calling apiMyFiltersDeleteIdDelete.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -301,7 +301,7 @@ export class JobsService {
             }
         }
 
-        let localVarPath = `/api/Jobs/Delete/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}`;
+        let localVarPath = `/api/MyFilters/Delete/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}`;
         return this.httpClient.request<boolean>('delete', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -319,10 +319,10 @@ export class JobsService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public apiJobsDeleteRangeByIdsPost(requestBody?: Array<number>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
-    public apiJobsDeleteRangeByIdsPost(requestBody?: Array<number>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
-    public apiJobsDeleteRangeByIdsPost(requestBody?: Array<number>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
-    public apiJobsDeleteRangeByIdsPost(requestBody?: Array<number>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+    public apiMyFiltersDeleteRangeByIdsPost(requestBody?: Array<number>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
+    public apiMyFiltersDeleteRangeByIdsPost(requestBody?: Array<number>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
+    public apiMyFiltersDeleteRangeByIdsPost(requestBody?: Array<number>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
+    public apiMyFiltersDeleteRangeByIdsPost(requestBody?: Array<number>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -373,7 +373,7 @@ export class JobsService {
             }
         }
 
-        let localVarPath = `/api/Jobs/DeleteRangeByIds`;
+        let localVarPath = `/api/MyFilters/DeleteRangeByIds`;
         return this.httpClient.request<any>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -395,21 +395,21 @@ export class JobsService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public apiJobsGetAllStartIndexPageSizeSortBySortDirGet(startIndex: number, pageSize: number, sortBy: string, sortDir: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<JobGetAllDto>;
-    public apiJobsGetAllStartIndexPageSizeSortBySortDirGet(startIndex: number, pageSize: number, sortBy: string, sortDir: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<JobGetAllDto>>;
-    public apiJobsGetAllStartIndexPageSizeSortBySortDirGet(startIndex: number, pageSize: number, sortBy: string, sortDir: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<JobGetAllDto>>;
-    public apiJobsGetAllStartIndexPageSizeSortBySortDirGet(startIndex: number, pageSize: number, sortBy: string, sortDir: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
+    public apiMyFiltersGetAllStartIndexPageSizeSortBySortDirGet(startIndex: number, pageSize: number, sortBy: string, sortDir: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<FilterGetAllDto>;
+    public apiMyFiltersGetAllStartIndexPageSizeSortBySortDirGet(startIndex: number, pageSize: number, sortBy: string, sortDir: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<FilterGetAllDto>>;
+    public apiMyFiltersGetAllStartIndexPageSizeSortBySortDirGet(startIndex: number, pageSize: number, sortBy: string, sortDir: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<FilterGetAllDto>>;
+    public apiMyFiltersGetAllStartIndexPageSizeSortBySortDirGet(startIndex: number, pageSize: number, sortBy: string, sortDir: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
         if (startIndex === null || startIndex === undefined) {
-            throw new Error('Required parameter startIndex was null or undefined when calling apiJobsGetAllStartIndexPageSizeSortBySortDirGet.');
+            throw new Error('Required parameter startIndex was null or undefined when calling apiMyFiltersGetAllStartIndexPageSizeSortBySortDirGet.');
         }
         if (pageSize === null || pageSize === undefined) {
-            throw new Error('Required parameter pageSize was null or undefined when calling apiJobsGetAllStartIndexPageSizeSortBySortDirGet.');
+            throw new Error('Required parameter pageSize was null or undefined when calling apiMyFiltersGetAllStartIndexPageSizeSortBySortDirGet.');
         }
         if (sortBy === null || sortBy === undefined) {
-            throw new Error('Required parameter sortBy was null or undefined when calling apiJobsGetAllStartIndexPageSizeSortBySortDirGet.');
+            throw new Error('Required parameter sortBy was null or undefined when calling apiMyFiltersGetAllStartIndexPageSizeSortBySortDirGet.');
         }
         if (sortDir === null || sortDir === undefined) {
-            throw new Error('Required parameter sortDir was null or undefined when calling apiJobsGetAllStartIndexPageSizeSortBySortDirGet.');
+            throw new Error('Required parameter sortDir was null or undefined when calling apiMyFiltersGetAllStartIndexPageSizeSortBySortDirGet.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -452,8 +452,8 @@ export class JobsService {
             }
         }
 
-        let localVarPath = `/api/Jobs/GetAll/${this.configuration.encodeParam({name: "startIndex", value: startIndex, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}/${this.configuration.encodeParam({name: "pageSize", value: pageSize, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}/${this.configuration.encodeParam({name: "sortBy", value: sortBy, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/${this.configuration.encodeParam({name: "sortDir", value: sortDir, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
-        return this.httpClient.request<JobGetAllDto>('get', `${this.configuration.basePath}${localVarPath}`,
+        let localVarPath = `/api/MyFilters/GetAll/${this.configuration.encodeParam({name: "startIndex", value: startIndex, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}/${this.configuration.encodeParam({name: "pageSize", value: pageSize, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}/${this.configuration.encodeParam({name: "sortBy", value: sortBy, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}/${this.configuration.encodeParam({name: "sortDir", value: sortDir, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        return this.httpClient.request<FilterGetAllDto>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -470,12 +470,12 @@ export class JobsService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public apiJobsGetByIdIdGet(id: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<Job>;
-    public apiJobsGetByIdIdGet(id: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<Job>>;
-    public apiJobsGetByIdIdGet(id: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<Job>>;
-    public apiJobsGetByIdIdGet(id: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
+    public apiMyFiltersGetByIdIdGet(id: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<Filter>;
+    public apiMyFiltersGetByIdIdGet(id: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<Filter>>;
+    public apiMyFiltersGetByIdIdGet(id: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<Filter>>;
+    public apiMyFiltersGetByIdIdGet(id: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling apiJobsGetByIdIdGet.');
+            throw new Error('Required parameter id was null or undefined when calling apiMyFiltersGetByIdIdGet.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -518,8 +518,8 @@ export class JobsService {
             }
         }
 
-        let localVarPath = `/api/Jobs/GetById/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}`;
-        return this.httpClient.request<Job>('get', `${this.configuration.basePath}${localVarPath}`,
+        let localVarPath = `/api/MyFilters/GetById/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}`;
+        return this.httpClient.request<Filter>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -535,10 +535,10 @@ export class JobsService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public apiJobsGetForSelectGet(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<Array<GetForSelectDto>>;
-    public apiJobsGetForSelectGet(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<Array<GetForSelectDto>>>;
-    public apiJobsGetForSelectGet(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<Array<GetForSelectDto>>>;
-    public apiJobsGetForSelectGet(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
+    public apiMyFiltersGetForSelectGet(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<Array<GetForSelectDto>>;
+    public apiMyFiltersGetForSelectGet(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<Array<GetForSelectDto>>>;
+    public apiMyFiltersGetForSelectGet(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<Array<GetForSelectDto>>>;
+    public apiMyFiltersGetForSelectGet(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -580,7 +580,7 @@ export class JobsService {
             }
         }
 
-        let localVarPath = `/api/Jobs/GetForSelect`;
+        let localVarPath = `/api/MyFilters/GetForSelect`;
         return this.httpClient.request<Array<GetForSelectDto>>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -597,10 +597,10 @@ export class JobsService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public apiJobsGetGet(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<Array<Job>>;
-    public apiJobsGetGet(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<Array<Job>>>;
-    public apiJobsGetGet(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<Array<Job>>>;
-    public apiJobsGetGet(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
+    public apiMyFiltersGetGet(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<Array<Filter>>;
+    public apiMyFiltersGetGet(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<Array<Filter>>>;
+    public apiMyFiltersGetGet(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<Array<Filter>>>;
+    public apiMyFiltersGetGet(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -642,8 +642,8 @@ export class JobsService {
             }
         }
 
-        let localVarPath = `/api/Jobs/Get`;
-        return this.httpClient.request<Array<Job>>('get', `${this.configuration.basePath}${localVarPath}`,
+        let localVarPath = `/api/MyFilters/Get`;
+        return this.httpClient.request<Array<Filter>>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -664,10 +664,10 @@ export class JobsService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public apiJobsGetListGet(startIndex?: number, pageSize?: number, sortBy?: string, sortDir?: string, name?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<JobGetAllDto>;
-    public apiJobsGetListGet(startIndex?: number, pageSize?: number, sortBy?: string, sortDir?: string, name?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<JobGetAllDto>>;
-    public apiJobsGetListGet(startIndex?: number, pageSize?: number, sortBy?: string, sortDir?: string, name?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<JobGetAllDto>>;
-    public apiJobsGetListGet(startIndex?: number, pageSize?: number, sortBy?: string, sortDir?: string, name?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
+    public apiMyFiltersGetListGet(startIndex?: number, pageSize?: number, sortBy?: string, sortDir?: string, name?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<FilterGetAllDto>;
+    public apiMyFiltersGetListGet(startIndex?: number, pageSize?: number, sortBy?: string, sortDir?: string, name?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpResponse<FilterGetAllDto>>;
+    public apiMyFiltersGetListGet(startIndex?: number, pageSize?: number, sortBy?: string, sortDir?: string, name?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<HttpEvent<FilterGetAllDto>>;
+    public apiMyFiltersGetListGet(startIndex?: number, pageSize?: number, sortBy?: string, sortDir?: string, name?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'text/plain' | 'application/json' | 'text/json', context?: HttpContext}): Observable<any> {
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         if (startIndex !== undefined && startIndex !== null) {
@@ -731,8 +731,8 @@ export class JobsService {
             }
         }
 
-        let localVarPath = `/api/Jobs/GetList`;
-        return this.httpClient.request<JobGetAllDto>('get', `${this.configuration.basePath}${localVarPath}`,
+        let localVarPath = `/api/MyFilters/GetList`;
+        return this.httpClient.request<FilterGetAllDto>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,
@@ -751,12 +751,12 @@ export class JobsService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public apiJobsPatchIdPatch(id: number, operation?: Array<Operation>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
-    public apiJobsPatchIdPatch(id: number, operation?: Array<Operation>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
-    public apiJobsPatchIdPatch(id: number, operation?: Array<Operation>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
-    public apiJobsPatchIdPatch(id: number, operation?: Array<Operation>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+    public apiMyFiltersPatchIdPatch(id: number, operation?: Array<Operation>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
+    public apiMyFiltersPatchIdPatch(id: number, operation?: Array<Operation>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
+    public apiMyFiltersPatchIdPatch(id: number, operation?: Array<Operation>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
+    public apiMyFiltersPatchIdPatch(id: number, operation?: Array<Operation>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling apiJobsPatchIdPatch.');
+            throw new Error('Required parameter id was null or undefined when calling apiMyFiltersPatchIdPatch.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -808,7 +808,7 @@ export class JobsService {
             }
         }
 
-        let localVarPath = `/api/Jobs/Patch/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}`;
+        let localVarPath = `/api/MyFilters/Patch/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}`;
         return this.httpClient.request<any>('patch', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -823,14 +823,14 @@ export class JobsService {
     }
 
     /**
-     * @param job 
+     * @param filter 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public apiJobsPutRangePost(job?: Array<Job>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
-    public apiJobsPutRangePost(job?: Array<Job>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
-    public apiJobsPutRangePost(job?: Array<Job>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
-    public apiJobsPutRangePost(job?: Array<Job>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+    public apiMyFiltersPutRangePost(filter?: Array<Filter>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
+    public apiMyFiltersPutRangePost(filter?: Array<Filter>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
+    public apiMyFiltersPutRangePost(filter?: Array<Filter>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
+    public apiMyFiltersPutRangePost(filter?: Array<Filter>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -881,11 +881,11 @@ export class JobsService {
             }
         }
 
-        let localVarPath = `/api/Jobs/PutRange`;
+        let localVarPath = `/api/MyFilters/PutRange`;
         return this.httpClient.request<any>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: job,
+                body: filter,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
@@ -897,16 +897,16 @@ export class JobsService {
 
     /**
      * @param id 
-     * @param job 
+     * @param filter 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public apiJobsUpdateIdPut(id: number, job?: Job, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
-    public apiJobsUpdateIdPut(id: number, job?: Job, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
-    public apiJobsUpdateIdPut(id: number, job?: Job, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
-    public apiJobsUpdateIdPut(id: number, job?: Job, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+    public apiMyFiltersUpdateIdPut(id: number, filter?: Filter, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
+    public apiMyFiltersUpdateIdPut(id: number, filter?: Filter, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
+    public apiMyFiltersUpdateIdPut(id: number, filter?: Filter, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
+    public apiMyFiltersUpdateIdPut(id: number, filter?: Filter, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling apiJobsUpdateIdPut.');
+            throw new Error('Required parameter id was null or undefined when calling apiMyFiltersUpdateIdPut.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -958,11 +958,11 @@ export class JobsService {
             }
         }
 
-        let localVarPath = `/api/Jobs/Update/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}`;
+        let localVarPath = `/api/MyFilters/Update/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}`;
         return this.httpClient.request<any>('put', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: job,
+                body: filter,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

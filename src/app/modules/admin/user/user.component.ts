@@ -100,7 +100,7 @@ export class UserComponent implements AfterViewInit {
         )),
         startWith(null as any),
         map(_ => ({
-            pageIndex: (this.paginator?.pageIndex || 0),// * (this.paginator?.pageSize ?? 10),// startIndex
+            startIndex: (this.paginator?.pageIndex || 0),// * (this.paginator?.pageSize ?? 10),// startIndex
             pageSize: this.paginator?.pageSize ?? 10,
             sortBy: this.sort?.active ? this.sort?.active : 'id',
             sortDir: this.sort?.direction ? this.sort?.direction : 'desc',

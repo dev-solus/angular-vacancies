@@ -5,6 +5,7 @@ api/accounts.service.ts
 api/api.ts
 api/configs.service.ts
 api/jobs.service.ts
+api/myFilters.service.ts
 api/roles.service.ts
 api/scraping.service.ts
 api/users.service.ts
@@ -16,6 +17,8 @@ model/addDto.ts
 model/config.ts
 model/configGetAllDto.ts
 model/detail.ts
+model/filter.ts
+model/filterGetAllDto.ts
 model/getForSelectDto.ts
 model/home.ts
 model/job.ts

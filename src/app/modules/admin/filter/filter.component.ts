@@ -1,6 +1,6 @@
 import { Component, ViewChild, Signal, AfterViewInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { merge, Subject, switchMap, filter, map, startWith, tap, delay, catchError } from 'rxjs';
-import { Job } from 'app/core/api';
+import { Filter } from 'app/core/api';
 import { UowService, TypeForm } from 'app/core/http-services/uow.service';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
@@ -15,17 +15,13 @@ import { FuseAlertComponent } from '@fuse/components/alert';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSelectModule } from '@angular/material/select';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { UpdateComponent } from './update/update.component';
 import { MatDialog } from '@angular/material/dialog';
-
-import { MyImageComponent } from '@fuse/upload-file/display-image/my-image.component';
-import { AddComponent } from './add/add.component';
-import { Router } from '@angular/router';
-
 
 @Component({
     standalone: true,
-    selector: 'app-job',
-    templateUrl: './job.component.html',
+    selector: 'app-filter',
+    templateUrl: './filter.component.html',
     styles: [``],
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [
@@ -42,15 +38,12 @@ import { Router } from '@angular/router';
         MatSelectModule,
         MatIconModule,
         MatProgressSpinnerModule,
-
-        MyImageComponent,
-
     ],
 })
-export class JobComponent implements AfterViewInit {
+export class FilterComponent implements AfterViewInit {
     //DI
     readonly uow = inject(UowService);
-    readonly router = inject(Router);
+
 
     readonly dialog = inject(MatDialog);
 
@@ -66,12 +59,12 @@ export class JobComponent implements AfterViewInit {
 
     readonly showMessage$ = new Subject<any>();
 
-    readonly delete$ = new Subject<Job>();
+    readonly delete$ = new Subject<Filter>();
     readonly #delete$ = this.delete$.pipe(
-        switchMap(item => this.uow.fuseConfirmation.open({ message: 'Job' }).afterClosed().pipe(
+        switchMap(item => this.uow.fuseConfirmation.open({ message: 'Filter' }).afterClosed().pipe(
             filter((e: 'confirmed' | 'cancelled') => e === 'confirmed'),
             tap(e => console.warn(e)),
-            switchMap(_ => this.uow.core.jobs.delete(item.id).pipe(
+            switchMap(_ => this.uow.core.filters.delete(item.id).pipe(
                 catchError(this.uow.handleError),
                 map((e: any) => ({ code: e.code < 0 ? -1 : 1, message: e.code < 0 ? e.message : 'Enregistrement réussi' })),
                 tap(r => this.showMessage$.next({ message: r.message, code: r.code })),
@@ -80,12 +73,13 @@ export class JobComponent implements AfterViewInit {
     );
 
     // select
+
+
     readonly name = new FormControl('');
 
     readonly viewInitDone = new Subject<void>();
-    readonly dataSource: Signal<(Job)[]> = toSignal(this.viewInitDone.pipe(
+    readonly dataSource: Signal<(Filter)[]> = toSignal(this.viewInitDone.pipe(
         delay(50),
-
         switchMap(_ => merge(
             this.sort.sortChange,
             this.paginator.page,
@@ -101,7 +95,7 @@ export class JobComponent implements AfterViewInit {
             name: this.name.value,
         })),
         tap(e => this.isLoadingResults = true),
-        switchMap(e => this.uow.core.jobs.getListQ(e).pipe(
+        switchMap(e => this.uow.core.filters.getListQ(e).pipe(
             tap(e => this.totalRecords = e.count),
             map(e => e.list))
         ),
@@ -110,21 +104,6 @@ export class JobComponent implements AfterViewInit {
 
     ngAfterViewInit(): void {
         this.viewInitDone.next();
-
-        // this.uow.core.myScrapings.getProgress([1, 2]).subscribe(
-        //     r => {
-        //         // console.log(`Progress: ${r}%`);
-        //     },
-        //     error => console.error(error)
-        // );
-
-
-        // this.uow.core.myScrapings.scrapeOffers().subscribe(
-        //     r => {
-        //         console.log(`data: ${r}`);
-        //     },
-        //     error => console.error(error)
-        // );
     }
 
     trackById(index: number, item: any): number {
@@ -132,6 +111,8 @@ export class JobComponent implements AfterViewInit {
     }
 
     reset() {
+        this.name.setValue('');
+
         this.update.next(0);
     }
 
@@ -139,23 +120,35 @@ export class JobComponent implements AfterViewInit {
         this.update.next(0);
     }
 
-    add() {
-        this.dialog.open(AddComponent, {
+    openDialog(o: Filter, text) {
+        const dialogRef = this.dialog.open(UpdateComponent, {
             // width: '1100px',
             disableClose: true,
-            data: { model: {}, title: 'Add' }
-        }).afterClosed().subscribe(result => {
+            data: { model: o, title: text }
+        });
+
+        return dialogRef.afterClosed();
+    };
+
+    add() {
+
+        this.openDialog({} as Filter, 'Ajouter Filter').subscribe(result => {
             if (result) {
                 this.update.next(0);
             }
         });
     }
 
-    edit(o: Job) {
-        this.router.navigate(['/admin/job', o.id]);
+    edit(o: Filter) {
+
+        this.openDialog(o, 'Modifier Filter').subscribe((result: Filter) => {
+            if (result) {
+                this.update.next(0);
+            }
+        });
     }
 
-    remove(o: Job) {
+    remove(o: Filter) {
         this.delete$.next(o);
     }
 

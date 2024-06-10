@@ -1,0 +1,52 @@
+<div class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
+
+
+
+
+    <div class="flex flex-col bg-gray-100 dark:bg-transparent">
+
+        <div>
+
+        </div>
+
+        <div class="grid">
+            <mat-form-field class="fuse-mat-rounded fuse-mat-dense flex-auto ml-4 lg:ml-0 w-full"
+                [subscriptSizing]="'dynamic'">
+                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:magnifying-glass'" matPrefix></mat-icon>
+                <input matInput [autocomplete]="'off'" [placeholder]="'Search notes'"
+                    [formControl]="name" #searchInput>
+            </mat-form-field>
+
+            <div class="flex">
+
+                <mat-form-field appearance="fill">
+                    <mat-label>Sort by</mat-label>
+                    <mat-select formControlName="role_id">
+                        <mat-option *ngFor="let e of orderBy" [value]="e">{{e}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                    <mat-label>Job type</mat-label>
+                    <mat-select formControlName="role_id">
+                        <mat-option *ngFor="let e of localisations$ | async" [value]="e.id">{{e.name}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                    <mat-label>Location</mat-label>
+                    <mat-select formControlName="role_id">
+                        <mat-option *ngFor="let e of skills$ | async" [value]="e.id">{{e.name}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+            </div>
+
+
+
+        </div>
+
+    </div>
+
+
+</div>

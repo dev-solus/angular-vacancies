@@ -17,10 +17,10 @@ export const appRoutes: Route[] = [
     // After the user signs in, the sign-in page will redirect the user to the 'signed-in-redirect'
     // path. Below is another redirection for that path to redirect the user to the desired
     // location. This is a small convenience to keep all main routes together here on this file.
-    { path: 'signed-in-redirect', pathMatch: 'full', redirectTo: '' },
+    // { path: 'signed-in-redirect', pathMatch: 'full', redirectTo: '' },
     // Auth routes for guests
     {
-        path: '',
+        path: 'auth',
         canActivate: [NoAuthGuard],
         canActivateChild: [NoAuthGuard],
         component: LayoutComponent,
@@ -50,6 +50,19 @@ export const appRoutes: Route[] = [
             { path: 'config', loadChildren: () => import('app/modules/admin/config/config.routes') },
             { path: 'role', loadChildren: () => import('app/modules/admin/role/role.routes') },
             { path: 'job', loadChildren: () => import('app/modules/admin/job/job.routes') },
+            { path: 'filter', loadChildren: () => import('app/modules/admin/filter/filter.routes') },
         ]
-    }
+    },
+
+    // landing routes
+    {
+        path: '',
+        component: LayoutComponent,
+        resolve: { initialData: initialDataResolver },
+        data: { layout: 'modern'},
+        children: [
+            // { path: '', pathMatch: 'full', redirectTo: '' },
+            { path: '', loadChildren: () => import('app/modules/landing/home/home.routes') },
+        ]
+    },
 ];
