@@ -20,8 +20,8 @@ export const AuthGuard: CanActivateFn | CanActivateChildFn = (route, state) =>
             if ( !authenticated )
             {
                 // Redirect to the sign-in page with a redirectUrl param
-                const redirectURL = state.url === '/sign-out' ? '' : `redirectURL=${state.url}`;
-                const urlTree = router.parseUrl(`sign-in?${redirectURL}`);
+                const redirectURL = state.url === '/auth/sign-out' ? '' : `redirectURL=${state.url}`;
+                const urlTree = router.parseUrl(`auth/sign-in?${redirectURL}`);
 
                 return of(urlTree);
             }

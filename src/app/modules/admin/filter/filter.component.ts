@@ -44,7 +44,6 @@ export class FilterComponent implements AfterViewInit {
     //DI
     readonly uow = inject(UowService);
 
-
     readonly dialog = inject(MatDialog);
 
     @ViewChild(MatPaginator, { static: true })
@@ -88,7 +87,7 @@ export class FilterComponent implements AfterViewInit {
         )),
         startWith(null as any),
         map(_ => ({
-            startIndex: (this.paginator?.pageIndex || 0),// * (this.paginator?.pageSize ?? 10),// startIndex
+            startIndex: (this.paginator?.pageIndex || 0) * (this.paginator?.pageSize ?? 10),// startIndex
             pageSize: this.paginator?.pageSize ?? 10,
             sortBy: this.sort?.active ? this.sort?.active : 'id',
             sortDir: this.sort?.direction ? this.sort?.direction : 'desc',
