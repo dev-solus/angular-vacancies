@@ -3,173 +3,160 @@
 
 
 
-    <div class="flex flex-col bg-gray-100 dark:bg-transparent">
+    <div class="flex items-center w-full h-full flex-col bg-gray-100 dark:bg-transparent pb-2">
 
-        <div>
 
-        </div>
+        <div class="flex flex-col h-full items-start w-full sm:w-11/12 md:w-10/12 xl:w-8/12 mt-10 ">
 
-        <div class="grid">
-            <mat-form-field class="fuse-mat-rounded fuse-mat-dense flex-auto lg:ml-0 w-full"
-                [subscriptSizing]="'dynamic'">
-                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:magnifying-glass'" matPrefix></mat-icon>
-                <input matInput [autocomplete]="'off'" [placeholder]="'Search notes'" [formControl]="name" #searchInput>
-            </mat-form-field>
-
-            <div class="flex">
-
-                <!-- <mat-form-field appearance="fill">
-                    <mat-label>Sort by</mat-label>
-                    <mat-select [formControl]="role_id">
-                        <mat-option *ngFor="let e of orderBy" [value]="e">{{e}}</mat-option>
-                    </mat-select>
-                </mat-form-field> -->
+            <div class="flex gap-3 items-start">
+                <mat-form-field class="flex-grow" [subscriptSizing]="'dynamic'">
+                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:magnifying-glass'" matPrefix></mat-icon>
+                    <input matInput [autocomplete]="'off'" [placeholder]="'Search notes'" [formControl]="name"
+                        #searchInput>
+                </mat-form-field>
 
                 <mat-form-field appearance="fill">
-                    <mat-label>Job type</mat-label>
                     <mat-select multiple [formControl]="contractType">
-                        <mat-option *ngFor="let e of contractTypes$ | async" [value]="e.id">{{e.name}}</mat-option>
+                        <mat-option class="hidden" [value]="''">Job type</mat-option>
+                        <mat-option *ngFor="let e of contractTypes$ | async" [value]="e">{{e}}</mat-option>
                     </mat-select>
                 </mat-form-field>
 
                 <mat-form-field appearance="fill">
-                    <mat-label>Location</mat-label>
                     <mat-select multiple [formControl]="location">
-                        <mat-option *ngFor="let e of locations$ | async" [value]="e.id">{{e.name}}</mat-option>
+                        <mat-option class="hidden" [value]="''">Location</mat-option>
+                        <mat-option *ngFor="let e of locations$ | async" [value]="e">{{e}}</mat-option>
                     </mat-select>
                 </mat-form-field>
 
                 <mat-form-field appearance="fill">
-                    <mat-label>Location</mat-label>
                     <mat-select multiple [formControl]="skill">
-                        <mat-option *ngFor="let e of skills$ | async" [value]="e.id">{{e.name}}</mat-option>
+                        <mat-option class="hidden" [value]="''">Location</mat-option>
+                        <mat-option *ngFor="let e of skills$ | async" [value]="e">{{e}}</mat-option>
                     </mat-select>
                 </mat-form-field>
 
             </div>
 
-            <div>
-                <div class="relative flex flex-auto w-full bg-card dark:bg-transparent">
+            <div class="relative h-full flex flex-auto w-full bg-card rounded-md mb-3 dark:bg-transparent">
 
-                    <!-- Mails list -->
-                    <div class="relative flex flex-auto flex-col w-full min-w-0 lg:min-w-90 lg:max-w-90 border-r z-10">
-                        <!-- Header -->
-                        <div
-                            class="relative flex flex-0 items-center justify-between h-16 px-4 border-b bg-gray-50 dark:bg-transparent">
+                <!-- Mails list -->
+                <div class="relative flex flex-auto flex-col w-full min-w-0 lg:min-w-90 lg:max-w-90 border-r z-10">
+                    <!-- Header -->
+                    <div
+                        class="relative flex flex-0 items-center justify-between h-16 px-4 border-b bg-gray-50 dark:bg-transparent">
 
-                            <div class="flex items-center">
-                                <div class="ml-2 font-semibold uppercase">Jobs</div>
+                        <div class="flex items-center">
+                            <div class="ml-2 font-semibold uppercase">Jobs</div>
+                        </div>
+
+                        <!-- Pagination -->
+                        <div class="flex items-center">
+                            <!-- Info -->
+                            <div class="flex items-center mr-3 text-md font-medium">
+                                <span>{{((paginator()?.pageIndex || 0) * (this.paginator()?.pageSize ?? 10)) +
+                                    1}}</span>
+                                <span class="mx-1 text-secondary">-</span>
+                                <span>{{(this.paginator()?.pageSize ?? 10)}}</span>
+                                <span class="mx-1 text-secondary">of</span>
+                                <span>{{totalRecords()}}</span>
                             </div>
 
-                            <!-- Pagination -->
-                            <div class="flex items-center">
-                                <!-- Info -->
-                                <div class="flex items-center mr-3 text-md font-medium">
-                                    <span>{{((paginator()?.pageIndex || 0) * (this.paginator()?.pageSize ?? 10)) +
-                                        1}}</span>
-                                    <span class="mx-1 text-secondary">-</span>
-                                    <span>{{(this.paginator()?.pageSize ?? 10)}}</span>
-                                    <span class="mx-1 text-secondary">of</span>
-                                    <span>{{totalRecords()}}</span>
-                                </div>
-
-                                <div>
-                                    <mat-paginator [length]="totalRecords()" [pageIndex]="0" [pageSize]="10"
-                                        style="visibility:hidden; height: 0;"
-                                        [pageSizeOptions]="[5, 10, 25, 50, 100, 250]" hidePageSize>
-                                    </mat-paginator>
-                                </div>
-                                <!-- Previous page button -->
-                                <a class="w-8 h-8 min-h-8" mat-icon-button [disabled]="!paginator().hasNextPage()"
+                            <div>
+                                <mat-paginator [length]="totalRecords()" [pageIndex]="0" [pageSize]="10"
+                                    style="visibility:hidden; height: 0;" [pageSizeOptions]="[5, 10, 25, 50, 100, 250]"
+                                    hidePageSize>
+                                </mat-paginator>
+                            </div>
+                            <!-- Previous page button -->
+                            <!-- <a class="w-8 h-8 min-h-8" mat-icon-button [disabled]="!paginator().hasNextPage()"
                                     [routerLink]="['../' + (paginator()?.pageIndex > 1 ? paginator()?.pageIndex - 1 : 1 )]">
                                     <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:chevron-left'"></mat-icon>
-                                </a>
-                                <!-- Next page button-->
-                                <a class="w-8 h-8 min-h-8" mat-icon-button [disabled]="paginator().hasPreviousPage()">
-                                    <!-- [routerLink]="['../' + (paginator()?.pageIndex < pagination.lastPage ? paginator()?.pageIndex + 1 : pagination.lastPage )]" -->
-                                    <mat-icon class="icon-size-5"
-                                        [svgIcon]="'heroicons_solid:chevron-right'"></mat-icon>
-                                </a>
-                            </div>
-
-                            <!-- Loading bar -->
-                            <mat-progress-bar class="absolute inset-x-0 bottom-0 h-0.5" *ngIf="isloading()"
-                                [mode]="'indeterminate'"></mat-progress-bar>
-                        </div>
-
-                        <!-- Mail list -->
-                        <div class="overflow-y-auto">
-                            @for (e of dataSource(); track e.id) {
-                            <a class="relative flex border-t first:border-0 hover:bg-hover" [routerLink]="[e.id]"
-                                (click)="onSelect$.next(e)">
-
-                                <!-- Item content -->
-                                <div class="flex flex-col items-start justify-start w-full py-6 pr-4 pl-5 border-l-4 border-transparent"
-                                    [ngClass]="{'border-primary': $any(e).unread,
-                                                        'bg-primary-50 dark:bg-black dark:bg-opacity-5': selectedJob()?.id === e.id}">
-
-                                    <!-- Info -->
-                                    <div class="flex items-center w-full">
-                                        <!-- Sender name -->
-                                        <div class="mr-2 font-semibold truncate">
-                                            {{e.company}}
-                                        </div>
-                                        <!-- Important indicator -->
-                                        <mat-icon class="mr-3 icon-size-4 text-red-500 dark:text-red-600"
-                                            *ngIf="$any(e).important"
-                                            [svgIcon]="'heroicons_solid:exclamation-circle'"></mat-icon>
-                                        <!-- Date -->
-                                        <div class="ml-auto text-md text-right whitespace-nowrap text-hint">
-                                            {{e.date | date:'LLL dd'}}
-                                        </div>
-                                    </div>
-
-                                    <!-- Subject -->
-                                    <div class="flex items-center w-full mt-1">
-                                        <span class="leading-4 truncate">{{e.title}}</span>
-                                        <!-- Indicators -->
-                                        <div class="flex ml-auto pl-2" *ngIf="$any(e).starred">
-                                            <!-- Starred -->
-                                            <mat-icon
-                                                class="flex justify-center icon-size-4 ml-1 text-orange-500 dark:text-orange-400"
-                                                *ngIf="$any(e).starred" [svgIcon]="'heroicons_solid:star'"></mat-icon>
-                                        </div>
-                                    </div>
-
-                                    <!-- Excerpt -->
-                                    <div class="mt-2 leading-normal line-clamp-2 text-secondary">
-                                        {{e.description}}...
-                                    </div>
-
-                                </div>
-
+                                </a> -->
+                            <!-- Next page button-->
+                            <a class="w-8 h-8 min-h-8" mat-icon-button [disabled]="paginator().hasPreviousPage()">
+                                <!-- [routerLink]="['../' + (paginator()?.pageIndex < pagination.lastPage ? paginator()?.pageIndex + 1 : pagination.lastPage )]" -->
+                                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:chevron-right'"></mat-icon>
                             </a>
-                            }
                         </div>
+
+                        <!-- Loading bar -->
+                        <mat-progress-bar class="absolute inset-x-0 bottom-0 h-0.5" *ngIf="isloading()"
+                            [mode]="'indeterminate'"></mat-progress-bar>
                     </div>
 
+                    <!-- Mail list -->
+                    <div class="overflow-y-auto flex-grow">
+                        @for (e of dataSource(); track e.id) {
+                        <a class="relative flex border-t first:border-0 hover:bg-hover" [routerLink]="[e.id]"
+                            (click)="service.selectedJob.next(e)">
+
+                            <!-- Item content -->
+                            <div class="flex flex-col items-start justify-start w-full py-6 pr-4 pl-5 border-l-4 border-transparent"
+                                [ngClass]="{'border-primary': $any(e).unread,
+                                                        'bg-primary-50 dark:bg-black dark:bg-opacity-5': selectedJob()?.id === e.id}">
+
+                                <!-- Info -->
+                                <div class="flex items-center w-full">
+                                    <!-- Sender name -->
+                                    <div class="mr-2 font-semibold truncate">
+                                        {{e.company}}
+                                    </div>
+                                    <!-- Important indicator -->
+                                    <mat-icon class="mr-3 icon-size-4 text-red-500 dark:text-red-600"
+                                        *ngIf="$any(e).important"
+                                        [svgIcon]="'heroicons_solid:exclamation-circle'"></mat-icon>
+                                    <!-- Date -->
+                                    <div class="ml-auto text-md text-right whitespace-nowrap text-hint">
+                                        {{e.date | date:'LLL dd'}}
+                                    </div>
+                                </div>
+
+                                <!-- Subject -->
+                                <div class="flex items-center w-full mt-1">
+                                    <span class="leading-4 truncate">{{e.title}}</span>
+                                    <!-- Indicators -->
+                                    <div class="flex ml-auto pl-2" *ngIf="$any(e).starred">
+                                        <!-- Starred -->
+                                        <mat-icon
+                                            class="flex justify-center icon-size-4 ml-1 text-orange-500 dark:text-orange-400"
+                                            *ngIf="$any(e).starred" [svgIcon]="'heroicons_solid:star'"></mat-icon>
+                                    </div>
+                                </div>
+
+                                <!-- Excerpt -->
+                                <div class="mt-2 leading-normal line-clamp-2 text-secondary">
+                                    {{e.description}}...
+                                </div>
+
+                            </div>
+
+                        </a>
+                        }
+
+
+                        <!-- <a class="relative bg-red-600 flex border-t first:border-0 hover:bg-hover h-50" >
+                            </a> -->
+                    </div>
                     <!-- No mails template -->
-                    <div *ngIf="!dataSource().length"
-                        class="z-100 absolute inset-0 flex flex-auto flex-col items-center justify-center bg-gray-100 dark:bg-transparent">
+                    <!-- <div *ngIf="!dataSource().length"
+                        class="flex flex-auto flex-col items-center justify-center bg-gray-100 dark:bg-transparent">
                         <mat-icon class="icon-size-24" [svgIcon]="'heroicons_outline:envelope'"></mat-icon>
                         <div class="mt-4 text-2xl font-semibold tracking-tight text-secondary">There are no e-mails
                         </div>
-                    </div>
-
-                    <!-- Mail details -->
-                    <ng-container *ngIf="!!dataSource().length">
-                        <div class="flex-auto" [ngClass]="{'z-20 absolute inset-0 lg:static lg:inset-auto flex': !!selectedJob(),
-                                        'hidden lg:flex': !selectedJob()}">
-                            <router-outlet></router-outlet>
-                        </div>
-                    </ng-container>
-
+                    </div> -->
                 </div>
 
+
+                <!-- Mail details -->
+                <ng-container *ngIf="!!dataSource().length">
+                    <div class="flex-auto" [ngClass]="{'z-20 absolute inset-0 lg:static lg:inset-auto flex': !!selectedJob(),
+                                        'hidden lg:flex': !selectedJob()}">
+                        <router-outlet></router-outlet>
+                    </div>
+                </ng-container>
+
             </div>
-
-
-
         </div>
 
     </div>

@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, signal, viewChild, ViewChild, ViewEncapsulation } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -15,7 +16,9 @@ import { RouterModule } from '@angular/router';
 import { FuseAlertComponent } from '@fuse/components/alert';
 import { Job } from 'app/core/api';
 import { UowService } from 'app/core/http-services/uow.service';
-import { map, merge, Subject, switchMap, tap } from 'rxjs';
+import { debounceTime, map, merge, startWith, Subject, switchMap, tap } from 'rxjs';
+import { MatChipsModule } from '@angular/material/chips';
+import { HomeService } from './home.service';
 
 @Component({
     standalone: true,
@@ -57,6 +60,8 @@ import { map, merge, Subject, switchMap, tap } from 'rxjs';
         MatIconModule,
         RouterModule,
         MatProgressBarModule,
+        MatAutocompleteModule,
+        MatChipsModule,
     ],
 })
 export class HomeComponent {
@@ -64,6 +69,9 @@ export class HomeComponent {
 
     // @ViewChild(MatPaginator, { static: true })
     // readonly paginator0: MatPaginator;
+
+    readonly service = inject(HomeService);
+
 
     readonly paginator = viewChild.required(MatPaginator);
     readonly sort = viewChild(MatSort);
@@ -81,14 +89,14 @@ export class HomeComponent {
 
     readonly #all$ = this.uow.core.filters.get$;
 
-    readonly contractTypes$ = this.#all$.pipe(map(e => e.filter(f => f.name === 'contract')));
-    readonly locations$ = this.#all$.pipe(map(e => e.filter(f => f.name === 'location')));
-    readonly skills$ = this.#all$.pipe(map(e => e.filter(f => f.name === 'skills')));
+    readonly contractTypes$ = this.#all$.pipe(map(e => e.filter(f => f.name === 'contract').map(e => e.list).flat()));
+    readonly locations$ = this.#all$.pipe(map(e => e.filter(f => f.name === 'location').map(e => e.list).flat()));
+    readonly skills$ = this.#all$.pipe(map(e => e.filter(f => f.name === 'skills').map(e => e.list).flat()));
 
     readonly name = new FormControl('');
-    readonly contractType = new FormControl<string[]>([]);
-    readonly location = new FormControl<string[]>([]);
-    readonly skill = new FormControl<string[]>([]);
+    readonly contractType = new FormControl<string[]>(['']);
+    readonly location = new FormControl<string[]>(['']);
+    readonly skill = new FormControl<string[]>(['']);
 
     readonly update$ = new Subject<void>();
 
@@ -100,6 +108,8 @@ export class HomeComponent {
         this.skill.valueChanges,
         this.update$,
     ).pipe(
+        startWith(null),
+        debounceTime(500),
         tap(() => this.isloading.set(true)),
         map(() => [
             (this.paginator()?.pageIndex || 0) * (this.paginator()?.pageSize ?? 10),// startIndex
@@ -107,15 +117,16 @@ export class HomeComponent {
             this.sort()?.active ? this.sort()?.active : 'id',
             this.sort()?.direction ? this.sort()?.direction : 'desc',
             this.name.value,
-            this.contractType.value,
-            this.location.value,
-            this.skill.value,
+            this.contractType.value.filter(e => !!e),
+            this.location.value.filter(e => !!e),
+            this.skill.value.filter(e => !!e),
         ]),
         // @ts-ignore
         switchMap((e) => this.uow.core.jobs.apiJobsGetJobsGet(...e).pipe(
             tap(e => this.totalRecords.set(e.count)),
-            map(e => e.list))
-        ),
+            map(e => e.list),
+            // map(e => []),
+        )),
         tap(() => this.isloading.set(false)),
     ), { initialValue: [] });
 

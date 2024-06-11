@@ -8,6 +8,11 @@ export default [
         component: HomeComponent,
         children: [
             {
+                path     : '',
+                pathMatch: 'full',
+                component: DetailsComponent,
+            },
+            {
                 path: ':id',
                 component: DetailsComponent,
             },

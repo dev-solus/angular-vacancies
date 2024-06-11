@@ -1,6 +1,5 @@
 <div class="flex flex-col flex-auto overflow-y-auto lg:overflow-hidden bg-card dark:bg-default">
-
-    @if (selectedJob$ |async; as e) {
+    @if (selectedJob$ | async; as e) {
     <!-- Header -->
     <div class="z-10 relative flex flex-col flex-0 w-full border-b">
         <!-- Toolbar -->
@@ -66,10 +65,10 @@
                         <span class="ml-2">Reply All</span>
                     </button>
                     <!-- Forward -->
-                    <button class="m-2" mat-stroked-button [color]="'primary'" (click)="submit$.next()">
+                    <button class="m-2" mat-stroked-button [color]="'primary'" (click)="openLink(e.url)">
                         <mat-icon class="icon-size-5" [color]="'primary'"
                             [svgIcon]="'heroicons_solid:chevron-double-right'"></mat-icon>
-                        <span class="ml-2">Forward</span>
+                        <span class="ml-2">Apply</span>
                     </button>
                 </div>
             </div>
