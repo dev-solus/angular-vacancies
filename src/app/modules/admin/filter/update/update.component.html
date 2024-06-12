@@ -70,16 +70,29 @@
                 </mat-error>
             </mat-form-field> -->
 
-            <mat-form-field appearance="fill">
-                <mat-label>count</mat-label>
-                <input matInput formControlName="count" type="number" [readonly]="true" required>
-                <mat-error
-                    *ngIf="myForm.controls.count.invalid && (myForm.controls.count.dirty || myForm.controls.count.touched)">
-                    Champ est requis
-                </mat-error>
+            <mat-form-field class="col-span-2">
+                <mat-label>List</mat-label>
+                <mat-chip-grid #chipGrid aria-label="Fruit selection">
+                    @for (e of chips$ | async; track e.name) {
+                    <mat-chip-row (removed)="removeChip$.next(e.name)">
+                        {{e.name}}
+                        <button matChipRemove [attr.aria-label]="'remove ' + e.name">
+                            <mat-icon>cancel</mat-icon>
+                        </button>
+                    </mat-chip-row>
+                    }
+                </mat-chip-grid>
+                <input placeholder="nouveau..." #myInput [matChipInputFor]="chipGrid" [matAutocomplete]="auto"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                    (matChipInputTokenEnd)="addChip$.next($event.value);myInput.value = ''" />
+                <mat-autocomplete #auto="matAutocomplete">
+                    @for (e of []; track e) {
+                    <mat-option [value]="e">{{e}}</mat-option>
+                    }
+                </mat-autocomplete>
             </mat-form-field>
 
-            <mat-form-field class="col-span-2">
+            <!-- <mat-form-field class="col-span-2">
                 <mat-label>List</mat-label>
                 <mat-chip-grid #chipGrid aria-label="Fruit selection">
                     @for (e of chips$ | async; track e) {
@@ -99,7 +112,7 @@
                     <mat-option [value]="e">{{e}}</mat-option>
                     }
                 </mat-autocomplete>
-            </mat-form-field>
+            </mat-form-field> -->
 
         </div>
     </form>

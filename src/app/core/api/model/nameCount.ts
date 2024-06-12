@@ -9,13 +9,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { NameCount } from './nameCount';
 
 
-export interface Filter { 
-    id?: number;
+export interface NameCount { 
     name?: string | null;
-    label?: string | null;
-    list?: Array<NameCount> | null;
+    count?: number;
 }
 

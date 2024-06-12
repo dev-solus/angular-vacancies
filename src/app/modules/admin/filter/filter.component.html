@@ -70,9 +70,8 @@
 
                             <div mat-sort-header="id">id</div>
                             <div mat-sort-header="name">Nom</div>
-                            <div mat-sort-header="label">label</div>
-                            <div mat-sort-header="count">count</div>
-                            <div>list</div>
+                            <div mat-sort-header="label" >label</div>
+                            <div class="col-span-2">list</div>
 
                             <div>Action</div>
                         </div>
@@ -84,8 +83,7 @@
                                 <div class="truncate">{{e.id}}</div>
                                 <div class="truncate">{{e.name}}</div>
                                 <div class="truncate">{{e.label}}</div>
-                                <div class="truncate">{{e.count}}</div>
-                                <div class="truncate">{{e.list}}</div>
+                                <div class="truncate col-span-2">{{e.list | toMap:'name'}}</div>
                                 <div>
                                     <button class="min-w-10 min-h-7 h-7 px-2 leading-6" mat-stroked-button
                                         matTooltip="Go to Edit form" (click)="edit(e)">

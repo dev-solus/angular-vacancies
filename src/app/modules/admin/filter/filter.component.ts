@@ -17,12 +17,15 @@ import { MatSelectModule } from '@angular/material/select';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { UpdateComponent } from './update/update.component';
 import { MatDialog } from '@angular/material/dialog';
+import { fuseAnimations } from '@fuse/animations';
+import { ToMapPipe } from '@fuse/pipes/to-map.pipe';
 
 @Component({
     standalone: true,
     selector: 'app-filter',
     templateUrl: './filter.component.html',
     styles: [``],
+    animations: fuseAnimations,
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [
         CommonModule,
@@ -38,6 +41,7 @@ import { MatDialog } from '@angular/material/dialog';
         MatSelectModule,
         MatIconModule,
         MatProgressSpinnerModule,
+        ToMapPipe,
     ],
 })
 export class FilterComponent implements AfterViewInit {

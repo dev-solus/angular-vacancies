@@ -14,7 +14,6 @@
 export interface MyElement { 
     name?: string | null;
     selector?: string | null;
-    selectors?: Array<string> | null;
     type?: string | null;
     pipe?: string | null;
 }

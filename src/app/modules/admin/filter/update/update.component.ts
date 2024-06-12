@@ -66,7 +66,6 @@ export class UpdateComponent {
         name: [null, []],
         label: [null, []],
         list: [[], []],
-        count: [0, []],
     }) as any;
 
     // select
@@ -79,16 +78,39 @@ export class UpdateComponent {
         startWith(this.myForm.controls.list.value || []),
         switchMap(list => this.addChip$.pipe(
             startWith(null),
-            tap(e => !!e ? list.push(e) : null),
+            tap(e => !!e ? list.push({name: e, count: 0}) : null),
             map(_ => list),
         )),
         switchMap(list => this.removeChip$.pipe(
             startWith(null),
-            tap(e => !!e ? list.splice(list.indexOf(e), 1) : null),
-            map(_ => list),
+            map(e => {
+                if (!!e) {
+                    const index = list.findIndex(i => i.name === e);
+                    if (index > -1) {
+                        list.splice(index, 1);
+                    }
+                }
+                return list;
+            }),
+            // map(_ => list),
         )),
         tap(list => this.myForm.controls.list.setValue(list, { emitEvent: false })),
     );
+
+    // readonly nameCount$ = this.myForm.controls.list.valueChanges.pipe(
+    //     startWith(this.myForm.controls.list.value || []),
+    //     switchMap(list => this.addChip$.pipe(
+    //         startWith(null),
+    //         tap(e => !!e ? list.push(e) : null),
+    //         map(_ => list),
+    //     )),
+    //     switchMap(list => this.removeChip$.pipe(
+    //         startWith(null),
+    //         tap(e => !!e ? list.splice(list.indexOf(e), 1) : null),
+    //         map(_ => list),
+    //     )),
+    //     tap(list => this.myForm.controls.list.setValue(list, { emitEvent: false })),
+    // );
 
     readonly post$ = new Subject<void>();
     readonly #post$ = toSignal(this.post$.pipe(
@@ -115,7 +137,7 @@ export class UpdateComponent {
         // filter(_ => this.myForm.valid && this.myForm.dirty),
         tap(_ => this.myForm.disable()),
         map(_ => this.myForm.getRawValue()),
-        switchMap(o => this.uow.core.filters.put(o.id, o).pipe(
+        switchMap(o => this.uow.core.filters.patchObject(o.id, o).pipe(
             catchError(this.uow.handleError),
             map((e: any) => ({ code: e.code < 0 ? -1 : 1, message: e.code < 0 ? e.message : 'Enregistrement réussi' })),
         )),

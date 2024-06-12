@@ -26,6 +26,7 @@ model/jobGetAllDto.ts
 model/loginResponseDto.ts
 model/models.ts
 model/myElement.ts
+model/nameCount.ts
 model/operation.ts
 model/operationType.ts
 model/role.ts

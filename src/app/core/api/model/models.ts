@@ -10,6 +10,7 @@ export * from './job';
 export * from './jobGetAllDto';
 export * from './loginResponseDto';
 export * from './myElement';
+export * from './nameCount';
 export * from './operation';
 export * from './operationType';
 export * from './role';
