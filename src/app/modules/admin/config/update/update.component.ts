@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, inject, ViewEncapsulation } from '@angular/core';
-import { Subject, delay, filter, map, switchMap, take, takeUntil, tap, catchError, of } from 'rxjs';
+import { Subject, delay, filter, map, switchMap, take, takeUntil, tap, catchError, of, pipe } from 'rxjs';
 import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule, FormControl, FormArray } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
@@ -66,7 +66,8 @@ export class UpdateComponent {
                     const metadataGroup = this.fb.group({
                         name: [m.name, Validators.required],
                         selector: [m.selector, Validators.required],
-                        type: [m.type, Validators.required]
+                        type: [m.type, Validators.required],
+                        pipe: [m.pipe],
                     });
                     (this.myForm.controls.detail.get('metadata') as FormArray).push(metadataGroup);
                 });
@@ -86,6 +87,7 @@ export class UpdateComponent {
     //     detail: [0, [Validators.min(1),]],
     // }) as any;
     readonly homeFields = ['card', 'title', 'url'];
+    readonly types = ['text', 'link', 'html', 'image', 'xpath'];
     readonly detailFields = ['title', 'image', 'date', 'location', 'domain', 'company', 'skills', 'educationLevel', 'contract', 'description'];
 
 
@@ -100,56 +102,69 @@ export class UpdateComponent {
             card: this.fb.group({
                 selector: ['', Validators.required],
                 type: ['', Validators.required],
+                pipe: [''],
             }),
             title: this.fb.group({
                 selector: ['', Validators.required],
                 type: ['', Validators.required],
+                pipe: [''],
             }),
             url: this.fb.group({
                 selector: ['', Validators.required],
                 type: ['', Validators.required],
+                pipe: [''],
             }),
         }),
         detail: this.fb.group({
             title: this.fb.group({
                 selector: ['', Validators.required],
                 type: ['', Validators.required],
+                pipe: [''],
             }),
             image: this.fb.group({
                 selector: ['', Validators.required],
                 type: ['', Validators.required],
+                pipe: [''],
             }),
             date: this.fb.group({
                 selector: ['', Validators.required],
                 type: ['', Validators.required],
+                pipe: [''],
             }),
             location: this.fb.group({
                 selector: ['', Validators.required],
                 type: ['', Validators.required],
+                pipe: [''],
             }),
             description: this.fb.group({
                 selector: ['', Validators.required],
                 type: ['', Validators.required],
+                pipe: [''],
             }),
             domain: this.fb.group({
                 selector: ['', Validators.required],
                 type: ['', Validators.required],
+                pipe: [''],
             }),
             company: this.fb.group({
                 selector: ['', Validators.required],
                 type: ['', Validators.required],
+                pipe: [''],
             }),
             skills: this.fb.group({
                 selector: ['', Validators.required],
                 type: ['', Validators.required],
+                pipe: [''],
             }),
             educationLevel: this.fb.group({
                 selector: ['', Validators.required],
                 type: ['', Validators.required],
+                pipe: [''],
             }),
             contract: this.fb.group({
                 selector: ['', Validators.required],
                 type: ['', Validators.required],
+                pipe: [''],
             }),
             metadata: this.fb.array([]) // You can push form groups to this form array later
 

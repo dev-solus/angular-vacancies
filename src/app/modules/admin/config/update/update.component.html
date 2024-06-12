@@ -107,22 +107,22 @@
                         </mat-error>
                     </mat-form-field>
 
-                    <!-- <mat-form-field appearance="fill">
+                    <mat-form-field appearance="fill" >
                         <mat-label>{{field | titlecase}} Type</mat-label>
-                        <input matInput formControlName="type" required>
+                        <mat-select formControlName="type">
+                            <mat-option *ngFor="let e of types" [value]="e">{{e}}</mat-option>
+                        </mat-select>
                         <mat-error
                             *ngIf="form.get('home.' + field).controls.type.invalid && (form.get('home.' + field).controls.type.dirty || form.get('home.' + field).controls.type.touched)">
                             Champ est requis
                         </mat-error>
-                    </mat-form-field> -->
+                    </mat-form-field>
 
-                    <mat-form-field appearance="fill" >
-                        <mat-label>{{field | titlecase}} Type</mat-label>
-                        <mat-select formControlName="type">
-                            <mat-option *ngFor="let e of ['text', 'link']" [value]="e">{{e}}</mat-option>
-                        </mat-select>
+                    <mat-form-field appearance="fill">
+                        <mat-label>{{field | titlecase}} Pipe</mat-label>
+                        <input matInput formControlName="pipe" required>
                         <mat-error
-                            *ngIf="form.get('home.' + field).controls.type.invalid && (form.get('home.' + field).controls.type.dirty || form.get('home.' + field).controls.type.touched)">
+                            *ngIf="form.get('home.' + field).controls.pipe.invalid && (form.get('home.' + field).controls.pipe.dirty || form.get('home.' + field).controls.pipe.touched)">
                             Champ est requis
                         </mat-error>
                     </mat-form-field>
@@ -145,10 +145,19 @@
                         </mat-error>
                     </mat-form-field>
 
+                    <mat-form-field appearance="fill">
+                        <mat-label>{{field | titlecase}} Pipe</mat-label>
+                        <input matInput formControlName="pipe" required>
+                        <mat-error
+                            *ngIf="form.get('detail.' + field).controls.pipe.invalid && (form.get('detail.' + field).controls.pipe.dirty || form.get('detail.' + field).controls.pipe.touched)">
+                            Champ est requis
+                        </mat-error>
+                    </mat-form-field>
+
                     <mat-form-field appearance="fill" >
                         <mat-label>{{field | titlecase}} Type</mat-label>
                         <mat-select formControlName="type">
-                            <mat-option *ngFor="let e of ['text', 'link']" [value]="e">{{e}}</mat-option>
+                            <mat-option *ngFor="let e of types" [value]="e">{{e}}</mat-option>
                         </mat-select>
                         <mat-error
                             *ngIf="form.get('detail.' + field).controls.type.invalid && (form.get('detail.' + field).controls.type.dirty || form.get('detail.' + field).controls.type.touched)">
@@ -182,9 +191,18 @@
                         </mat-form-field>
 
                         <mat-form-field appearance="fill">
+                            <mat-label>Metadata {{ i + 1 }}  Pipe</mat-label>
+                            <input matInput formControlName="pipe" required>
+                            <mat-error
+                                *ngIf="item.get('pipe').invalid && (item.get('pipe').dirty || item.get('pipe').touched)">
+                                Champ est requis
+                            </mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="fill">
                             <mat-label>Metadata {{ i + 1 }} Type</mat-label>
                             <mat-select formControlName="type">
-                                <mat-option *ngFor="let e of ['text', 'link']" [value]="e">{{e}}</mat-option>
+                                <mat-option *ngFor="let e of types" [value]="e">{{e}}</mat-option>
                             </mat-select>
                             <mat-error
                                 *ngIf="item.get('type').invalid && (item.get('type').dirty || item.get('type').touched)">
