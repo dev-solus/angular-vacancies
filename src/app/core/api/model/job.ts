@@ -14,17 +14,20 @@ import { MyElement } from './myElement';
 
 export interface Job { 
     id?: number;
+    source?: string | null;
     title?: string | null;
+    experience?: string | null;
+    contract?: string | null;
+    skills?: Array<string> | null;
     url?: string | null;
     image?: string | null;
-    date?: string | null;
+    originalDate?: string;
+    creationDate?: string;
     location?: string | null;
     description?: string | null;
     domain?: string | null;
     company?: string | null;
-    fonction?: string | null;
     educationLevel?: string | null;
-    salary?: string | null;
     metadata?: Array<MyElement> | null;
 }
 

@@ -20,9 +20,10 @@ export interface Detail {
     description?: MyElement;
     domain?: MyElement;
     company?: MyElement;
-    fonction?: MyElement;
+    skills?: MyElement;
+    experience?: MyElement;
+    contract?: MyElement;
     educationLevel?: MyElement;
-    salary?: MyElement;
     metadata?: Array<MyElement> | null;
 }
 

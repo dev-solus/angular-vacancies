@@ -86,7 +86,7 @@ export class UpdateComponent {
     //     detail: [0, [Validators.min(1),]],
     // }) as any;
     readonly homeFields = ['card', 'title', 'url'];
-    readonly detailFields = ['title', 'image', 'date', 'location', 'domain', 'company', 'fonction', 'educationLevel', 'salary', 'description'];
+    readonly detailFields = ['title', 'image', 'date', 'location', 'domain', 'company', 'skills', 'educationLevel', 'contract', 'description'];
 
 
     readonly myForm: FormGroup<TypeForm<Config>> = this.fb.group({
@@ -139,7 +139,7 @@ export class UpdateComponent {
                 selector: ['', Validators.required],
                 type: ['', Validators.required],
             }),
-            fonction: this.fb.group({
+            skills: this.fb.group({
                 selector: ['', Validators.required],
                 type: ['', Validators.required],
             }),
@@ -147,7 +147,7 @@ export class UpdateComponent {
                 selector: ['', Validators.required],
                 type: ['', Validators.required],
             }),
-            salary: this.fb.group({
+            contract: this.fb.group({
                 selector: ['', Validators.required],
                 type: ['', Validators.required],
             }),
