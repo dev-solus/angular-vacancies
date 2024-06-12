@@ -6,33 +6,37 @@
     <div class="flex items-center w-full h-full flex-col bg-gray-100 dark:bg-transparent pb-2">
 
 
-        <div class="flex flex-col h-full items-start w-full sm:w-11/12 md:w-10/12 xl:w-8/12 mt-10 ">
-
-            <div class="flex gap-3 items-start">
-                <mat-form-field class="flex-grow" [subscriptSizing]="'dynamic'">
+        <div class="flex flex-col gap-2 items-start w-full sm:w-11/12 md:w-10/12 xl:w-9/12 mt-5 " style="height: calc(100% - 110px);">
+            <div class="grid grid-cols-5 gap-3 items-start w-full bg-card p-2 border">
+                <mat-form-field class="col-span-2" [subscriptSizing]="'dynamic'">
                     <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:magnifying-glass'" matPrefix></mat-icon>
                     <input matInput [autocomplete]="'off'" [placeholder]="'Search notes'" [formControl]="name"
                         #searchInput>
                 </mat-form-field>
 
-                <mat-form-field appearance="fill">
+             <!-- <span class="text-xl">
+                {{!contractType.value.at(-1) | json}}
+                {{!contractType.value.length | json}}
+             </span> -->
+
+                <mat-form-field appearance="fill" [subscriptSizing]="'dynamic'">
+                    <mat-label>Job type</mat-label>
                     <mat-select multiple [formControl]="contractType">
-                        <mat-option class="hidden" [value]="''">Job type</mat-option>
-                        <mat-option *ngFor="let e of contractTypes$ | async" [value]="e">{{e}}</mat-option>
+                        <mat-option *ngFor="let e of contractTypes$ | async" [value]="e.name">{{e.name}} ({{e.count}})</mat-option>
                     </mat-select>
                 </mat-form-field>
 
-                <mat-form-field appearance="fill">
+                <mat-form-field appearance="fill" [subscriptSizing]="'dynamic'">
+                    <mat-label>Location</mat-label>
                     <mat-select multiple [formControl]="location">
-                        <mat-option class="hidden" [value]="''">Location</mat-option>
-                        <mat-option *ngFor="let e of locations$ | async" [value]="e">{{e}}</mat-option>
+                        <mat-option *ngFor="let e of locations$ | async" [value]="e.name">{{e.name}} ({{e.count}})</mat-option>
                     </mat-select>
                 </mat-form-field>
 
-                <mat-form-field appearance="fill">
+                <mat-form-field appearance="fill" [subscriptSizing]="'dynamic'">
+                    <mat-label>Skills</mat-label>
                     <mat-select multiple [formControl]="skill">
-                        <mat-option class="hidden" [value]="''">Location</mat-option>
-                        <mat-option *ngFor="let e of skills$ | async" [value]="e">{{e}}</mat-option>
+                        <mat-option *ngFor="let e of skills$ | async" [value]="e.name">{{e.name}} ({{e.count}})</mat-option>
                     </mat-select>
                 </mat-form-field>
 
@@ -41,7 +45,7 @@
             <div class="relative h-full flex flex-auto w-full bg-card rounded-md mb-3 dark:bg-transparent">
 
                 <!-- Mails list -->
-                <div class="relative flex flex-auto flex-col w-full min-w-0 lg:min-w-90 lg:max-w-90 border-r z-10">
+                <div [ngClass]="{'hidden lg:flex': !!jobId()}" class="relative flex flex-auto flex-col w-full min-w-0 lg:min-w-90 lg:max-w-90 border-r z-10">
                     <!-- Header -->
                     <div
                         class="relative flex flex-0 items-center justify-between h-16 px-4 border-b bg-gray-50 dark:bg-transparent">
@@ -86,15 +90,15 @@
                     </div>
 
                     <!-- Mail list -->
-                    <div class="overflow-y-auto flex-grow">
+                    <div class="overflow-y-auto flex-grow" >
                         @for (e of dataSource(); track e.id) {
-                        <a class="relative flex border-t first:border-0 hover:bg-hover" [routerLink]="[e.id]"
-                            (click)="service.selectedJob.next(e)">
+                        <a class="relative flex border-t first:border-0 hover:bg-hover"
+                            (click)="jobClick(e)">
 
                             <!-- Item content -->
                             <div class="flex flex-col items-start justify-start w-full py-6 pr-4 pl-5 border-l-4 border-transparent"
                                 [ngClass]="{'border-primary': $any(e).unread,
-                                                        'bg-primary-50 dark:bg-black dark:bg-opacity-5': selectedJob()?.id === e.id}">
+                                                        'bg-primary-50 dark:bg-black dark:bg-opacity-5': jobId() === e.id}">
 
                                 <!-- Info -->
                                 <div class="flex items-center w-full">
@@ -125,9 +129,10 @@
                                 </div>
 
                                 <!-- Excerpt -->
-                                <div class="mt-2 leading-normal line-clamp-2 text-secondary">
-                                    {{e.description}}...
+                                <div class="mt-2 leading-normal line-clamp-2 text-secondary" [innerHTML]="e.description">
+                                    <!-- {{e.description}}... -->
                                 </div>
+
 
                             </div>
 
@@ -150,8 +155,8 @@
 
                 <!-- Mail details -->
                 <ng-container *ngIf="!!dataSource().length">
-                    <div class="flex-auto" [ngClass]="{'z-20 absolute inset-0 lg:static lg:inset-auto flex': !!selectedJob(),
-                                        'hidden lg:flex': !selectedJob()}">
+                    <div class="flex-auto" [ngClass]="{'z-20 absolute inset-0 lg:static lg:inset-auto flex': !!jobId(),
+                                        'hidden lg:flex': !jobId()}">
                         <router-outlet></router-outlet>
                     </div>
                 </ng-container>

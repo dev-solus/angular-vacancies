@@ -4,12 +4,13 @@ import { Observable } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { environment } from "environments/environment.development";
 import { SuperService } from "./super.service";
+import { LocalService } from "../user/local.service";
 
 @Injectable({
     providedIn: 'root'
 })
 export class MyScrapingService extends SuperService<Job> {
-    readonly zone = inject(NgZone);
+    readonly session = inject(LocalService);
     constructor() {
         super('Scraping');
     }
@@ -17,7 +18,7 @@ export class MyScrapingService extends SuperService<Job> {
     getProgress(numbers?: number[]): Observable<any> {
         const numbersString = numbers?.join(',') ?? '';
         return new Observable(observer => {
-            const eventSource = new EventSource(environment.apiUrl + `/api/Scraping/GetProgress?numbers=${numbersString}`);
+            const eventSource = new EventSource(environment.apiUrl + `/api/Scraping/GetProgress?numbers=${numbersString}&token=${this.session.token}`);
             // const eventSource = new EventSource(`${environment.apiUrl}/api/${this.controller}/ScrapeOffers=${numbersString}`);
             eventSource.onmessage = event => {
                 console.log('event.data', event.data);

@@ -12,11 +12,11 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSort, MatSortModule } from '@angular/material/sort';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FuseAlertComponent } from '@fuse/components/alert';
 import { Job } from 'app/core/api';
 import { UowService } from 'app/core/http-services/uow.service';
-import { debounceTime, map, merge, startWith, Subject, switchMap, tap } from 'rxjs';
+import { debounceTime, filter, map, merge, startWith, Subject, switchMap, take, tap } from 'rxjs';
 import { MatChipsModule } from '@angular/material/chips';
 import { HomeService } from './home.service';
 
@@ -66,12 +66,9 @@ import { HomeService } from './home.service';
 })
 export class HomeComponent {
     readonly uow = inject(UowService);
-
-    // @ViewChild(MatPaginator, { static: true })
-    // readonly paginator0: MatPaginator;
-
+    readonly router = inject(Router);
+    readonly route = inject(ActivatedRoute);
     readonly service = inject(HomeService);
-
 
     readonly paginator = viewChild.required(MatPaginator);
     readonly sort = viewChild(MatSort);
@@ -94,19 +91,15 @@ export class HomeComponent {
     readonly skills$ = this.#all$.pipe(map(e => e.filter(f => f.name === 'skills').map(e => e.list).flat()));
 
     readonly name = new FormControl('');
-    readonly contractType = new FormControl<string[]>(['']);
-    readonly location = new FormControl<string[]>(['']);
-    readonly skill = new FormControl<string[]>(['']);
-
-    readonly update$ = new Subject<void>();
-
+    readonly contractType = new FormControl<string[]>([]);
+    readonly location = new FormControl<string[]>([]);
+    readonly skill = new FormControl<string[]>([]);
 
     readonly dataSource = toSignal(merge(
         this.name.valueChanges,
         this.contractType.valueChanges,
         this.location.valueChanges,
         this.skill.valueChanges,
-        this.update$,
     ).pipe(
         startWith(null),
         debounceTime(500),
@@ -130,8 +123,22 @@ export class HomeComponent {
         tap(() => this.isloading.set(false)),
     ), { initialValue: [] });
 
+    readonly jobId = toSignal(this.route.queryParamMap.pipe(
+        tap(e => console.log(e.get('id'))),
+        map(e => +e.get('id')),
+    ), { initialValue: 0 });
 
-    readonly selectedJob = signal<Job>(null);
-    readonly onSelect$ = new Subject<Job>();
+    // recover last visiting job if id exist in the url
+    readonly getJob = toSignal(this.route.queryParamMap.pipe(
+        take(1),
+        map(e => +e.get('id')),
+        filter(e => !!e),
+        switchMap(e => this.uow.core.jobs.getById(e)),
+        tap(e => this.service.selectedJob.next(e)),
+    ));
 
+    jobClick(e: Job) {
+        this.service.selectedJob.next(e);
+        this.router.navigate([''], { queryParams: { id: e.id } });
+    }
 }

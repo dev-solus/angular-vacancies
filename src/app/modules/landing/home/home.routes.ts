@@ -12,10 +12,10 @@ export default [
                 pathMatch: 'full',
                 component: DetailsComponent,
             },
-            {
-                path: ':id',
-                component: DetailsComponent,
-            },
+            // {
+            //     path: ':id',
+            //     component: DetailsComponent,
+            // },
         ],
     },
 ] as Routes;

@@ -5,7 +5,7 @@
         <!-- Toolbar -->
         <div class="flex items-center min-h-16 px-4 md:px-6 border-b bg-gray-50 dark:bg-transparent">
             <!-- Back button -->
-            <a class="lg:hidden md:-ml-2" mat-icon-button [routerLink]="['./../']">
+            <a class="lg:hidden md:-ml-2" mat-icon-button [routerLink]="['']">
                 <mat-icon [svgIcon]="'heroicons_outline:arrow-long-left'"></mat-icon>
             </a>
 
@@ -29,7 +29,7 @@
                 <div class="flex items-center w-full">
 
                     <!-- Sender avatar -->
-                    <div class="flex flex-0 items-center justify-center w-10 h-10 rounded-full overflow-hidden">
+                    <div *ngIf="!!e.image" class="flex flex-0 items-center justify-center w-10 h-10 rounded-full overflow-hidden">
                         <img class="w-full h-full" [src]="e.image" alt="User avatar">
                     </div>
 

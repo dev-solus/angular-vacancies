@@ -45,7 +45,7 @@
         <!-- Name -->
         <mat-form-field appearance="fill" class="col-span-2">
             <mat-label>Name</mat-label>
-            <input matInput formControlName="name" required>
+            <input matInput formControlName="name" >
             <mat-error *ngIf="form.controls.name.invalid && (form.controls.name.dirty || form.controls.name.touched)">
                 Champ est requis
             </mat-error>
@@ -54,7 +54,7 @@
         <!-- URL -->
         <mat-form-field appearance="fill" class="col-span-2">
             <mat-label>URL</mat-label>
-            <input matInput formControlName="url" required>
+            <input matInput formControlName="url" >
             <mat-error *ngIf="form.controls.url.invalid && (form.controls.url.dirty || form.controls.url.touched)">
                 Champ est requis
             </mat-error>
@@ -63,7 +63,7 @@
         <!-- Page Size -->
         <mat-form-field appearance="fill">
             <mat-label>Page Size</mat-label>
-            <input matInput formControlName="pageSize" type="number" required>
+            <input matInput formControlName="pageSize" type="number" >
             <mat-error
                 *ngIf="form.controls.pageSize.invalid && (form.controls.pageSize.dirty || form.controls.pageSize.touched)">
                 Champ est requis
@@ -73,7 +73,7 @@
         <!-- Count -->
         <mat-form-field appearance="fill">
             <mat-label>Count</mat-label>
-            <input matInput formControlName="count" type="number" required>
+            <input matInput formControlName="count" type="number" >
             <mat-error
                 *ngIf="form.controls.count.invalid && (form.controls.count.dirty || form.controls.count.touched)">
                 Champ est requis
@@ -83,7 +83,7 @@
         <!-- Page Selector -->
         <mat-form-field appearance="fill">
             <mat-label>Page Selector</mat-label>
-            <input matInput formControlName="pageSelector" required>
+            <input matInput formControlName="pageSelector" >
             <mat-error
                 *ngIf="form.controls.pageSelector.invalid && (form.controls.pageSelector.dirty || form.controls.pageSelector.touched)">
                 Champ est requis
@@ -100,7 +100,7 @@
                 <div [formGroupName]="field" class="grid items-start gap-2 bg-slate-50 p-2 border">
                     <mat-form-field appearance="fill">
                         <mat-label>{{field | titlecase}} Selector</mat-label>
-                        <input matInput formControlName="selector" required>
+                        <input matInput formControlName="selector" >
                         <mat-error
                             *ngIf="form.get('home.' + field).controls.selector.invalid && (form.get('home.' + field).controls.selector.dirty || form.get('home.' + field).controls.selector.touched)">
                             Champ est requis
@@ -120,7 +120,7 @@
 
                     <mat-form-field appearance="fill">
                         <mat-label>{{field | titlecase}} Pipe</mat-label>
-                        <input matInput formControlName="pipe" required>
+                        <input matInput formControlName="pipe" >
                         <mat-error
                             *ngIf="form.get('home.' + field).controls.pipe.invalid && (form.get('home.' + field).controls.pipe.dirty || form.get('home.' + field).controls.pipe.touched)">
                             Champ est requis
@@ -138,7 +138,7 @@
                 <div [formGroupName]="field" class="grid items-start bg-slate-50 p-2 border">
                     <mat-form-field appearance="fill">
                         <mat-label>{{field | titlecase}} Selector</mat-label>
-                        <input matInput formControlName="selector" required>
+                        <input matInput formControlName="selector" >
                         <mat-error
                             *ngIf="form.get('detail.' + field).controls.selector.invalid && (form.get('detail.' + field).controls.selector.dirty || form.get('detail.' + field).controls.selector.touched)">
                             Champ est requis
@@ -147,7 +147,7 @@
 
                     <mat-form-field appearance="fill">
                         <mat-label>{{field | titlecase}} Pipe</mat-label>
-                        <input matInput formControlName="pipe" required>
+                        <input matInput formControlName="pipe" >
                         <mat-error
                             *ngIf="form.get('detail.' + field).controls.pipe.invalid && (form.get('detail.' + field).controls.pipe.dirty || form.get('detail.' + field).controls.pipe.touched)">
                             Champ est requis
@@ -174,7 +174,7 @@
                     <div [formGroupName]="i" class="grid items-start bg-slate-50 p-2 border">
                         <mat-form-field appearance="fill">
                             <mat-label>Metadata {{ i + 1 }} Name</mat-label>
-                            <input matInput formControlName="name" required>
+                            <input matInput formControlName="name" >
                             <mat-error
                                 *ngIf="item.get('name').invalid && (item.get('name').dirty || item.get('name').touched)">
                                 Champ est requis
@@ -183,7 +183,7 @@
 
                         <mat-form-field appearance="fill">
                             <mat-label>Metadata {{ i + 1 }} Selector</mat-label>
-                            <input matInput formControlName="selector" required>
+                            <input matInput formControlName="selector" >
                             <mat-error
                                 *ngIf="item.get('selector').invalid && (item.get('selector').dirty || item.get('selector').touched)">
                                 Champ est requis
@@ -192,7 +192,7 @@
 
                         <mat-form-field appearance="fill">
                             <mat-label>Metadata {{ i + 1 }}  Pipe</mat-label>
-                            <input matInput formControlName="pipe" required>
+                            <input matInput formControlName="pipe" >
                             <mat-error
                                 *ngIf="item.get('pipe').invalid && (item.get('pipe').dirty || item.get('pipe').touched)">
                                 Champ est requis

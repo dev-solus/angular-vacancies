@@ -77,8 +77,8 @@ export class AddComponent {
 
     ngAfterViewInit(): void {
         // this.viewInitDone.next();
-        this.uow.core.myScrapings.getProgress([1, 2]).subscribe(r => {
-            console.log(r);
-        });
+        // this.uow.core.myScrapings.getProgress([1, 2]).subscribe(r => {
+        //     console.log(r);
+        // });
     }
 }
