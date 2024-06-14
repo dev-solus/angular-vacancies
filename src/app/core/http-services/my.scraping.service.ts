@@ -21,12 +21,15 @@ export class MyScrapingService extends SuperService<Job> {
             const eventSource = new EventSource(environment.apiUrl + `/api/Scraping/GetProgress?numbers=${numbersString}&token=${this.session.token}`);
             // const eventSource = new EventSource(`${environment.apiUrl}/api/${this.controller}/ScrapeOffers=${numbersString}`);
             eventSource.onmessage = event => {
-                console.log('event.data', event.data);
+                // console.log('event.data', event.data);
                 observer.next(event.data);
             };
             eventSource.onerror = error => {
+                console.error('EventSource failed:', error);
                 observer.error(error);
+                eventSource.close();
             };
+
             return () => {
                 eventSource.close();
             };

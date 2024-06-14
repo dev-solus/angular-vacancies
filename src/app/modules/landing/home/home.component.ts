@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, signal, viewChild, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, inject, signal, viewChild, ViewChild, ViewEncapsulation } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -16,7 +16,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FuseAlertComponent } from '@fuse/components/alert';
 import { Job } from 'app/core/api';
 import { UowService } from 'app/core/http-services/uow.service';
-import { debounceTime, filter, map, merge, startWith, Subject, switchMap, take, tap } from 'rxjs';
+import { debounceTime, filter, map, merge, of, startWith, Subject, switchMap, take, tap } from 'rxjs';
 import { MatChipsModule } from '@angular/material/chips';
 import { HomeService } from './home.service';
 
@@ -64,7 +64,7 @@ import { HomeService } from './home.service';
         MatChipsModule,
     ],
 })
-export class HomeComponent {
+export class HomeComponent implements AfterViewInit {
     readonly uow = inject(UowService);
     readonly router = inject(Router);
     readonly route = inject(ActivatedRoute);
@@ -84,7 +84,7 @@ export class HomeComponent {
     //     'Skill',
     // ];
 
-    readonly #all$ = this.uow.core.filters.get$;
+    readonly #all$ = of([])// this.uow.core.filters.get$;
 
     readonly contractTypes$ = this.#all$.pipe(map(e => e.filter(f => f.name === 'contract').map(e => e.list).flat()));
     readonly locations$ = this.#all$.pipe(map(e => e.filter(f => f.name === 'location').map(e => e.list).flat()));
@@ -101,7 +101,7 @@ export class HomeComponent {
         this.location.valueChanges,
         this.skill.valueChanges,
     ).pipe(
-        startWith(null),
+        // startWith(null),
         debounceTime(500),
         tap(() => this.isloading.set(true)),
         map(() => [
@@ -136,6 +136,12 @@ export class HomeComponent {
         switchMap(e => this.uow.core.jobs.getById(e)),
         tap(e => this.service.selectedJob.next(e)),
     ));
+
+    ngAfterViewInit(): void {
+        this.uow.core.gemini.test2().subscribe(r => {
+            console.log(r);
+        });
+    }
 
     jobClick(e: Job) {
         this.service.selectedJob.next(e);

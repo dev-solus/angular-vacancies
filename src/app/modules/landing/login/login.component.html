@@ -1,0 +1,97 @@
+<div class="w-full max-w-96 sm:w-96 mx-auto sm:mx-0 relative z-10">
+    <!-- Logo -->
+    <!-- <div class="w-14">
+        <img src="assets/images/logo/logo.png">
+    </div> -->
+
+    <!-- Title -->
+    <div class="mt-8 text-4xl font-extrabold tracking-tight leading-tight">Se connecter</div>
+
+    <!-- Alert -->
+    <ng-container *ngIf="showMessage | async as e">
+        <fuse-alert class="w-full my-5" [@shake]="true" [type]="e.code < 0 ? 'warn' : 'success'"
+            [appearance]="'border'">
+            <span fuseAlertTitle>Message</span>
+            {{e.message}}
+        </fuse-alert>
+    </ng-container>
+
+    <!-- Sign in form -->
+    <form
+        class="mt-8"
+        [formGroup]="myForm">
+
+        <!-- Email field -->
+    <mat-form-field class="w-full">
+        <mat-label>Matricule</mat-label>
+        <input matInput placeholder="Email" [formControlName]="'email'">
+        <mat-error *ngIf="myForm.get('email').hasError('required')">
+            Adresse e-mail est nécessaire
+        </mat-error>
+        <mat-error *ngIf="myForm.get('email').hasError('email')">
+            S'il vous plaît, mettez une adresse email valide
+        </mat-error>
+    </mat-form-field>
+
+    <!-- Password field -->
+    <mat-form-field class="w-full">
+        <mat-label>Mot de passe</mat-label>
+        <input id="password" matInput type="password" placeholder="Mot de pass" formControlName="password"
+            #passwordField>
+        <button mat-icon-button type="button"
+            (click)="passwordField.type === 'password' ? passwordField.type = 'text' : passwordField.type = 'password'"
+            matSuffix>
+            <!-- <mat-icon>{{passwordField.type === 'text' ? 'visibility_off' : 'visibility'}}</mat-icon>  -->
+            @if (passwordField.type !== 'text') {
+                <mat-icon svgIcon="heroicons_outline:eye"></mat-icon>
+            } @else {
+                <mat-icon svgIcon="heroicons_outline:eye-slash"></mat-icon>
+            }
+        </button>
+        <mat-error
+            *ngIf="myForm.controls.password.invalid && (myForm.controls.password.dirty || myForm.controls.password.touched)">
+            Mot de passe requis
+        </mat-error>
+    </mat-form-field>
+
+
+    <div class="text-primary-500 hover:underline">
+        <a [routerLink]="['/forgot-password']" class="text-left">Forgot password?</a>
+    </div>
+
+         <!-- Actions -->
+         <!-- <div class="inline-flex items-center justify-end w-full mt-1.5">
+            <a
+                class="text-md font-medium text-primary-500 hover:underline"
+                [routerLink]="['']">vers accueil
+            </a>
+        </div> -->
+
+        <!-- Submit button -->
+        <button
+            class="fuse-mat-button-large w-full mt-6"
+            mat-flat-button
+            [color]="'primary'"
+            [disabled]="myForm.disabled"
+            (click)="login.next()">
+            <span *ngIf="!myForm.disabled">
+                Se connecter
+            </span>
+            <mat-progress-spinner
+                *ngIf="myForm.disabled"
+                [diameter]="24"
+                [mode]="'indeterminate'"></mat-progress-spinner>
+        </button>
+
+        <!-- <div class="grid grid-cols-4 my-5 gap-y-2 text-xs">
+
+            @for (e of users; track $index) {
+            <span class="col-span-3 shadow text-xs">{{e.email}} - <span
+                    class="p-0.5 bg-orange-400 text-white rounded-md">{{e.role}}</span></span>
+            <span class="shadow cursor-pointer"
+                (click)="myForm.setValue({email: e.email, password: e.password})">{{e.password}}</span>
+            }
+        </div> -->
+
+    </form>
+</div>
