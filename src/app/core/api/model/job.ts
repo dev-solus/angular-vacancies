@@ -9,6 +9,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { Submission } from './submission';
 import { MyElement } from './myElement';
 
 
@@ -28,6 +29,7 @@ export interface Job {
     domain?: string | null;
     company?: string | null;
     educationLevel?: string | null;
+    submissions?: Array<Submission> | null;
     metadata?: Array<MyElement> | null;
 }
 

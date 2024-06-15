@@ -10,6 +10,8 @@
  * Do not edit the class manually.
  */
 import { Role } from './role';
+import { CV } from './cV';
+import { Submission } from './submission';
 
 
 export interface User { 
@@ -24,5 +26,7 @@ export interface User {
     phone?: string | null;
     roleId?: number;
     role?: Role;
+    cv?: CV;
+    submissions?: Array<Submission> | null;
 }
 

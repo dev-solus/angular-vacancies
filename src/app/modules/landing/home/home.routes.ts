@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './home.component';
 import { DetailsComponent } from './details/details.component';
+import { CvComponent } from './cv/cv.component';
 
 export default [
     {
@@ -12,10 +13,10 @@ export default [
                 pathMatch: 'full',
                 component: DetailsComponent,
             },
-            // {
-            //     path: ':id',
-            //     component: DetailsComponent,
-            // },
+            {
+                path: 'cv',
+                component: CvComponent,
+            },
         ],
     },
 ] as Routes;

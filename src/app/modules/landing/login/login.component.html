@@ -5,14 +5,24 @@
     </div> -->
 
     <!-- Title -->
-    <div class="text-4xl font-extrabold tracking-tight leading-tight">Se connecter</div>
-    <div class="flex items-baseline mt-0.5 font-medium">
-        <div>Don't have an account?</div>
-        <a
-            class="ml-1 text-primary-500 hover:underline"
-            [routerLink]="['/sign-up']">Sign up
-        </a>
-    </div>
+
+
+    @if (showLogin()) {
+        <div class="text-4xl font-extrabold tracking-tight leading-tight">Se connecter</div>
+        <div class="flex items-baseline mt-0.5 font-medium">
+            <div>Don't have an account?</div>
+            <a class="ml-1 text-primary-500 hover:underline cursor-pointer" (click)="showLogin$.next(false)">S'inscrire
+            </a>
+        </div>
+    } @else {
+        <div class="text-4xl font-extrabold tracking-tight leading-tight">S'inscrire</div>
+        <div class="flex items-baseline mt-0.5 font-medium">
+            <div>Already have an account?</div>
+            <a class="ml-1 text-primary-500 hover:underline cursor-pointer" (click)="showLogin$.next(true)">Sign in
+            </a>
+        </div>
+    }
+
 
     <!-- Alert -->
     <ng-container *ngIf="showMessage | async as e">
@@ -23,51 +33,126 @@
         </fuse-alert>
     </ng-container>
 
+    <ng-container *ngIf="showLogin()">
+        <ng-container *ngTemplateOutlet="loginT"></ng-container>
+    </ng-container>
+
+    <ng-container *ngIf="!showLogin()">
+        <ng-container *ngTemplateOutlet="registerT"></ng-container>
+    </ng-container>
+
     <!-- Sign in form -->
-    <form
-        class="mt-8"
-        [formGroup]="myForm">
+
+</div>
+
+<ng-template #registerT>
+    <form class="mt-8" [formGroup]="myForm" #signUpNgForm="ngForm">
+
+        <!-- First name field -->
+        <mat-form-field class="w-full">
+            <mat-label>First name</mat-label>
+            <input id="firstname" matInput [formControlName]="'firstname'">
+            <mat-error *ngIf="myForm.get('firstname').hasError('required')">
+                First name is required
+            </mat-error>
+        </mat-form-field>
+
+        <!-- Last name field -->
+        <mat-form-field class="w-full">
+            <mat-label>Last name</mat-label>
+            <input id="lastname" matInput [formControlName]="'lastname'">
+            <mat-error *ngIf="myForm.get('lastname').hasError('required')">
+                Full name is required
+            </mat-error>
+        </mat-form-field>
 
         <!-- Email field -->
-    <mat-form-field class="w-full">
-        <mat-label>Email</mat-label>
-        <input matInput placeholder="Email" [formControlName]="'email'">
-        <mat-error *ngIf="myForm.get('email').hasError('required')">
-            Adresse e-mail est nécessaire
-        </mat-error>
-        <mat-error *ngIf="myForm.get('email').hasError('email')">
-            S'il vous plaît, mettez une adresse email valide
-        </mat-error>
-    </mat-form-field>
+        <mat-form-field class="w-full">
+            <mat-label>Email address</mat-label>
+            <input id="email" matInput [formControlName]="'email'">
+            <mat-error *ngIf="myForm.get('email').hasError('required')">
+                Email address is required
+            </mat-error>
+            <mat-error *ngIf="myForm.get('email').hasError('email')">
+                Please enter a valid email address
+            </mat-error>
+        </mat-form-field>
 
-    <!-- Password field -->
-    <mat-form-field class="w-full">
-        <mat-label>Mot de passe</mat-label>
-        <input id="password" matInput type="password" placeholder="Mot de pass" formControlName="password"
-            #passwordField>
-        <button mat-icon-button type="button"
-            (click)="passwordField.type === 'password' ? passwordField.type = 'text' : passwordField.type = 'password'"
-            matSuffix>
-            <!-- <mat-icon>{{passwordField.type === 'text' ? 'visibility_off' : 'visibility'}}</mat-icon>  -->
-            @if (passwordField.type !== 'text') {
-                <mat-icon svgIcon="heroicons_outline:eye"></mat-icon>
-            } @else {
-                <mat-icon svgIcon="heroicons_outline:eye-slash"></mat-icon>
-            }
+        <!-- Password field -->
+        <mat-form-field class="w-full">
+            <mat-label>Password</mat-label>
+            <input id="password" matInput type="password" [formControlName]="'password'" #passwordField>
+            <button mat-icon-button type="button"
+                (click)="passwordField.type === 'password' ? passwordField.type = 'text' : passwordField.type = 'password'"
+                matSuffix>
+                <mat-icon class="icon-size-5" *ngIf="passwordField.type === 'password'"
+                    [svgIcon]="'heroicons_solid:eye'"></mat-icon>
+                <mat-icon class="icon-size-5" *ngIf="passwordField.type === 'text'"
+                    [svgIcon]="'heroicons_solid:eye-slash'"></mat-icon>
+            </button>
+            <mat-error>
+                Password is required
+            </mat-error>
+        </mat-form-field>
+
+
+        <!-- Submit button -->
+        <button class="fuse-mat-button-large w-full mt-6" mat-flat-button [color]="'primary'"
+            [disabled]="myForm.disabled" (click)="submit.next('register')">
+            <span *ngIf="!myForm.disabled">
+                Create your free account
+            </span>
+            <mat-progress-spinner *ngIf="myForm.disabled" [diameter]="24"
+                [mode]="'indeterminate'"></mat-progress-spinner>
         </button>
-        <mat-error
-            *ngIf="myForm.controls.password.invalid && (myForm.controls.password.dirty || myForm.controls.password.touched)">
-            Mot de passe requis
-        </mat-error>
-    </mat-form-field>
+
+    </form>
+</ng-template>
 
 
-    <div class="text-primary-500 hover:underline">
-        <a [routerLink]="['/forgot-password']" class="text-left">Forgot password?</a>
-    </div>
+<ng-template #loginT>
+    <form class="mt-8" [formGroup]="myForm">
 
-         <!-- Actions -->
-         <!-- <div class="inline-flex items-center justify-end w-full mt-1.5">
+        <!-- Email field -->
+        <mat-form-field class="w-full">
+            <mat-label>Email</mat-label>
+            <input matInput placeholder="Email" [formControlName]="'email'">
+            <mat-error *ngIf="myForm.get('email').hasError('required')">
+                Adresse e-mail est nécessaire
+            </mat-error>
+            <mat-error *ngIf="myForm.get('email').hasError('email')">
+                S'il vous plaît, mettez une adresse email valide
+            </mat-error>
+        </mat-form-field>
+
+        <!-- Password field -->
+        <mat-form-field class="w-full">
+            <mat-label>Mot de passe</mat-label>
+            <input id="password" matInput type="password" placeholder="Mot de pass" formControlName="password"
+                #passwordField>
+            <button mat-icon-button type="button"
+                (click)="passwordField.type === 'password' ? passwordField.type = 'text' : passwordField.type = 'password'"
+                matSuffix>
+                <!-- <mat-icon>{{passwordField.type === 'text' ? 'visibility_off' : 'visibility'}}</mat-icon>  -->
+                @if (passwordField.type !== 'text') {
+                <mat-icon svgIcon="heroicons_outline:eye"></mat-icon>
+                } @else {
+                <mat-icon svgIcon="heroicons_outline:eye-slash"></mat-icon>
+                }
+            </button>
+            <mat-error
+                *ngIf="myForm.controls.password.invalid && (myForm.controls.password.dirty || myForm.controls.password.touched)">
+                Mot de passe requis
+            </mat-error>
+        </mat-form-field>
+
+
+        <!-- <div class="text-primary-500 hover:underline">
+            <a [routerLink]="['/forgot-password']" class="text-left">Forgot password?</a>
+        </div> -->
+
+        <!-- Actions -->
+        <!-- <div class="inline-flex items-center justify-end w-full mt-1.5">
             <a
                 class="text-md font-medium text-primary-500 hover:underline"
                 [routerLink]="['']">vers accueil
@@ -75,18 +160,12 @@
         </div> -->
 
         <!-- Submit button -->
-        <button
-            class="fuse-mat-button-large w-full mt-6"
-            mat-flat-button
-            [color]="'primary'"
-            [disabled]="myForm.disabled"
-            (click)="login.next()">
+        <button class="fuse-mat-button-large w-full mt-6" mat-flat-button [color]="'primary'"
+            [disabled]="myForm.disabled" (click)="submit.next('login')">
             <span *ngIf="!myForm.disabled">
                 Se connecter
             </span>
-            <mat-progress-spinner
-                *ngIf="myForm.disabled"
-                [diameter]="24"
+            <mat-progress-spinner *ngIf="myForm.disabled" [diameter]="24"
                 [mode]="'indeterminate'"></mat-progress-spinner>
         </button>
 
@@ -101,4 +180,4 @@
         </div> -->
 
     </form>
-</div>
+</ng-template>

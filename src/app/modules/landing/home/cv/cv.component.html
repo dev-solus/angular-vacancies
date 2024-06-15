@@ -1,0 +1,53 @@
+<div class="flex flex-col flex-auto overflow-y-auto lg:overflow-hidden bg-card dark:bg-default">
+
+    <p>cv works!</p>
+    <form [formGroup]="myForm" class="grid grid-cols-2 gap-2">
+        <!-- Name -->
+        <mat-form-field appearance="fill" class="col-span-2">
+            <mat-label>Titre</mat-label>
+            <input matInput formControlName="name">
+            <mat-error
+                *ngIf="myForm.controls.name.invalid && (myForm.controls.name.dirty || myForm.controls.name.touched)">
+                Champ est requis
+            </mat-error>
+        </mat-form-field>
+
+        <!-- <pre>
+        {{ myForm.controls.sections.controls | json }}
+    </pre> -->
+
+        <div class="grid w-full">
+            @for (item of myForm.controls.sections.controls; track $index) {
+            <div [formGroup]="item" class="grid items-start bg-slate-50 p-2 border">
+                <mat-form-field appearance="fill">
+                    <mat-label>Section</mat-label>
+                    <input matInput formControlName="title">
+                    <mat-error
+                        *ngIf="item.get('title').invalid && (item.get('title').dirty || item.get('title').touched)">
+                        Champ est requis
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                    <mat-label>Description</mat-label>
+                    <input matInput formControlName="details">
+                    <mat-error
+                        *ngIf="item.get('details').invalid && (item.get('details').dirty || item.get('details').touched)">
+                        Champ est requis
+                    </mat-error>
+                </mat-form-field>
+
+            </div>
+
+            }
+        <button mat-flat-button [color]="'primary'" class="w-50" (click)="addSection()">
+            <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+            <span class="ml-2 mr-1">Add Metadata</span>
+        </button>
+        </div>
+
+
+
+    </form>
+
+</div>

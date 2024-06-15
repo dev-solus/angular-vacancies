@@ -55,14 +55,14 @@
                 <!-- Buttons -->
                 <div class="flex flex-wrap w-full -m-2">
                     <!-- Reply -->
-                    <button class="m-2" mat-stroked-button [color]="'primary'" (click)="submit$.next()">
+                    <!-- <button class="m-2" mat-stroked-button [color]="'primary'" (click)="submit$.next()">
                         <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:arrow-uturn-left'"></mat-icon>
                         <span class="ml-2">Reply</span>
-                    </button>
+                    </button> -->
                     <!-- Reply all -->
-                    <button class="m-2" mat-stroked-button [color]="'primary'" (click)="submit$.next()">
+                    <button class="m-2" mat-stroked-button [color]="'primary'" routerLink="/cv">
                         <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:arrow-uturn-left'"></mat-icon>
-                        <span class="ml-2">Reply All</span>
+                        <span class="ml-2">CV AI</span>
                     </button>
                     <!-- Forward -->
                     <button class="m-2" mat-stroked-button [color]="'primary'" (click)="openLink(e.url)">

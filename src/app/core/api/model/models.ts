@@ -1,4 +1,5 @@
 export * from './addDto';
+export * from './cV';
 export * from './config';
 export * from './configGetAllDto';
 export * from './detail';
@@ -15,6 +16,9 @@ export * from './operation';
 export * from './operationType';
 export * from './role';
 export * from './roleGetAllDto';
+export * from './section';
+export * from './submission';
+export * from './submissionGetAllDto';
 export * from './user';
 export * from './userDto';
 export * from './userDtoGetAllDto';

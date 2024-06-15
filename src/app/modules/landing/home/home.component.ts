@@ -101,7 +101,7 @@ export class HomeComponent implements AfterViewInit {
         this.location.valueChanges,
         this.skill.valueChanges,
     ).pipe(
-        // startWith(null),
+        startWith(null),
         debounceTime(500),
         tap(() => this.isloading.set(true)),
         map(() => [
@@ -124,7 +124,7 @@ export class HomeComponent implements AfterViewInit {
     ), { initialValue: [] });
 
     readonly jobId = toSignal(this.route.queryParamMap.pipe(
-        tap(e => console.log(e.get('id'))),
+        // tap(e => console.log(e.get('id'))),
         map(e => +e.get('id')),
     ), { initialValue: 0 });
 
@@ -138,9 +138,9 @@ export class HomeComponent implements AfterViewInit {
     ));
 
     ngAfterViewInit(): void {
-        this.uow.core.gemini.test2().subscribe(r => {
-            console.log(r);
-        });
+        // this.uow.core.gemini.test2().subscribe(r => {
+        //     console.log(r);
+        // });
     }
 
     jobClick(e: Job) {
