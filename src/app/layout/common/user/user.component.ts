@@ -8,6 +8,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { Router, RouterLink } from '@angular/router';
 import { LocalService } from 'app/core/user/local.service';
 import { UserService } from 'app/core/user/user.service';
+import { LoginDialogService } from 'app/modules/landing/login/login-dialog.service';
 import { Subject, takeUntil } from 'rxjs';
 
 @Component({
@@ -30,6 +31,7 @@ export class UserComponent implements OnInit, OnDestroy {
     /* eslint-disable @typescript-eslint/naming-convention */
     static ngAcceptInputType_showAvatar: BooleanInput;
     readonly session = inject(LocalService);
+    readonly loginDialog = inject(LoginDialogService);
 
     /* eslint-enable @typescript-eslint/naming-convention */
 
@@ -59,6 +61,11 @@ export class UserComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
 
     }
+
+    login() {
+        this.loginDialog.openLoginDialog().subscribe();
+    }
+
 
     /**
      * On destroy

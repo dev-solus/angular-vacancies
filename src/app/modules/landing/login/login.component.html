@@ -5,7 +5,14 @@
     </div> -->
 
     <!-- Title -->
-    <div class="mt-8 text-4xl font-extrabold tracking-tight leading-tight">Se connecter</div>
+    <div class="text-4xl font-extrabold tracking-tight leading-tight">Se connecter</div>
+    <div class="flex items-baseline mt-0.5 font-medium">
+        <div>Don't have an account?</div>
+        <a
+            class="ml-1 text-primary-500 hover:underline"
+            [routerLink]="['/sign-up']">Sign up
+        </a>
+    </div>
 
     <!-- Alert -->
     <ng-container *ngIf="showMessage | async as e">
@@ -23,7 +30,7 @@
 
         <!-- Email field -->
     <mat-form-field class="w-full">
-        <mat-label>Matricule</mat-label>
+        <mat-label>Email</mat-label>
         <input matInput placeholder="Email" [formControlName]="'email'">
         <mat-error *ngIf="myForm.get('email').hasError('required')">
             Adresse e-mail est nécessaire
