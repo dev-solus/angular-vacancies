@@ -11,6 +11,16 @@
 
             <div class="flex flex-wrap items-center py-5 px-6">
                 <div class="flex flex-auto my-1 mr-4 text-2xl">{{e.title}}</div>
+
+                    <div class="flex flex-wrap items-center justify-start -mx-1">
+                        <ng-container *ngFor="let label of labels()">
+                            <div
+                                class="m-1 py-0.5 px-2.5 rounded-full text-sm font-medium whitespace-nowrap"
+                                [ngClass]="labelColors[label.color].combined">
+                                {{label.title}}
+                            </div>
+                        </ng-container>
+                    </div>
             </div>
         </div>
     </div>
@@ -60,7 +70,7 @@
                         <span class="ml-2">Reply</span>
                     </button> -->
                     <!-- Reply all -->
-                    <button class="m-2" mat-stroked-button [color]="'primary'" routerLink="/cv">
+                    <button class="m-2" mat-stroked-button [color]="'primary'" (click)="toCV()">
                         <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:arrow-uturn-left'"></mat-icon>
                         <span class="ml-2">CV AI</span>
                     </button>

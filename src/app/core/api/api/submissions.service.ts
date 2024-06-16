@@ -733,6 +733,87 @@ export class SubmissionsService {
     }
 
     /**
+     * @param jobId 
+     * @param userId 
+     * @param operation 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public apiSubmissionsPatchJobIdUserIdPatch(jobId: number, userId: number, operation?: Array<Operation>, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
+    public apiSubmissionsPatchJobIdUserIdPatch(jobId: number, userId: number, operation?: Array<Operation>, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
+    public apiSubmissionsPatchJobIdUserIdPatch(jobId: number, userId: number, operation?: Array<Operation>, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
+    public apiSubmissionsPatchJobIdUserIdPatch(jobId: number, userId: number, operation?: Array<Operation>, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+        if (jobId === null || jobId === undefined) {
+            throw new Error('Required parameter jobId was null or undefined when calling apiSubmissionsPatchJobIdUserIdPatch.');
+        }
+        if (userId === null || userId === undefined) {
+            throw new Error('Required parameter userId was null or undefined when calling apiSubmissionsPatchJobIdUserIdPatch.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (Bearer) required
+        localVarCredential = this.configuration.lookupCredential('Bearer');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json-patch+json',
+            'application/json',
+            'text/json',
+            'application/*+json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/Submissions/Patch/${this.configuration.encodeParam({name: "jobId", value: jobId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}/${this.configuration.encodeParam({name: "userId", value: userId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int32"})}`;
+        return this.httpClient.request<any>('patch', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: operation,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * @param submission 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.

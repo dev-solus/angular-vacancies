@@ -1,7 +1,7 @@
 import { environment } from 'environments/environment.development';
 import { Injectable, inject } from '@angular/core';
 import { UtilsService } from './utils.service';
-import { AccountsService, Config, ConfigsService, Filter, MyFiltersService, Job, JobsService, Role, RolesService, ScrapingService, User, UsersService } from '../api';
+import { AccountsService, Config, ConfigsService, Filter, MyFiltersService, Job, JobsService, Role, RolesService, ScrapingService, User, UsersService, Submission, SubmissionsService } from '../api';
 import { MyScrapingService } from './my.scraping.service';
 import { GeminiService } from './gemini.service';
 
@@ -23,5 +23,7 @@ export class CoreService {
     // readonly scrapings = this.utils.extendClass<Job, ScrapingService>(ScrapingService, environment.apiUrl, 'scrapings');
     readonly myScrapings = this.utils.extendClass<Job, MyScrapingService>(MyScrapingService, environment.apiUrl, 'scraping');
     readonly gemini = this.utils.extendClass<any, GeminiService>(GeminiService, environment.apiUrl, 'gemini');
+    // submissions
+    readonly submissions = this.utils.extendClass<Submission, SubmissionsService>(SubmissionsService, environment.apiUrl, 'submissions');
 
 }

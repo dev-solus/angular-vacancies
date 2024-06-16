@@ -16,36 +16,36 @@ export const defaultConfig : EditorConfig= {
 			'outdent',
 			'indent',
 			'|',
-			'imageUpload',
-			'blockQuote',
-			'insertTable',
-			'mediaEmbed',
+			// 'imageUpload',
+			// 'blockQuote',
+			// 'insertTable',
+			// 'mediaEmbed',
 			'undo',
 			'redo',
-			'findAndReplace',
-			'specialCharacters',
+			// 'findAndReplace',
+			// 'specialCharacters',
 			'alignment',
-			'code',
-			'codeBlock',
+			// 'code',
+			// 'codeBlock',
 			'fontBackgroundColor',
 			'fontColor',
 			'fontSize',
 			'highlight',
-			'horizontalLine',
+			// 'horizontalLine',
 			'fontFamily',
-			'htmlEmbed',
-			'imageInsert',
-			'pageBreak',
-			'removeFormat',
-			'selectAll',
-			'restrictedEditingException',
-			'strikethrough',
-			'superscript',
-			'subscript',
-			'style',
-			'textPartLanguage',
-			'todoList',
-			'underline'
+			// 'htmlEmbed',
+			// 'imageInsert',
+			// 'pageBreak',
+			// 'removeFormat',
+			// 'selectAll',
+			// 'restrictedEditingException',
+			// 'strikethrough',
+			// 'superscript',
+			// 'subscript',
+			// 'style',
+			// 'textPartLanguage',
+			// 'todoList',
+			// 'underline'
 		]
 
     },
@@ -53,32 +53,32 @@ export const defaultConfig : EditorConfig= {
     alignment: {
       options: ['left', 'center', 'right','justify']
     },
-    image: {
-      toolbar: [
-        'imageTextAlternative',
-        'imageStyle:inline',
-        'imageStyle:block',
-        'imageStyle:side',
-        'linkImage',
-      ]
-    },
-    mediaEmbed: {
-      previewsInData: true,
-      toolbar: [
-        'mediaEmbedTextAlternative',
-        'mediaEmbedStyle:inline',
-        'mediaEmbedStyle:block',
-        'mediaEmbedStyle:side',
-        'linkmediaEmbed',
-      ]
-    },
+    // image: {
+    //   toolbar: [
+    //     'imageTextAlternative',
+    //     'imageStyle:inline',
+    //     'imageStyle:block',
+    //     'imageStyle:side',
+    //     'linkImage',
+    //   ]
+    // },
+    // mediaEmbed: {
+    //   previewsInData: true,
+    //   toolbar: [
+    //     'mediaEmbedTextAlternative',
+    //     'mediaEmbedStyle:inline',
+    //     'mediaEmbedStyle:block',
+    //     'mediaEmbedStyle:side',
+    //     'linkmediaEmbed',
+    //   ]
+    // },
 
-    table: {
-      contentToolbar: [
-        'tableColumn',
-        'tableRow',
-        'mergeTableCells'
-      ],
+    // table: {
+    //   contentToolbar: [
+    //     'tableColumn',
+    //     'tableRow',
+    //     'mergeTableCells'
+    //   ],
 
-    }
+    // }
   }  as EditorConfig

@@ -1,9 +1,104 @@
 <div class="flex flex-col flex-auto overflow-y-auto lg:overflow-hidden bg-card dark:bg-default">
 
-    <p>cv works!</p>
-    <form [formGroup]="myForm" class="grid grid-cols-2 gap-2">
+    <div class="z-10 relative flex flex-col flex-0 w-full border-b">
+        <!-- Toolbar -->
+        <div class="flex items-center min-h-16 px-4 md:px-6 border-b bg-gray-50 dark:bg-transparent">
+            <!-- Back button -->
+            <a class="-ml-2" mat-icon-button (click)="back()">
+                <mat-icon [svgIcon]="'heroicons_outline:arrow-long-left'"></mat-icon>
+            </a>
+
+            <div class="flex flex-wrap items-center py-5 px-6">
+                <div class="flex flex-auto my-1 mr-4 text-2xl">CV</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex flex-col flex-auto shrink-0 lg:shrink p-3 lg:overflow-y-auto bg-gray-100 dark:bg-transparent"
+        fuseScrollReset>
+
+        <!-- Thread -->
+        <div
+            class="flex flex-col flex-0 w-full shadow rounded-2xl overflow-hidden bg-card dark:bg-black dark:bg-opacity-10">
+
+            <div class="flex flex-col py-8 px-6">
+
+                <ng-container *ngIf="showMessage$ | async as e">
+                    <fuse-alert [dismissible]="true" class="w-full" [@shake]="true"
+                        [type]="e.code < 0 ? 'warn' : 'success'" [appearance]="'border'">
+                        <span fuseAlertTitle>Message</span>
+                        {{e.message}}
+                    </fuse-alert>
+                </ng-container>
+
+
+
+                <mat-accordion class="example-headers-align" multi>
+                    <mat-expansion-panel [expanded]="true">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>AI CV</mat-panel-title>
+
+                        </mat-expansion-panel-header>
+
+                        <div class="col-span-2">
+                            <app-editor [formControl]="cvAI"></app-editor>
+                        </div>
+
+                        <pre>
+{{ cvAI.valueChanges | async | json }}
+                        </pre>
+
+                        <!-- <app-typing-animation text="Hello, this is a typing animation example!"></app-typing-animation> -->
+
+                    </mat-expansion-panel>
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>Données professionnelles</mat-panel-title>
+                        </mat-expansion-panel-header>
+
+                        <ng-container *ngTemplateOutlet="cvForm"></ng-container>
+
+                    </mat-expansion-panel>
+
+
+                </mat-accordion>
+
+
+
+            </div>
+
+            <div class="flex w-full p-6 border-t bg-gray-50 dark:bg-transparent">
+
+                <!-- Buttons -->
+                <div class="flex flex-wrap w-full justify-between -m-2">
+                    <button class="m-2" mat-stroked-button [color]="'primary'" (click)="put$.next()">
+                        <mat-icon class="icon-size-5" [color]="'primary'"
+                            [svgIcon]="'heroicons_solid:chevron-double-right'"></mat-icon>
+                        <span class="ml-2">Enregistrer</span>
+                    </button>
+                    <!-- Reply -->
+                    <!-- <button class="m-2" mat-stroked-button [color]="'primary'" (click)="submit$.next()">
+                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:arrow-uturn-left'"></mat-icon>
+                        <span class="ml-2">Reply</span>
+                    </button> -->
+                    <!-- Reply all -->
+                    <button class="m-2" mat-stroked-button [color]="'primary'" routerLink="/cv">
+                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:arrow-uturn-left'"></mat-icon>
+                        <span class="ml-2">Genere CV AI</span>
+                    </button>
+                    <!-- Forward -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<ng-template #cvForm>
+    <form [formGroup]="myForm" class="grid grid-cols-2 gap-2 p-4">
         <!-- Name -->
-        <mat-form-field appearance="fill" class="col-span-2">
+        <mat-form-field appearance="fill" class="col-span-2" [subscriptSizing]="'dynamic'">
             <mat-label>Titre</mat-label>
             <input matInput formControlName="name">
             <mat-error
@@ -13,24 +108,25 @@
         </mat-form-field>
 
         <!-- <pre>
-        {{ myForm.controls.sections.controls | json }}
-    </pre> -->
+{{ myForm.controls.sections.controls | json }}
+</pre> -->
 
-        <div class="grid w-full">
-            @for (item of myForm.controls.sections.controls; track $index) {
-            <div [formGroup]="item" class="grid items-start bg-slate-50 p-2 border">
-                <mat-form-field appearance="fill">
-                    <mat-label>Section</mat-label>
-                    <input matInput formControlName="title">
-                    <mat-error
-                        *ngIf="item.get('title').invalid && (item.get('title').dirty || item.get('title').touched)">
-                        Champ est requis
-                    </mat-error>
-                </mat-form-field>
+        <div class="grid col-span-2 gap-2">
+            @for (item of myForm.controls.sections.controls; track i; let i = $index) {
+            <div [formGroup]="item" class="grid ">
+                <!-- <mat-form-field appearance="fill" [subscriptSizing]="'dynamic'">
+<mat-label>Section {{i + 1}}</mat-label>
+<input matInput formControlName="title">
+<mat-error
+    *ngIf="item.get('title').invalid && (item.get('title').dirty || item.get('title').touched)">
+    Champ est requis
+</mat-error>
+</mat-form-field> -->
 
-                <mat-form-field appearance="fill">
-                    <mat-label>Description</mat-label>
-                    <input matInput formControlName="details">
+                <mat-form-field appearance="fill" [subscriptSizing]="'dynamic'">
+                    <mat-label>{{item.get('title').value}}</mat-label>
+                    <!-- <input matInput formControlName="details"> -->
+                    <textarea matInput formControlName="details"></textarea>
                     <mat-error
                         *ngIf="item.get('details').invalid && (item.get('details').dirty || item.get('details').touched)">
                         Champ est requis
@@ -40,14 +136,10 @@
             </div>
 
             }
-        <button mat-flat-button [color]="'primary'" class="w-50" (click)="addSection()">
-            <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
-            <span class="ml-2 mr-1">Add Metadata</span>
-        </button>
+            <!-- <button mat-flat-button [color]="'primary'" class="w-50" (click)="addSection()">
+<mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+<span class="ml-2 mr-1">Add Metadata</span>
+</button> -->
         </div>
-
-
-
     </form>
-
-</div>
+</ng-template>
