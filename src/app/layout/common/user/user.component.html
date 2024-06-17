@@ -22,7 +22,8 @@
     <button mat-menu-item>
         <span class="flex flex-col leading-none">
             <span>Connecté en tant que</span>
-            <span class="mt-1.5 text-md font-medium">{{user()?.email}}</span>
+            <span class="mt-1.5 text-md font-medium">{{user()?.firstname}} {{user()?.lastname}}</span>
+            <span class="mt-1.5 text-sm font-semibold">{{user()?.email}}</span>
         </span>
     </button>
     <mat-divider class="my-2"></mat-divider>

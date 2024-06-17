@@ -51,17 +51,27 @@
 
                 <div class="grid">
                     <h2 class="font-bold">CV AI</h2>
-                    <!-- <app-editor [formControl]="cvAI"></app-editor> -->
+                    <app-editor class="hidden" [formControl]="cvAI"></app-editor>
 
-                    <div class="p-5 border rounded-xl" [innerHTML]="cvAI.valueChanges | async | sanitizeHtml"></div>
+                    <!-- <textarea class="p-5 border rounded-xl" rows="10"
+                    [formControl]="cvAI"></textarea> -->
 
-                    <div class="p-5 border rounded-xl" >
+
+                    <!-- <div class="p-5 border rounded-xl" >
                         {{streamAI | async }}
-                    </div>
+                    </div> -->
+
+                    <!-- <ng-container *ngIf="streamAI | async "></ng-container> -->
+
+
+                    <!-- <div class="p-5 border rounded-xl" [innerHTML]="cvAI.value |  sanitizeHtml"></div> -->
+                    <div class="p-5 border rounded-xl" [innerHTML]="cvAI.valueChanges | async |  sanitizeHtml"></div>
+                    <!--
+
 
                     <div class="p-5 border rounded-xl" >
                         {{cvAI.valueChanges| async }}
-                    </div>
+                    </div> -->
                 </div>
             </div>
 

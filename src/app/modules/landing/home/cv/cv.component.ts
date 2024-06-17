@@ -16,17 +16,18 @@ import { FuseAlertComponent } from '@fuse/components/alert';
 import { FuseScrollResetDirective } from '@fuse/directives/scroll-reset';
 import { Config, CV, Section } from 'app/core/api';
 import { UowService, TypeForm, TypeFormNew } from 'app/core/http-services/uow.service';
-import { catchError, concatMap, delay, filter, from, map, of, Subject, switchMap, tap } from 'rxjs';
+import { catchError, concatMap, delay, filter, from, map, of, Subject, switchMap, tap, toArray } from 'rxjs';
 import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
 import { EditorComponent } from 'app/core/editor/editor.component';
 import { SanitizeHtml } from '@fuse/pipes/sanitize-html.pipe';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
     standalone: true,
     selector: 'app-cv',
     templateUrl: './cv.component.html',
     styles: [``],
-    // changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     animations: fuseAnimations,
     imports: [
         CommonModule,
@@ -128,23 +129,32 @@ export class CvComponent implements AfterViewInit {
 
     readonly cvAI = new FormControl('', Validators.required);
 
-    readonly res = signal('')
+    // readonly res = signal('')
+
+    // readonly sanitizer = inject( DomSanitizer)
 
     readonly generateCvAI$ = new Subject<void>();
-    readonly streamAI = this.generateCvAI$.pipe(
+    readonly streamAI = toSignal( this.generateCvAI$.pipe(
+        tap(_ => this.cvAI.setValue('')),
         switchMap(_ => this.uow.core.gemini.generateCV(this.jobId).pipe(
+            tap(e => console.log('>>>>>>>>>>>>>>', e)),
             concatMap((phrase: any) => from(phrase).pipe(
-                // concatMap(char => of(char).pipe(
-                delay(90),
-                // map(e => this.cvAI.value.concat(e.toString())),
-                tap(e => this.res.update(c => c + e)),
-                // tap(e => console.log(this.res())),
-                map(_ => this.res()),
-                tap(e => this.cvAI.setValue(e)),
-                // )),
+                concatMap(char => of(char).pipe(
+                    delay(5),
+                    map(e => this.cvAI.value.concat(e.toString())),
+                    // tap(e => this.res.update(c => c + e)),
+                    // tap(e => console.log(e)),
+                    // tap(e => console.log(this.res())),
+                    // map(_ => this.res()),
+                    // map(e => this.sanitizer.bypassSecurityTrustHtml(e)),
+                    tap(e => this.cvAI.setValue(e as any)),
+                )),
             )),
-        ))
-    );
+            toArray(),
+            // tap(e => console.error(e.join(''))),
+            // tap(e => console.log('>>>>>>>>>>>>>>')),
+        )),
+    ));
 
     readonly saveCvAI$ = new Subject<void>();
     readonly #saveCvAI$ = toSignal(this.saveCvAI$.pipe(
