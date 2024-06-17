@@ -14,7 +14,11 @@ export default [
                 component: DetailsComponent,
             },
             {
-                path: 'cv',
+                path     : ':title/:id',
+                component: DetailsComponent,
+            },
+            {
+                path: 'cv/:title/:id',
                 component: CvComponent,
             },
         ],

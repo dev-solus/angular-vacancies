@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -16,17 +16,17 @@ import { FuseAlertComponent } from '@fuse/components/alert';
 import { FuseScrollResetDirective } from '@fuse/directives/scroll-reset';
 import { Config, CV, Section } from 'app/core/api';
 import { UowService, TypeForm, TypeFormNew } from 'app/core/http-services/uow.service';
-import { catchError, delay, filter, map, of, Subject, switchMap, tap } from 'rxjs';
+import { catchError, concatMap, delay, filter, from, map, of, Subject, switchMap, tap } from 'rxjs';
 import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
 import { EditorComponent } from 'app/core/editor/editor.component';
-import { TypingAnimationComponent } from './typing-animation/typing-animation.component';
+import { SanitizeHtml } from '@fuse/pipes/sanitize-html.pipe';
 
 @Component({
     standalone: true,
     selector: 'app-cv',
     templateUrl: './cv.component.html',
     styles: [``],
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    // changeDetection: ChangeDetectionStrategy.OnPush,
     animations: fuseAnimations,
     imports: [
         CommonModule,
@@ -45,7 +45,7 @@ import { TypingAnimationComponent } from './typing-animation/typing-animation.co
         FuseScrollResetDirective,
         MatExpansionModule,
         EditorComponent,
-        TypingAnimationComponent,
+        SanitizeHtml,
     ],
 })
 export class CvComponent implements AfterViewInit {
@@ -103,6 +103,8 @@ export class CvComponent implements AfterViewInit {
 
     readonly showMessage$ = new Subject<any>();
 
+    readonly jobId = +this.route.snapshot.paramMap.get('id');
+
     readonly put$ = new Subject<void>();
     readonly #put$ = toSignal(this.put$.pipe(
         tap(_ => this.uow.logInvalidFields(this.myForm)),
@@ -124,21 +126,55 @@ export class CvComponent implements AfterViewInit {
         )),
     ));
 
-    submit = (e: Config) => this.put$.next();
-    back = () => this.router.navigate(['../'], { relativeTo: this.route });
+    readonly cvAI = new FormControl('', Validators.required);
 
-    readonly cvAI = new FormControl('');
+    readonly res = signal('')
 
-    readonly streamAI = toSignal(this.uow.core.gemini.test2().pipe(
-        // tap(r => {
-        //     console.warn(r);
-        // }),
-        tap(e => {
-            const s = this.cvAI.value.concat(e.toString());
-            // console.error(s)
-            this.cvAI.setValue(s);
-        }),
+    readonly generateCvAI$ = new Subject<void>();
+    readonly streamAI = this.generateCvAI$.pipe(
+        switchMap(_ => this.uow.core.gemini.generateCV(this.jobId).pipe(
+            concatMap((phrase: any) => from(phrase).pipe(
+                // concatMap(char => of(char).pipe(
+                delay(90),
+                // map(e => this.cvAI.value.concat(e.toString())),
+                tap(e => this.res.update(c => c + e)),
+                // tap(e => console.log(this.res())),
+                map(_ => this.res()),
+                tap(e => this.cvAI.setValue(e)),
+                // )),
+            )),
+        ))
+    );
+
+    readonly saveCvAI$ = new Subject<void>();
+    readonly #saveCvAI$ = toSignal(this.saveCvAI$.pipe(
+        tap(_ => this.cvAI.markAllAsTouched()),
+        filter(_ => this.cvAI.valid && this.cvAI.dirty),
+        tap(_ => this.cvAI.disable()),
+        map(_ => this.cvAI.getRawValue()),
+        map(o => ({ id: this.user().id, cv: o })),
+        switchMap(o => this.uow.core.submissions.patchObject(o.id, { cv: o.cv }).pipe(
+            // tap((r) => this.cvAI.enable()),
+            catchError(this.uow.handleError),
+            map((e: any) => ({ code: e.code < 0 ? -1 : 1, message: e.code < 0 ? e.message : 'Enregistrement réussi' })),
+            tap(r => this.showMessage$.next({ message: r.message, code: r.code })),
+            // filter(r => r.code === 1),
+            delay(900),
+            tap(r => /*r.code > 0 ?? */this.cvAI.enable()),
+            // tap(r => this.back()),
+            // tap(_ => this.uow.session.updateUser({ ...this.user(), cv: o.cv })),
+        )),
     ));
+
+    submit = (e: Config) => this.put$.next();
+    back = () => {
+        const title = this.route.snapshot.paramMap.get('title');
+        const id = this.route.snapshot.paramMap.get('id');
+
+        // console.log(title, id);
+
+        this.router.navigate(['', title, id], { queryParams: { id } });
+    };
 
     ngAfterViewInit(): void {
         // this.uow.core.gemini.test2().subscribe(r => {

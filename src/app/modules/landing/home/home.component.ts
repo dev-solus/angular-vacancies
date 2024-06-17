@@ -124,7 +124,7 @@ export class HomeComponent implements AfterViewInit {
     ), { initialValue: [] });
 
     readonly jobId = toSignal(this.route.queryParamMap.pipe(
-        // tap(e => console.log(e.get('id'))),
+        // tap(e => console.log('home subscribe to route', e.get('id'))),
         map(e => +e.get('id')),
     ), { initialValue: 0 });
 
@@ -137,6 +137,9 @@ export class HomeComponent implements AfterViewInit {
         tap(e => this.service.selectedJob.next(e)),
     ));
 
+
+
+
     ngAfterViewInit(): void {
         // this.uow.core.gemini.test2().subscribe(r => {
         //     console.log(r);
@@ -145,6 +148,6 @@ export class HomeComponent implements AfterViewInit {
 
     jobClick(e: Job) {
         this.service.selectedJob.next(e);
-        this.router.navigate([''], { queryParams: { id: e.id } });
+        this.router.navigate(['', e.title, e.id], { queryParams: { id: e.id } });
     }
 }

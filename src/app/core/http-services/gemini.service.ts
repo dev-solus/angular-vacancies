@@ -15,26 +15,29 @@ export class GeminiService extends SuperService<Job> {
         super('Gemini');
     }
 
-    test(text?: string): Observable<any> {
+    generateCV(jobId: number): Observable<string> {
         return new Observable(observer => {
-            const eventSource = new EventSource(environment.apiUrl + `/api/Gemini/Test?text=${text}&token=${this.session.token}`);
+            const eventSource = new EventSource(environment.apiUrl + `/api/Gemini/generateCV?jobId=${jobId}&token=${this.session.token}`);
             // const eventSource = new EventSource(`${environment.apiUrl}/api/${this.controller}/ScrapeOffers=${numbersString}`);
             eventSource.onmessage = event => {
-                console.log('event.data', event.data);
+                // console.log('event.data', event.data);
                 observer.next(event.data);
             };
             eventSource.onerror = error => {
-                observer.error(error);
+                // console.error('EventSource failed:', error);
+                // observer.error(error);
+                eventSource.close();
             };
+
             return () => {
                 eventSource.close();
             };
         });
     }
 
-    test2(text?: string): Observable<any> {
+    test2(text?: any): Observable<string> {
         return new Observable(observer => {
-            const eventSource = new EventSource(environment.apiUrl + `/api/Gemini/Test2?text=${text}&token=${this.session.token}`);
+            const eventSource = new EventSource(environment.apiUrl + `/api/Gemini/Test3?text=${text}&token=${this.session.token}`);
             // const eventSource = new EventSource(`${environment.apiUrl}/api/${this.controller}/ScrapeOffers=${numbersString}`);
             eventSource.onmessage = event => {
                 // console.log('event.data', event.data);

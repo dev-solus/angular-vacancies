@@ -21,7 +21,7 @@
         <div
             class="flex flex-col flex-0 w-full shadow rounded-2xl overflow-hidden bg-card dark:bg-black dark:bg-opacity-10">
 
-            <div class="flex flex-col py-8 px-6">
+            <div class="flex flex-col gap-10 py-8 px-6">
 
                 <ng-container *ngIf="showMessage$ | async as e">
                     <fuse-alert [dismissible]="true" class="w-full" [@shake]="true"
@@ -34,23 +34,6 @@
 
 
                 <mat-accordion class="example-headers-align" multi>
-                    <mat-expansion-panel [expanded]="true">
-                        <mat-expansion-panel-header>
-                            <mat-panel-title>AI CV</mat-panel-title>
-
-                        </mat-expansion-panel-header>
-
-                        <div class="col-span-2">
-                            <app-editor [formControl]="cvAI"></app-editor>
-                        </div>
-
-                        <pre>
-{{ cvAI.valueChanges | async | json }}
-                        </pre>
-
-                        <!-- <app-typing-animation text="Hello, this is a typing animation example!"></app-typing-animation> -->
-
-                    </mat-expansion-panel>
                     <mat-expansion-panel>
                         <mat-expansion-panel-header>
                             <mat-panel-title>Données professionnelles</mat-panel-title>
@@ -58,20 +41,35 @@
 
                         <ng-container *ngTemplateOutlet="cvForm"></ng-container>
 
-                    </mat-expansion-panel>
+                        <mat-action-row>
+                            <button mat-button color="primary" (click)="put$.next()">Enregistrer</button>
+                          </mat-action-row>
 
+                    </mat-expansion-panel>
 
                 </mat-accordion>
 
+                <div class="grid">
+                    <h2 class="font-bold">CV AI</h2>
+                    <!-- <app-editor [formControl]="cvAI"></app-editor> -->
 
+                    <div class="p-5 border rounded-xl" [innerHTML]="cvAI.valueChanges | async | sanitizeHtml"></div>
 
+                    <div class="p-5 border rounded-xl" >
+                        {{streamAI | async }}
+                    </div>
+
+                    <div class="p-5 border rounded-xl" >
+                        {{cvAI.valueChanges| async }}
+                    </div>
+                </div>
             </div>
 
             <div class="flex w-full p-6 border-t bg-gray-50 dark:bg-transparent">
 
                 <!-- Buttons -->
                 <div class="flex flex-wrap w-full justify-between -m-2">
-                    <button class="m-2" mat-stroked-button [color]="'primary'" (click)="put$.next()">
+                    <button class="m-2" mat-stroked-button [color]="'primary'" (click)="saveCvAI$.next()">
                         <mat-icon class="icon-size-5" [color]="'primary'"
                             [svgIcon]="'heroicons_solid:chevron-double-right'"></mat-icon>
                         <span class="ml-2">Enregistrer</span>
@@ -82,7 +80,7 @@
                         <span class="ml-2">Reply</span>
                     </button> -->
                     <!-- Reply all -->
-                    <button class="m-2" mat-stroked-button [color]="'primary'" routerLink="/cv">
+                    <button class="m-2" mat-stroked-button [color]="'primary'" (click)="generateCvAI$.next()">
                         <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:arrow-uturn-left'"></mat-icon>
                         <span class="ml-2">Genere CV AI</span>
                     </button>

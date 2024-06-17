@@ -3,9 +3,9 @@ import { Component, inject, ViewEncapsulation } from '@angular/core';
 import { MatButton, MatButtonModule } from '@angular/material/button';
 import { MatRippleModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { HomeService } from '../home.service';
-import { map, Subject, switchMap, tap } from 'rxjs';
+import { filter, map, Subject, switchMap, take, tap } from 'rxjs';
 import { Job } from 'app/core/api';
 import { FuseScrollResetDirective } from '@fuse/directives/scroll-reset';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -30,6 +30,7 @@ import { UowService } from 'app/core/http-services/uow.service';
 export class DetailsComponent {
     readonly service = inject(HomeService);
     readonly router = inject(Router);
+    readonly route = inject(ActivatedRoute);
     readonly uow = inject(UowService);
 
     readonly labelColors = labelColorDefs;
@@ -63,7 +64,7 @@ export class DetailsComponent {
 
     toCV() {
         this.submit$.next();
-        this.router.navigate(['/cv'], { queryParamsHandling: 'merge' });
+        this.router.navigate(['/cv', this.selectedJob$.value.title, this.selectedJob$.value.id]);
     }
 
 }
