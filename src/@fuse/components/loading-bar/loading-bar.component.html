@@ -1,5 +1,5 @@
-<ng-container *ngIf="show">
-    <mat-progress-bar
+<ng-container *ngIf="show$ | async as show">
+    <mat-progress-bar *ngIf="show === true"
         [mode]="mode"
         [value]="progress"></mat-progress-bar>
 </ng-container>

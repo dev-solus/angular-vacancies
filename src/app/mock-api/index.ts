@@ -8,7 +8,7 @@ import { MailboxMockApi } from 'app/mock-api/apps/mailbox/api';
 import { NotesMockApi } from 'app/mock-api/apps/notes/api';
 import { ScrumboardMockApi } from 'app/mock-api/apps/scrumboard/api';
 import { TasksMockApi } from 'app/mock-api/apps/tasks/api';
-import { AuthMockApi } from 'app/mock-api/common/auth/api';
+// import { AuthMockApi } from 'app/mock-api/common/auth/api';
 import { MessagesMockApi } from 'app/mock-api/common/messages/api';
 import { NavigationMockApi } from 'app/mock-api/common/navigation/api';
 import { NotificationsMockApi } from 'app/mock-api/common/notifications/api';
@@ -26,7 +26,7 @@ export const mockApiServices = [
     AcademyMockApi,
     ActivitiesMockApi,
     AnalyticsMockApi,
-    AuthMockApi,
+    // AuthMockApi,
     ChatMockApi,
     ContactsMockApi,
     CryptoMockApi,

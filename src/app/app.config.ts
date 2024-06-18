@@ -1,5 +1,5 @@
 import { provideHttpClient } from '@angular/common/http';
-import { ApplicationConfig } from '@angular/core';
+import { ApplicationConfig ,provideExperimentalZonelessChangeDetection} from '@angular/core';
 import { LuxonDateAdapter } from '@angular/material-luxon-adapter';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { PreloadAllModules, provideRouter, withInMemoryScrolling, withPreloading } from '@angular/router';
@@ -52,6 +52,7 @@ export const FRENCH_DATE_FORMATS: MatDateFormats = {
 
 export const appConfig: ApplicationConfig = {
     providers: [
+        provideExperimentalZonelessChangeDetection(),
         provideAnimations(),
         provideHttpClient(),
         provideRouter(appRoutes,

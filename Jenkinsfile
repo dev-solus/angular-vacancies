@@ -1,7 +1,7 @@
 #!groovy
 node {
   def apps = [
-    [name: "bank-front", port: '4000', exposed_port: '', path: '', domaine: "bank.dev-solus.com"],
+    [name: "job-front", port: '4000', exposed_port: '', path: '', domaine: "jobs.dev-solus.com"],
   ];
 
   def app
