@@ -6,7 +6,7 @@ on:
     branches: [a18]
 
 env:
-  JOB_NAME: 'bank-front'
+  JOB_NAME: 'jobs-front'
   TOKEN: '11c80379c26a77d3b60f78764bb994fb4f'
 jobs:
   build:
