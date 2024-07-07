@@ -51,10 +51,10 @@
 
                 <div class="grid">
                     <h2 class="font-bold">CV AI</h2>
-                    <app-editor class="hidden" [formControl]="cvAI"></app-editor>
+                    <app-editor class="hidden" [formControl]="result"></app-editor>
 
                     <!-- <textarea class="p-5 border rounded-xl" rows="10"
-                    [formControl]="cvAI"></textarea> -->
+                    [formControl]="result"></textarea> -->
 
 
                     <!-- <div class="p-5 border rounded-xl" >
@@ -64,13 +64,19 @@
                     <!-- <ng-container *ngIf="streamAI | async "></ng-container> -->
 
 
-                    <!-- <div class="p-5 border rounded-xl" [innerHTML]="cvAI.value |  sanitizeHtml"></div> -->
-                    <div class="p-5 border rounded-xl" [innerHTML]="cvAI.valueChanges | async |  sanitizeHtml"></div>
+                    <!-- <div class="p-5 border rounded-xl" [innerHTML]="result.value |  sanitizeHtml"></div> -->
+                    <div class="p-5 border rounded-xl" [innerHTML]="result.valueChanges | async |  sanitizeHtml">
+
+                    </div>
+
+                    <div class="w-full flex justify-end">
+                        {{elapsedTime()}} s
+                    </div>
                     <!--
 
 
                     <div class="p-5 border rounded-xl" >
-                        {{cvAI.valueChanges| async }}
+                        {{result.valueChanges| async }}
                     </div> -->
                 </div>
             </div>
@@ -79,21 +85,28 @@
 
                 <!-- Buttons -->
                 <div class="flex flex-wrap w-full justify-between -m-2">
-                    <button class="m-2" mat-stroked-button [color]="'primary'" (click)="saveCvAI$.next()">
+                    <button class="m-2" mat-stroked-button [color]="'primary'" [disabled]="result.invalid" (click)="saveCvAI$.next()">
                         <mat-icon class="icon-size-5" [color]="'primary'"
                             [svgIcon]="'heroicons_solid:chevron-double-right'"></mat-icon>
                         <span class="ml-2">Enregistrer</span>
                     </button>
-                    <!-- Reply -->
-                    <!-- <button class="m-2" mat-stroked-button [color]="'primary'" (click)="submit$.next()">
-                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:arrow-uturn-left'"></mat-icon>
-                        <span class="ml-2">Reply</span>
-                    </button> -->
-                    <!-- Reply all -->
-                    <button class="m-2" mat-stroked-button [color]="'primary'" (click)="generateCvAI$.next()">
-                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:arrow-uturn-left'"></mat-icon>
-                        <span class="ml-2">Genere CV AI</span>
+
+
+
+                    <button class="m-2" mat-stroked-button [disabled]="result.disabled" [color]="'primary'" [matMenuTriggerFor]="menu" >
+                        <mat-icon *ngIf="!result.disabled" class="icon-size-5" [svgIcon]="'heroicons_solid:arrow-uturn-left'"></mat-icon>
+                        <span class="ml-2" *ngIf="!result.disabled">Genere CV AI</span>
+                        <mat-progress-spinner
+                        *ngIf="result.disabled"
+                        [diameter]="24"
+                        [mode]="'indeterminate'"></mat-progress-spinner>
                     </button>
+
+                    <mat-menu #menu="matMenu">
+                        <button mat-menu-item (click)="generateCvAI$.next('mistral')">Mistral</button>
+                        <button mat-menu-item (click)="generateCvAI$.next('qwen2')">qwen2</button>
+                        <button mat-menu-item (click)="generateCvAI$.next('llama3')">llama3</button>
+                    </mat-menu>
                     <!-- Forward -->
 
                 </div>

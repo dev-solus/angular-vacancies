@@ -84,7 +84,9 @@ export class HomeComponent implements AfterViewInit {
     //     'Skill',
     // ];
 
-    readonly #all$ = of([])// this.uow.core.filters.get$;
+    readonly #all$ = this.uow.core.filters.get$;
+
+    readonly update$ = new Subject<void>();
 
     readonly contractTypes$ = this.#all$.pipe(map(e => e.filter(f => f.name === 'contract').map(e => e.list).flat()));
     readonly locations$ = this.#all$.pipe(map(e => e.filter(f => f.name === 'location').map(e => e.list).flat()));
@@ -95,33 +97,39 @@ export class HomeComponent implements AfterViewInit {
     readonly location = new FormControl<string[]>([]);
     readonly skill = new FormControl<string[]>([]);
 
-    readonly dataSource = toSignal(merge(
-        this.name.valueChanges,
-        this.contractType.valueChanges,
-        this.location.valueChanges,
-        this.skill.valueChanges,
-    ).pipe(
-        startWith(null),
-        debounceTime(500),
-        tap(() => this.isloading.set(true)),
-        map(() => [
-            (this.paginator()?.pageIndex || 0) * (this.paginator()?.pageSize ?? 10),// startIndex
-            this.paginator()?.pageSize ?? 10,
-            this.sort()?.active ? this.sort()?.active : 'id',
-            this.sort()?.direction ? this.sort()?.direction : 'desc',
-            this.name.value,
-            this.contractType.value.filter(e => !!e),
-            this.location.value.filter(e => !!e),
-            this.skill.value.filter(e => !!e),
-        ]),
-        // @ts-ignore
-        switchMap((e) => this.uow.core.jobs.apiJobsGetJobsGet(...e).pipe(
-            tap(e => this.totalRecords.set(e.count)),
-            map(e => e.list),
-            // map(e => []),
-        )),
-        tap(() => this.isloading.set(false)),
-    ), { initialValue: [] });
+    readonly pageIndex = signal(+this.route.snapshot.queryParamMap.get('pageIndex') || 0);
+    readonly pageSize = 20;
+
+    readonly dataSource = toSignal(this.update$.pipe(
+        switchMap(_ => merge(
+            this.name.valueChanges,
+            this.contractType.valueChanges,
+            this.location.valueChanges,
+            this.skill.valueChanges,
+            this.paginator().page,
+        ).pipe(
+            startWith(null),
+            debounceTime(500),
+            tap(() => this.isloading.set(true)),
+            map(() => [
+                (this.paginator()?.pageIndex || this.pageIndex()) * (this.paginator()?.pageSize ?? this.pageSize),// startIndex
+                this.paginator()?.pageSize ?? this.pageSize,
+                this.sort()?.active ? this.sort()?.active : 'id',
+                this.sort()?.direction ? this.sort()?.direction : 'desc',
+                this.name.value,
+                this.contractType.value.filter(e => !!e),
+                this.location.value.filter(e => !!e),
+                this.skill.value.filter(e => !!e),
+            ]),
+            tap(e => this.router.navigate([], { queryParams: { pageIndex: this.paginator()?.pageIndex || 0 }, queryParamsHandling: 'merge' })),
+            // @ts-ignore
+            switchMap((e) => this.uow.core.jobs.apiJobsGetJobsGet(...e).pipe(
+                tap(e => this.totalRecords.set(e.count)),
+                map(e => e.list),
+                // map(e => []),
+            )),
+            tap(() => this.isloading.set(false)),
+        ))), { initialValue: [] });
 
     readonly jobId = toSignal(this.route.queryParamMap.pipe(
         // tap(e => console.log('home subscribe to route', e.get('id'))),
@@ -141,6 +149,7 @@ export class HomeComponent implements AfterViewInit {
 
 
     ngAfterViewInit(): void {
+        this.update$.next();
         // this.uow.core.gemini.test2().subscribe(r => {
         //     console.log(r);
         // });
@@ -148,6 +157,6 @@ export class HomeComponent implements AfterViewInit {
 
     jobClick(e: Job) {
         this.service.selectedJob.next(e);
-        this.router.navigate(['', e.title, e.id], { queryParams: { id: e.id } });
+        this.router.navigate(['', e.title, e.id], { queryParams: { id: e.id }, queryParamsHandling: 'merge'});
     }
 }

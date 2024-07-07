@@ -1,8 +1,11 @@
-import { Route } from '@angular/router';
+import { inject } from '@angular/core';
+import { Route, Router } from '@angular/router';
 import { initialDataResolver } from 'app/app.resolvers';
 import { AuthGuard } from 'app/core/auth/guards/auth.guard';
 import { NoAuthGuard } from 'app/core/auth/guards/noAuth.guard';
 import { LayoutComponent } from 'app/layout/layout.component';
+import { switchMap, of } from 'rxjs';
+import { LocalService } from './core/user/local.service';
 
 // @formatter:off
 /* eslint-disable max-len */
@@ -44,6 +47,7 @@ export const appRoutes: Route[] = [
         canActivateChild: [AuthGuard],
         component: LayoutComponent,
         resolve: { initialData: initialDataResolver },
+        data: { layout: 'classy' },
         children: [
             { path: '', pathMatch: 'full', redirectTo: 'job' },
             { path: 'user', loadChildren: () => import('app/modules/admin/user/user.routes') },
@@ -58,6 +62,13 @@ export const appRoutes: Route[] = [
     {
         path: '',
         component: LayoutComponent,
+        canActivate: [(route, state) => {
+            const router = inject(Router);
+
+            return inject(LocalService).isAmin$.pipe(
+                switchMap((isAmin) => of(isAmin ? router.parseUrl(`admin`) : true) ),
+            );
+        }],
         resolve: { initialData: initialDataResolver },
         // data: { layout: 'modern'},
         children: [

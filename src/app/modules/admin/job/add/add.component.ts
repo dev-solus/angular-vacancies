@@ -1,5 +1,5 @@
-import { Component, ChangeDetectionStrategy, inject, ViewEncapsulation } from '@angular/core';
-import { Subject, delay, filter, map, switchMap, take, takeUntil, tap, catchError, of } from 'rxjs';
+import { Component, ChangeDetectionStrategy, inject, ViewEncapsulation, signal } from '@angular/core';
+import { Subject, delay, filter, map, switchMap, take, takeUntil, tap, catchError, of, concatMap, from, toArray, distinct, distinctUntilChanged } from 'rxjs';
 import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { Job } from 'app/core/api';
 import { CommonModule } from '@angular/common';
@@ -18,6 +18,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 
 import { UploadFileComponent } from '@fuse/upload-file/upload-file.component';
+import moment from 'moment';
 
 @Component({
     standalone: true,
@@ -56,21 +57,32 @@ export class AddComponent {
 
     readonly showMessage$ = new Subject<any>();
 
+    readonly result = new FormControl('')
+    readonly startTime = signal(moment());
+    readonly elapsedTime = signal(0);
+
     readonly post$ = new Subject<void>();
-    readonly resultStream$ = this.post$.pipe(
+    readonly #post$ = toSignal(this.post$.pipe(
+        map(_ => this.result.setValue('')),
+        map(_ => this.result.disable()),
         tap(_ => this.uow.logInvalidFields(this.myForm)),
         tap(_ => this.myForm.markAllAsTouched()),
         map(_ => this.myForm.getRawValue()),
         tap(_ => console.log('myForm', this.myForm.getRawValue())),
         filter(e => e.configIds?.length > 0),
-        // filter(_ => false),
         switchMap(o => this.uow.core.myScrapings.getProgress(o.configIds).pipe(
-            catchError(this.uow.handleError),
-            tap(r => console.warn(r)),
-            tap(r => this.showMessage$.next(r)),
-            map(r => r.message),
+            distinctUntilChanged(),
+            tap(phrase => this.result.setValue(`${this.result.value + phrase}\r\n`)),
+            tap(phrase => {
+                phrase.trim().includes('.done.') ? this.result.enable() : null;
+                const currentTime = moment();
+
+                this.elapsedTime.set(currentTime.diff(this.startTime(), 'seconds'));
+                // Update UI or log with the elapsed time
+                // console.log(`Elapsed Time: ${elapsedTime} ms`);
+            }),
         )),
-    );
+    ));
 
     submit = (e: Job) => this.post$.next();
     back = (e?: Job) => this.dialogRef.close(e);

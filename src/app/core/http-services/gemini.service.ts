@@ -15,9 +15,9 @@ export class GeminiService extends SuperService<Job> {
         super('Gemini');
     }
 
-    generateCV(jobId: number): Observable<string> {
+    generateCV(jobId: number, model:string = null): Observable<string> {
         return new Observable(observer => {
-            const eventSource = new EventSource(environment.apiUrl + `/api/Gemini/generateCV?jobId=${jobId}&token=${this.session.token}`);
+            const eventSource = new EventSource(environment.apiUrl + `/api/Gemini/generateCV?jobId=${jobId}&model=${model}&token=${this.session.token}`);
             // const eventSource = new EventSource(`${environment.apiUrl}/api/${this.controller}/ScrapeOffers=${numbersString}`);
             eventSource.onmessage = event => {
                 // console.log('event.data', event.data);

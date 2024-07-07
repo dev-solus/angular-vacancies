@@ -2,9 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { environment } from 'environments/environment.development';
 import { of, Observable, shareReplay } from 'rxjs';
+import { LocalService } from '../user/local.service';
 
 export class SuperService<T> {
     protected http = inject(HttpClient);
+    readonly session = inject(LocalService);
+
 
     constructor(public controller: string, public apiUrl = environment.apiUrl) { }
 
@@ -82,6 +85,27 @@ export class SuperService<T> {
 
     getByForeign(id) {
         return this.http.get<T[]>(`${this.apiUrl}/${this.controller}/getByForeign/${id}`);
+    }
+
+
+    getEventSource(url: string): Observable<string> {
+        return new Observable(observer => {
+            const eventSource = new EventSource(`${environment.apiUrl}/api/${this.controller}/${url}&token=${this.session.token}`);
+
+            eventSource.onmessage = event => {
+                // console.log('event.data', event.data);
+                observer.next(event.data);
+            };
+            eventSource.onerror = error => {
+                // console.error('EventSource failed:', error);
+                // observer.error(error);
+                eventSource.close();
+            };
+
+            return () => {
+                eventSource.close();
+            };
+        });
     }
 }
 

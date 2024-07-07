@@ -1,6 +1,8 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { StorageService } from './storage.service';
 import { User } from '../api';
+import { BehaviorSubject } from 'rxjs';
+import { toObservable } from '@angular/core/rxjs-interop';
 
 type UserClient = User
 const USER = 'user-client';
@@ -13,8 +15,10 @@ export class LocalService {
     readonly storageService = inject(StorageService)
     readonly user = signal<UserClient>(null);
     readonly isSignin = signal(false);
+    readonly isSignin$ = toObservable(this.isSignin);
     public token = '';
     readonly isAdmin = computed(() => this.user()?.role.label === 'Admin');
+    readonly isAmin$ =toObservable(this.isAdmin);
 
     constructor() {
         this.getLocal();

@@ -6,7 +6,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { HomeService } from '../home.service';
 import { filter, map, Subject, switchMap, take, tap } from 'rxjs';
-import { Job } from 'app/core/api';
 import { FuseScrollResetDirective } from '@fuse/directives/scroll-reset';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { labelColorDefs } from '../home.constants';

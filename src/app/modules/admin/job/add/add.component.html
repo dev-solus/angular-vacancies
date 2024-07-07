@@ -14,11 +14,15 @@
             <ng-container [ngTemplateOutlet]="formTemplate"
                 [ngTemplateOutletContext]="{$implicit:myForm}"></ng-container>
 
-                @if(resultStream$ | async; as result){
-                    <pre>
-                        {{result | json}}
+                    <pre class="h-72 bg-slate-50 border rounded-md overflow-scroll overscroll-y-contain sm:overscroll-auto">
+                        {{result.valueChanges| async}}
                     </pre>
-                }
+
+                    <div class="w-full flex justify-end">
+                        {{elapsedTime()}} s
+                    </div>
+
+
 
             <ng-container *ngIf="showMessage$ | async as e">
                 <fuse-alert class="w-full my-5" [@shake]="true" [type]="e.code < 0 ? 'warn' : 'success'"
@@ -35,13 +39,22 @@
             </div>
 
             <div class="flex items-center gap-2 mt-4 sm:mt-0">
-                <button class="ml-auto sm:ml-0" mat-button (click)="back()">
+                <button class="ml-auto sm:ml-0" mat-button (click)="back()" [disabled]="result.disabled">
                     Retour
                 </button>
 
-                <button class="order-first sm:order-last" mat-flat-button [color]="'primary'"
+                <!-- <button class="order-first sm:order-last" mat-flat-button [color]="'primary'"
                     (click)="submit(myForm.getRawValue())">
-                    Enregistrer
+                    Exécuter
+                </button> -->
+
+
+                <button class="order-first sm:order-last" mat-stroked-button [disabled]="result.disabled" [color]="'primary'" (click)="submit(myForm.getRawValue())">
+                    <span *ngIf="!result.disabled">Exécuter</span>
+                    <mat-progress-spinner
+                    *ngIf="result.disabled"
+                    [diameter]="24"
+                    [mode]="'indeterminate'"></mat-progress-spinner>
                 </button>
             </div>
         </div>
@@ -63,9 +76,9 @@
             </mat-form-field>
 
 
-            <pre>
+            <!-- <pre>
                 {{myForm.value.metadata | json}}
-            </pre>
+            </pre> -->
         </div>
     </form>
 </ng-template>

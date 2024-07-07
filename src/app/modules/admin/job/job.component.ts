@@ -95,7 +95,7 @@ export class JobComponent implements AfterViewInit {
         startWith(null as any),
         map(_ => ({
             startIndex: (this.paginator?.pageIndex || 0) * (this.paginator?.pageSize ?? 10),// startIndex
-            pageSize: this.paginator?.pageSize ?? 10,
+            pageSize: this.paginator?.pageSize ?? 50,
             sortBy: this.sort?.active ? this.sort?.active : 'id',
             sortDir: this.sort?.direction ? this.sort?.direction : 'desc',
             name: this.name.value,

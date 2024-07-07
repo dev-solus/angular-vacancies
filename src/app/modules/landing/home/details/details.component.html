@@ -12,15 +12,14 @@
             <div class="flex flex-wrap items-center py-5 px-6">
                 <div class="flex flex-auto my-1 mr-4 text-2xl">{{e.title}}</div>
 
-                    <div class="flex flex-wrap items-center justify-start -mx-1">
-                        <ng-container *ngFor="let label of labels()">
-                            <div
-                                class="m-1 py-0.5 px-2.5 rounded-full text-sm font-medium whitespace-nowrap"
-                                [ngClass]="labelColors[label.color].combined">
-                                {{label.title}}
-                            </div>
-                        </ng-container>
-                    </div>
+                <div class="flex flex-wrap items-center justify-start -mx-1">
+                    <ng-container *ngFor="let label of labels()">
+                        <div class="m-1 py-0.5 px-2.5 rounded-full text-sm font-medium whitespace-nowrap"
+                            [ngClass]="labelColors[label.color].combined">
+                            {{label.title}}
+                        </div>
+                    </ng-container>
+                </div>
             </div>
         </div>
     </div>
@@ -39,7 +38,8 @@
                 <div class="flex items-center w-full">
 
                     <!-- Sender avatar -->
-                    <div *ngIf="!!e.image" class="flex flex-0 items-center justify-center w-10 h-10 rounded-full overflow-hidden">
+                    <div *ngIf="!!e.image"
+                        class="flex flex-0 items-center justify-center w-10 h-10 rounded-full overflow-hidden">
                         <img class="w-full h-full" [src]="e.image" alt="User avatar">
                     </div>
 
@@ -54,7 +54,7 @@
                 </div>
 
                 <!-- Content -->
-                <div class="flex mt-8 whitespace-pre-line leading-relaxed" [innerHTML]="e.description">
+                <div class="flex flex-col mt-8 whitespace-pre-line leading-relaxed" [innerHTML]="e.description">
                 </div>
 
             </div>
@@ -87,8 +87,8 @@
 
     } @else {
     <div class="flex flex-col flex-auto items-center justify-center bg-gray-100 dark:bg-transparent">
-        <mat-icon class="icon-size-24" [svgIcon]="'heroicons_outline:envelope'"></mat-icon>
-        <div class="mt-4 text-2xl font-semibold tracking-tight text-secondary">Select a mail to read</div>
+        <mat-icon class="icon-size-24" [svgIcon]="'heroicons_outline:viewfinder-circle'"></mat-icon>
+        <div class="mt-4 text-2xl font-semibold tracking-tight text-secondary">Sélectionnez une offre</div>
     </div>
     }
 </div>

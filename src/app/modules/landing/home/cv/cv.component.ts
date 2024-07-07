@@ -21,6 +21,8 @@ import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
 import { EditorComponent } from 'app/core/editor/editor.component';
 import { SanitizeHtml } from '@fuse/pipes/sanitize-html.pipe';
 import { DomSanitizer } from '@angular/platform-browser';
+import { MatMenuModule } from '@angular/material/menu';
+import moment from 'moment';
 
 @Component({
     standalone: true,
@@ -47,6 +49,7 @@ import { DomSanitizer } from '@angular/platform-browser';
         MatExpansionModule,
         EditorComponent,
         SanitizeHtml,
+        MatMenuModule,
     ],
 })
 export class CvComponent implements AfterViewInit {
@@ -127,41 +130,50 @@ export class CvComponent implements AfterViewInit {
         )),
     ));
 
-    readonly cvAI = new FormControl('', Validators.required);
+    readonly result = new FormControl('', Validators.required);
 
     // readonly res = signal('')
 
     // readonly sanitizer = inject( DomSanitizer)
 
-    readonly generateCvAI$ = new Subject<void>();
-    readonly streamAI = toSignal( this.generateCvAI$.pipe(
-        tap(_ => this.cvAI.setValue('')),
-        switchMap(_ => this.uow.core.gemini.generateCV(this.jobId).pipe(
-            tap(e => console.log('>>>>>>>>>>>>>>', e)),
-            concatMap((phrase: any) => from(phrase).pipe(
+    readonly startTime = signal(moment());
+    readonly elapsedTime = signal(0);
+
+
+    readonly generateCvAI$ = new Subject<string>();
+    readonly streamAI = toSignal(this.generateCvAI$.pipe(
+        tap(_ => this.result.setValue('')),
+        tap(_ => this.result.disable()),
+        tap(_ => this.startTime.set(moment())),
+        switchMap(model => this.uow.core.gemini.generateCV(this.jobId, model).pipe(
+            // tap(e => console.log('>>>>>>>>>>>>>>', e)),
+            concatMap((phrase: string) => from(phrase).pipe(
+                tap(e => {
+                    phrase.trim().includes('.done.') ? this.result.enable() : null;
+                    const currentTime = moment();
+
+                    this.elapsedTime.set(currentTime.diff(this.startTime(), 'seconds'));
+                    // Update UI or log with the elapsed time
+                    // console.log(`Elapsed Time: ${elapsedTime} ms`);
+                }),
+                filter(char => phrase.trim().includes('.done.') === false),
                 concatMap(char => of(char).pipe(
                     delay(5),
-                    map(e => this.cvAI.value.concat(e.toString())),
-                    // tap(e => this.res.update(c => c + e)),
-                    // tap(e => console.log(e)),
-                    // tap(e => console.log(this.res())),
-                    // map(_ => this.res()),
-                    // map(e => this.sanitizer.bypassSecurityTrustHtml(e)),
-                    tap(e => this.cvAI.setValue(e as any)),
+                    map(e => this.result.value.concat(e.toString())),
+                    tap(e => this.result.setValue(e as any)),
                 )),
             )),
             toArray(),
-            // tap(e => console.error(e.join(''))),
             // tap(e => console.log('>>>>>>>>>>>>>>')),
         )),
     ));
 
     readonly saveCvAI$ = new Subject<void>();
     readonly #saveCvAI$ = toSignal(this.saveCvAI$.pipe(
-        tap(_ => this.cvAI.markAllAsTouched()),
-        filter(_ => this.cvAI.valid && this.cvAI.dirty),
-        tap(_ => this.cvAI.disable()),
-        map(_ => this.cvAI.getRawValue()),
+        tap(_ => this.result.markAllAsTouched()),
+        filter(_ => this.result.valid && this.result.dirty),
+        tap(_ => this.result.disable()),
+        map(_ => this.result.getRawValue()),
         map(o => ({ id: this.user().id, cv: o })),
         switchMap(o => this.uow.core.submissions.patchObject(o.id, { cv: o.cv }).pipe(
             // tap((r) => this.cvAI.enable()),
@@ -170,7 +182,7 @@ export class CvComponent implements AfterViewInit {
             tap(r => this.showMessage$.next({ message: r.message, code: r.code })),
             // filter(r => r.code === 1),
             delay(900),
-            tap(r => /*r.code > 0 ?? */this.cvAI.enable()),
+            tap(r => /*r.code > 0 ?? */this.result.enable()),
             // tap(r => this.back()),
             // tap(_ => this.uow.session.updateUser({ ...this.user(), cv: o.cv })),
         )),
@@ -183,7 +195,7 @@ export class CvComponent implements AfterViewInit {
 
         // console.log(title, id);
 
-        this.router.navigate(['', title, id], { queryParams: { id } });
+        this.router.navigate(['', title, id], { queryParams: { id }, queryParamsHandling: 'merge'});
     };
 
     ngAfterViewInit(): void {

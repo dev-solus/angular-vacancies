@@ -1,5 +1,5 @@
 import { provideHttpClient } from '@angular/common/http';
-import { ApplicationConfig ,provideExperimentalZonelessChangeDetection} from '@angular/core';
+import { ApplicationConfig ,LOCALE_ID,provideExperimentalZonelessChangeDetection} from '@angular/core';
 import { LuxonDateAdapter } from '@angular/material-luxon-adapter';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { PreloadAllModules, provideRouter, withInMemoryScrolling, withPreloading } from '@angular/router';
@@ -12,6 +12,11 @@ import { mockApiServices } from 'app/mock-api';
 
 import { NativeDateAdapter, MatDateFormats, DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatPaginatorIntl } from '@angular/material/paginator';
+import { registerLocaleData } from '@angular/common';
+import fr from '@angular/common/locales/fr';
+
+// Register the French locale data
+registerLocaleData(fr);
 
 export class FrenchDateAdapter extends NativeDateAdapter {
     parse(value: any): Date | null {
@@ -61,12 +66,36 @@ export const appConfig: ApplicationConfig = {
         ),
         {
             provide: MatPaginatorIntl,
-            useFactory: () => ({...new MatPaginatorIntl(), itemsPerPageLabel: 'element par page'})
+            useFactory: () => ({
+                ...new MatPaginatorIntl(),
+                itemsPerPageLabel: 'element par page',
+                nextPageLabel: 'Page suivante',
+                previousPageLabel: 'Page précédente',
+                firstPageLabel: 'Première page',
+                lastPageLabel: 'Dernière page',
+                getRangeLabel: (page: number, pageSize: number, length: number) => {
+                    if (length === 0 || pageSize === 0) {
+                        return `0 sur ${length}`;
+                    }
+                    length = Math.max(length, 0);
+                    const startIndex = page * pageSize;
+                    const endIndex = startIndex < length ?
+                        Math.min(startIndex + pageSize, length) :
+                        startIndex + pageSize;
+                    return `${startIndex + 1} - ${endIndex} sur ${length}`;
+                }
+
+            })
         },
         // Material Date Adapter
         {
             provide: DateAdapter,
             useClass: LuxonDateAdapter,
+        },
+         // Provide LOCALE_ID for French
+         {
+            provide: LOCALE_ID,
+            useValue: 'fr-FR'
         },
         { provide: MAT_DATE_LOCALE, useValue: 'fr' },
         {
