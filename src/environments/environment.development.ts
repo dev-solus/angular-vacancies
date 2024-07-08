@@ -4,8 +4,8 @@ const CORE_API_PROD = 'https://jobs-api.dev-solus.com';
 
 export const environment = {
     production: false,
-    apiUrl: `${CORE_API}`,
-    url: CORE_API,
+    apiUrl: `${CORE_API_PROD}`,
+    url: CORE_API_PROD,
 };
 
 

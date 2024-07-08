@@ -11,7 +11,7 @@
             <div class="grid grid-cols-5 gap-3 items-start w-full bg-card p-2 border">
                 <mat-form-field class="col-span-2" [subscriptSizing]="'dynamic'">
                     <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:magnifying-glass'" matPrefix></mat-icon>
-                    <input matInput [autocomplete]="'off'" [placeholder]="'Search notes'" [formControl]="name"
+                    <input matInput [autocomplete]="'off'" [placeholder]="'Recherche'" [formControl]="name"
                         #searchInput>
                 </mat-form-field>
 
@@ -21,7 +21,7 @@
              </span> -->
 
                 <mat-form-field appearance="fill" [subscriptSizing]="'dynamic'">
-                    <mat-label>Job type</mat-label>
+                    <mat-label>Type d'emploi</mat-label>
                     <mat-select multiple [formControl]="contractType">
                         <mat-option *ngFor="let e of contractTypes$ | async" [value]="e.name">{{e.name}}
                             ({{e.count}})</mat-option>
@@ -29,7 +29,7 @@
                 </mat-form-field>
 
                 <mat-form-field appearance="fill" [subscriptSizing]="'dynamic'">
-                    <mat-label>Location</mat-label>
+                    <mat-label>Emplacement</mat-label>
                     <mat-select multiple [formControl]="location">
                         <mat-option *ngFor="let e of locations$ | async" [value]="e.name">{{e.name}}
                             ({{e.count}})</mat-option>
@@ -37,7 +37,7 @@
                 </mat-form-field>
 
                 <mat-form-field appearance="fill" [subscriptSizing]="'dynamic'">
-                    <mat-label>Skills</mat-label>
+                    <mat-label>Compétences</mat-label>
                     <mat-select multiple [formControl]="skill">
                         <mat-option *ngFor="let e of skills$ | async" [value]="e.name">{{e.name}}
                             ({{e.count}})</mat-option>
