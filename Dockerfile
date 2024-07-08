@@ -2,8 +2,7 @@ FROM node:22.2-alpine3.19 as build-env
 WORKDIR /app
 
 # copy and cahe
-# COPY package*.json ./
-COPY package.json ./
+COPY package*.json ./
 
 RUN npm i --force
 
