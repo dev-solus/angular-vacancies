@@ -2,7 +2,8 @@ FROM node:18.20.3-slim as build-env
 WORKDIR /app
 
 # copy and cahe
-COPY package*.json ./
+# COPY package*.json ./
+COPY package.json ./
 
 RUN npm i --force
 
