@@ -24,7 +24,8 @@
                     <mat-label>Job type</mat-label>
                     <mat-select multiple [formControl]="contractType">
                         <mat-option *ngFor="let e of contractTypes$ | async" [value]="e.name">{{e.name}}
-                            ({{e.count}})</mat-option>
+                            <!-- ({{e.count}}) -->
+                        </mat-option>
                     </mat-select>
                 </mat-form-field>
 
@@ -32,7 +33,8 @@
                     <mat-label>Location</mat-label>
                     <mat-select multiple [formControl]="location">
                         <mat-option *ngFor="let e of locations$ | async" [value]="e.name">{{e.name}}
-                            ({{e.count}})</mat-option>
+                            <!-- ({{e.count}}) -->
+                        </mat-option>
                     </mat-select>
                 </mat-form-field>
 
@@ -40,7 +42,8 @@
                     <mat-label>Skills</mat-label>
                     <mat-select multiple [formControl]="skill">
                         <mat-option *ngFor="let e of skills$ | async" [value]="e.name">{{e.name}}
-                            ({{e.count}})</mat-option>
+                            <!-- ({{e.count}}) -->
+                        </mat-option>
                     </mat-select>
                 </mat-form-field>
 
