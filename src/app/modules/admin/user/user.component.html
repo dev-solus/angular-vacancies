@@ -14,12 +14,12 @@
                     <button #testVariable mat-flat-button [ngClass]="{'hidden': false}"
                         (click)="$any(testVariable).value = !!!$any(testVariable).value">
                         <mat-icon [svgIcon]="'heroicons_outline:chevron-double-down'"></mat-icon>
-                        <span class="ml-2 mr-1">search</span>
+                        <span class="ml-2 mr-1">Recherche</span>
                     </button>
 
                     <button mat-flat-button [color]="'primary'" (click)="add()">
                         <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
-                        <span class="ml-2 mr-1">Add</span>
+                        <span class="ml-2 mr-1">Ajouter</span>
                     </button>
                 </div>
             </div>
@@ -69,9 +69,9 @@
                             matSort matSortDisableClear>
                             <div mat-sort-header="id">id</div>
                             <div mat-sort-header="firstname" class="col-span-2">Nom complet</div>
-                            <div mat-sort-header="email">email</div>
+                            <div mat-sort-header="email">Email</div>
                             <div mat-sort-header="phone">Téléphone</div>
-                            <div mat-sort-header="role">role</div>
+                            <div mat-sort-header="role">Role</div>
                             <div mat-sort-header="active">Actif</div>
                             <div>Action</div>
                         </div>

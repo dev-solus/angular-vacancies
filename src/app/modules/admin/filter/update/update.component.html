@@ -10,7 +10,7 @@
 
     <div class="flex flex-col flex-auto p-6 sm:p-8 overflow-y-auto">
 
-        <div class="grid w-full">
+        <mat-dialog-content class="grid w-full">
             <ng-container [ngTemplateOutlet]="formTemplate"
                 [ngTemplateOutletContext]="{$implicit:myForm}"></ng-container>
 
@@ -21,7 +21,7 @@
                     {{e.message}}
                 </fuse-alert>
             </ng-container>
-        </div>
+        </mat-dialog-content>
 
         <!-- Actions -->
         <div class="flex flex-col sm:flex-row sm:items-center justify-between mt-4 sm:mt-6">
@@ -54,7 +54,7 @@
                 </mat-error>
             </mat-form-field>
             <mat-form-field appearance="fill">
-                <mat-label>label</mat-label>
+                <mat-label>Label</mat-label>
                 <input matInput formControlName="label" type="text" required>
                 <mat-error
                     *ngIf="myForm.controls.label.invalid && (myForm.controls.label.dirty || myForm.controls.label.touched)">
